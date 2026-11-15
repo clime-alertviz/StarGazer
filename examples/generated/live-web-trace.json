@@ -1,0 +1,37 @@
+{
+  "checkedAt": "2026-11-15T01:30:00.815Z",
+  "provenance": "Actual web API, SQLite profiles, Codex app-server model turn and live providers. Synthetic people and public coordinates only.",
+  "calendarWrite": false,
+  "status": "passed",
+  "planStatus": "needs_access_check",
+  "carpoolCount": 1,
+  "events": [
+    {
+      "at": "2026-11-15T01:29:48.796Z",
+      "message": "Your Codex agent is starting the search."
+    },
+    {
+      "at": "2026-11-15T01:29:51.202Z",
+      "message": "Finding shared interests, available evenings and offered car seats."
+    },
+    {
+      "at": "2026-11-15T01:29:52.483Z",
+      "message": "Looking for reachable viewpoints through Geoapify."
+    },
+    {
+      "at": "2026-11-15T01:29:54.539Z",
+      "message": "Checking weather, darkness, target visibility, carpool routes and the journey home."
+    },
+    {
+      "at": "2026-11-15T01:29:56.602Z",
+      "message": "A workable combination is ready to review."
+    }
+  ],
+  "summary": "The planner found a provisional Saturn outing at promenáda Pawla Adamowicze on 16 November, 22:00–22:30 Prague time, with suitable forecast weather, a shared telescope and a proposed carpool for two profiles labelled “Synthetic web driver” and “Synthetic web rider.” It isn’t a confirmed match: night access must be checked, participants and transport confirmed, and the forecast rechecked before departure.",
+  "checks": {
+    "agentCompleted": true,
+    "sharedProfileStore": true,
+    "liveProviders": true,
+    "unverifiedAccessBlocksInvite": true
+  }
+}

@@ -1,0 +1,189 @@
+{
+  "provenance": {
+    "recordedAt": "2026-11-15T00:41:49.354Z",
+    "mode": "live-calendar-self-test",
+    "recipient": "Calendar owner only",
+    "eventType": "Private, free software test; no real outing",
+    "redaction": "Email, calendar/event identifiers, event URLs and conference identifiers removed",
+    "limitations": [
+      "Self-attendee returned accepted; an independent guest RSVP was not tested.",
+      "notify=true was requested; email delivery was not verified.",
+      "This connector test is separate from the live plan, whose unverified site access correctly blocked invitation preparation."
+    ]
+  },
+  "calls": [
+    {
+      "tool": "google_calendar.search_events",
+      "arguments": {
+        "calendar_id": "[identifier redacted]",
+        "time_min": "2026-11-16T18:00:00Z",
+        "time_max": "2026-11-16T21:00:00Z"
+      },
+      "result": {
+        "events": [],
+        "next_page_token": null
+      }
+    },
+    {
+      "tool": "google_calendar.create_event",
+      "arguments": {
+        "calendar_id": "[identifier redacted]",
+        "title": "[TEST] Star Gazer — Calendar integration",
+        "start_time": "2026-11-16T20:00:00+01:00",
+        "end_time": "2026-11-16T20:30:00+01:00",
+        "timezone_str": "Europe/Prague",
+        "attendees": [
+          "[email redacted]"
+        ],
+        "description": "Star Gazer integration test: star-gazer-calendar-20261115-01\n\nSOFTWARE TEST ONLY. No observing trip, travel or attendance is scheduled.\n\nThis event checks Google Calendar creation, timezone, attendee handling, description, route links and guest notifications for the Star Gazer prototype.\n\nLive Geoapify MCP checks passed: geocoding, categories, places, route matrices and detailed routes. A public central-Prague walking example returned 7 minutes in both matrix and route calculations.\nExample navigation link (public test coordinate, no private origin): https://www.google.com/maps/dir/?api=1&destination=50.078%2C14.44&travelmode=walking\n\nThe live planner also ran with real weather and journeys. It correctly blocked an invitation for a site whose night access was unverified. This separate Calendar integration test does not approve that site.\n\nLocation tools: https://www.geoapify.com/\nWeather: https://open-meteo.com/ (CC BY 4.0)\nAstronomy Engine: https://github.com/cosinekitty/astronomy\n\nOnly the calendar owner is listed. The event is private and marked free, with reminders disabled. Event creation does not prove email delivery.",
+        "location": "Software integration test — no physical meeting",
+        "notify": true,
+        "visibility": "private",
+        "transparency": "transparent",
+        "guests_can_modify": false,
+        "reminders": {
+          "use_default": false,
+          "overrides": []
+        }
+      },
+      "result": {
+        "organizer": {
+          "is_self": true,
+          "email": "[email redacted]",
+          "display_name": null
+        },
+        "guests_can_modify": null,
+        "locked": null,
+        "id": "[identifier redacted]",
+        "summary": "[TEST] Star Gazer — Calendar integration",
+        "description": "<p>Star Gazer integration test: star-gazer-calendar-20261115-01</p><p>SOFTWARE TEST ONLY. No observing trip, travel or attendance is scheduled.</p><p>This event checks Google Calendar creation, timezone, attendee handling, description, route links and guest notifications for the Star Gazer prototype.</p><p>Live Geoapify MCP checks passed: geocoding, categories, places, route matrices and detailed routes. A public central-Prague walking example returned 7 minutes in both matrix and route calculations.\nExample navigation link (public test coordinate, no private origin): https://www.google.com/maps/dir/?api=1&amp;destination=50.078%2C14.44&amp;travelmode=walking</p><p>The live planner also ran with real weather and journeys. It correctly blocked an invitation for a site whose night access was unverified. This separate Calendar integration test does not approve that site.</p><p>Location tools: https://www.geoapify.com/\nWeather: https://open-meteo.com/ (CC BY 4.0)\nAstronomy Engine: https://github.com/cosinekitty/astronomy</p><p>Only the calendar owner is listed. The event is private and marked free, with reminders disabled. Event creation does not prove email delivery.</p>",
+        "location": "Software integration test — no physical meeting",
+        "start": "2026-11-16T19:00:00Z",
+        "end": "2026-11-16T19:30:00Z",
+        "attendees": [
+          {
+            "email": "[email redacted]",
+            "response_status": "accepted",
+            "display_name": null,
+            "resource": null,
+            "optional": false,
+            "is_self": true
+          }
+        ],
+        "url": "[private link redacted]",
+        "color_id": null,
+        "reminders": {
+          "use_default": false,
+          "overrides": []
+        },
+        "visibility": "private",
+        "transparency": "transparent",
+        "hangout_link": "[private link redacted]",
+        "conference_id": "[identifier redacted]",
+        "conference_status": "success",
+        "conference_solution_type": "hangoutsMeet"
+      }
+    },
+    {
+      "tool": "google_calendar.read_event",
+      "arguments": {
+        "calendar_id": "[identifier redacted]",
+        "event_id": "[identifier redacted]"
+      },
+      "result": {
+        "guests_can_modify": null,
+        "locked": null,
+        "id": "[identifier redacted]",
+        "summary": "[TEST] Star Gazer — Calendar integration",
+        "status": "confirmed",
+        "organizer": {
+          "is_self": true,
+          "email": "[email redacted]",
+          "display_name": null
+        },
+        "description": "Star Gazer integration test: star-gazer-calendar-20261115-01\n\nSOFTWARE TEST ONLY. No observing trip, travel or attendance is scheduled.\n\nThis event checks Google Calendar creation, timezone, attendee handling,\ndescription, route links and guest notifications for the Star Gazer prototype.\n\nLive Geoapify MCP checks passed: geocoding, categories, places, route matrices\nand detailed routes. A public central-Prague walking example returned 7\nminutes in both matrix and route calculations. Example navigation link (public\ntest coordinate, no private origin):\nhttps://www.google.com/maps/dir/?api=1&destination=50.078%2C14.44&travelmode=walking\n\nThe live planner also ran with real weather and journeys. It correctly blocked\nan invitation for a site whose night access was unverified. This separate\nCalendar integration test does not approve that site.\n\nLocation tools: https://www.geoapify.com/ Weather: https://open-meteo.com/ (CC\nBY 4.0) Astronomy Engine: https://github.com/cosinekitty/astronomy\n\nOnly the calendar owner is listed. The event is private and marked free, with\nreminders disabled. Event creation does not prove email delivery.\n\n",
+        "location": "Software integration test — no physical meeting",
+        "color_id": null,
+        "event_label_id": null,
+        "start": "2026-11-16T19:00:00Z",
+        "end": "2026-11-16T19:30:00Z",
+        "attendees": [
+          {
+            "email": "[email redacted]",
+            "response_status": "accepted",
+            "display_name": null,
+            "resource": null,
+            "optional": false,
+            "is_self": true
+          }
+        ],
+        "url": "[private link redacted]",
+        "hangout_link": "[private link redacted]",
+        "event_type": "default",
+        "transparency": "transparent",
+        "visibility": "private",
+        "attachments": null,
+        "reminders": {
+          "use_default": false,
+          "overrides": []
+        },
+        "recurrence": null,
+        "recurring_event_id": null,
+        "original_start_time": null,
+        "display_url": "[private link redacted]",
+        "display_title": "[TEST] Star Gazer — Calendar integration"
+      }
+    },
+    {
+      "tool": "google_calendar.search_events",
+      "arguments": {
+        "calendar_id": "[identifier redacted]",
+        "query": "star-gazer-calendar-20261115-01",
+        "time_min": "2026-11-16T18:00:00Z",
+        "time_max": "2026-11-16T21:00:00Z"
+      },
+      "result": {
+        "events": [
+          {
+            "organizer": {
+              "is_self": true,
+              "email": "[email redacted]",
+              "display_name": null
+            },
+            "guests_can_modify": null,
+            "locked": null,
+            "id": "[identifier redacted]",
+            "summary": "[TEST] Star Gazer — Calendar integration",
+            "status": "confirmed",
+            "location": "Software integration test — no physical meeting",
+            "color_id": null,
+            "event_label_id": null,
+            "event_type": "default",
+            "start": "2026-11-16T20:00:00+01:00",
+            "end": "2026-11-16T20:30:00+01:00",
+            "url": "[private link redacted]",
+            "description": "Star Gazer integration test: star-gazer-calendar-20261115-01\n\nSOFTWARE TEST ONLY. No observing trip, travel or attendance is scheduled.\n\nThis event checks Google Calendar creation, timezone, attendee handling,\ndescription, route links and guest notifications for the Star Gazer prototype.\n\nLive Geoapify MCP checks passed: geocoding, categories, places, route matrices\nand detailed routes. A public central-Prague walking example returned 7\nminutes in both matrix and route calculations. Example navigation link (public\ntest coordinate, no private origin):\nhttps://www.google.com/maps/dir/?api=1&destination=50.078%2C14.44&travelmode=walking\n\nThe live planner also ran with real weather and journeys. It correctly blocked\nan invitation for a site whose night access was unverified. This separate\nCalendar integration test does not approve that site.\n\nLocation tools: https://www.geoapify.com/ Weather: https://open-meteo.com/ (CC\nBY 4.0) Astronomy Engine: https://github.com/cosinekitty/astronomy\n\nOnly the calendar owner is listed. The event is private and marked free, with\nreminders disabled. Event creation does not prove email delivery.\n\n",
+            "my_response_status": "accepted",
+            "transparency": "transparent",
+            "visibility": "private",
+            "attachments": null,
+            "recurring_event_id": null,
+            "original_start_time": null,
+            "display_url": "[private link redacted]",
+            "display_title": "[TEST] Star Gazer — Calendar integration"
+          }
+        ],
+        "next_page_token": null
+      }
+    }
+  ],
+  "checks": {
+    "created": true,
+    "readBack": true,
+    "oneEventFound": true,
+    "private": true,
+    "markedFree": true,
+    "remindersDisabled": true,
+    "onlyOwnerAttends": true
+  }
+}

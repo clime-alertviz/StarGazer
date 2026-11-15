@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Watch StarGazer: find a night, a place and company for stargazing. A short narrated walkthrough and a simple local demo.">
+  <title>StarGazer · Look up, together</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0b141c;--card:#192a33;--text:#f3efe5;--muted:#a6bbc0;--line:#344851;--gold:#f2cc83;--mint:#a4ddcd}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 85% 0,#223954,transparent 50%),radial-gradient(ellipse at 0 70%,#193c3b,transparent 60%),var(--bg);color:var(--text);font:17px/1.7 system-ui,sans-serif}main{max-width:1080px;margin:auto;padding:54px 28px}a{color:var(--mint);text-underline-offset:4px}a:focus-visible,video:focus-visible{outline:2px solid var(--gold);outline-offset:5px}.brand{font-family:Georgia,serif;font-size:24px;color:var(--gold)}.spark{display:inline-block;font-size:34px;vertical-align:middle;margin-right:8px;animation:glow 4s ease-in-out infinite}.eyebrow{margin-top:45px;color:var(--gold);letter-spacing:.2em;font-size:12px;font-weight:700;text-transform:uppercase}h1{font-family:Georgia,serif;font-weight:400;font-size:clamp(42px,7vw,76px);line-height:1.12;margin:18px 0}h1 em{color:var(--mint)}h2{font:400 32px/1.2 Georgia,serif;margin:0 0 14px}h3{font-size:18px;margin:0 0 10px}.intro{font-size:22px;max-width:740px;color:var(--muted);line-height:1.5}.meta{font-size:14px;color:var(--muted)}video{display:block;width:100%;aspect-ratio:16/9;background:#09131d;border:1px solid var(--line);border-radius:18px;margin-top:30px;box-shadow:0 24px 80px #0005}section{margin-top:42px;padding-top:32px;border-top:1px solid var(--line)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}.card{background:#192a33cc;border:1px solid var(--line);border-radius:18px;padding:25px}pre{overflow:auto;padding:20px;background:#0b1720;border:1px solid var(--line);border-radius:12px;color:var(--mint);font-size:14px;line-height:1.9}p{margin:12px 0}code{font-size:.9em}ul,ol{padding-left:22px;color:var(--muted)}li{margin:9px 0}strong{color:var(--text)}.button{display:inline-block;background:linear-gradient(110deg,#ffe0a0,#eab365);color:#322717;border-radius:12px;padding:10px 18px;text-decoration:none;font-weight:650}.links{display:flex;gap:18px;flex-wrap:wrap;align-items:center}footer{margin-top:50px;font-size:14px;color:var(--muted)}@keyframes glow{50%{filter:drop-shadow(0 0 10px #f2cc83aa)}}@media(prefers-reduced-motion:reduce){.spark{animation:none}}@media(max-width:700px){main{padding:30px 20px}.grid{grid-template-columns:1fr}.intro{font-size:19px}}
+  </style>
+</head>
+<body><main>
+  <div class="brand"><span class="spark" aria-hidden="true">✦</span>stargazer</div>
+  <div class="eyebrow">Little plans, big skies</div>
+  <h1>Less planning.<br><em>More wonder.</em></h1>
+  <p class="intro">Find the night, the place and the company.<br>Join an evening under the stars—or make one of your own.</p>
+  <video controls playsinline preload="metadata" poster="showcase-poster.jpg" aria-label="StarGazer walkthrough with English narration, music and captions">
+    <source src="showcase.mp4" type="video/mp4">
+    <track kind="captions" src="showcase.en.vtt" srclang="en" label="English">
+    <p><a href="showcase.mp4">Download the video</a> or read the walkthrough below.</p>
+  </video>
+  <p class="meta">1 minute 9 seconds · English voiceover · Captions · Original music and gentle sound effects</p>
+  <div class="links"><a class="button" href="showcase.mp4" download>Download the film ↓</a><a href="showcase.en.srt">English captions</a><a href="showcase.md">Film credits</a></div>
+
+  <section><h2>Your first evening.</h2>
+    <div class="grid">
+      <div class="card"><h3>1. Make it yours</h3><p>Pick an avatar, share your interests and choose when you are free. Add more evenings or make it a weekly habit.</p></div>
+      <div class="card"><h3>2. Find a night to join</h3><p>Open suggestions appear as you plan. Check who is going, what they bring, the sky report and expected weather.</p></div>
+      <div class="card"><h3>3. Check the journey</h3><p>Make your own way or choose a public pickup. Review the times, choose email or Calendar, and join.</p></div>
+      <div class="card"><h3>4. Keep the company</h3><p>Discuss the plan on its shared page. Invite people into your circle for another evening, or organize your own.</p></div>
+    </div>
+  </section>
+
+  <section><h2>Run the demo from the repository.</h2>
+    <p>With Node.js 22.13+ and npm installed, run these commands in your checkout:</p>
+    <pre><code>npm ci --ignore-scripts
+cp .env.example .env
+npm run seed
+npm run web:demo</code></pre>
+    <p>Open <a href="http://127.0.0.1:4318">StarGazer at 127.0.0.1:4318</a>. Browse the open outings, then sign in as <code>mia@stargazer.test</code>. Open <strong>Local outbox</strong>, follow the sign-in link and click <strong>Continue</strong>.</p>
+    <p>For a simple first join, choose <strong>I’ll make my own way</strong>. For live address search, routes and AI planning, put your Geoapify key in the ignored <code>.env</code> file, run <code>npx codex login</code>, then restart the app.</p>
+    <p class="meta">The separate sample database contains eight varied outings. For a fresh set of dates, stop the demo, run <code>npm run seed -- --reset</code>, then restart it. Real email and Calendar delivery need a connected provider.</p>
+  </section>
+
+  <section><h2>Prefer to organize?</h2><ol>
+    <li>Choose <strong>Plan your next adventure</strong>, complete the evening setup, then <strong>Organize my own evening</strong>.</li>
+    <li>Choose your target, full availability and group size. Include the journey home and use the following date after midnight.</li>
+    <li>Click <strong>Create outing</strong>. Review the proposed people, place, sky conditions and journeys.</li>
+    <li>Confirm night access and the final walk. Choose circle invitations and whether remaining places are open, then invite.</li>
+    <li>Follow responses on the outing page. Refresh the forecast before departure; edit or cancel when needed.</li>
+  </ol></section>
+
+  <section><h2>Or work entirely in Codex.</h2>
+    <p>The website and the StarGazer skill share your account and outings. Local Codex can compare options, save plans and coordinate invitations through the same service.</p>
+    <pre><code>npm run package
+codex plugin marketplace add ./output/marketplace
+codex plugin add star-gazer@star-gazer-local
+npm run codex</code></pre>
+    <p>First create an MCP token in the app’s Settings and add your service URL, token and Geoapify key to <code>.env</code>. The README explains the complete setup.</p>
+  </section>
+
+  <section><h2>Read the details.</h2><ul>
+    <li><a href="walkthrough.md">Written walkthrough</a></li>
+    <li><a href="ai-workflow.md">Prompts and AI workflow</a></li>
+    <li><a href="geoapify-feedback.md">Geoapify tools, lessons and feedback</a></li>
+    <li><a href="providers.md">Email and Calendar setup</a></li>
+    <li><a href="verification.md">Verification evidence</a></li>
+    <li><a href="release.md">Version and publishing steps</a></li>
+  </ul></section>
+  <footer>StarGazer 0.4.0 · MIT license · A project by Michal Novotný<br>Places and journeys powered by <a href="https://www.geoapify.com/">Geoapify</a> · Weather by <a href="https://open-meteo.com/">Open-Meteo</a> · Sky calculations by <a href="https://github.com/cosinekitty/astronomy">Astronomy Engine</a></footer>
+</main></body></html>

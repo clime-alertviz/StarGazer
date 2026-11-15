@@ -1,0 +1,458 @@
+{
+  "recordedAt": "2026-11-15T23:44:51.540Z",
+  "mode": "isolated local fixture",
+  "prompt": "Show my outings, send an email connection test to my second test account, add a comment, and cancel it.",
+  "steps": [
+    {
+      "tool": "get_state",
+      "arguments": {},
+      "result": {
+        "user": {
+          "id": "account-organizer",
+          "email": "organizer@fixture.test",
+          "preferences": null
+        },
+        "solver": {
+          "defaultBackend": "codex",
+          "codex": "starting"
+        },
+        "planningWindows": [],
+        "circle": [],
+        "circleInvitations": [],
+        "outings": [],
+        "providers": {
+          "googleConfigured": false,
+          "googleConnected": false,
+          "email": "local_outbox"
+        }
+      }
+    },
+    {
+      "tool": "send_connection_test",
+      "arguments": {
+        "guestEmail": "guest@fixture.test",
+        "start": "2026-11-17T23:44:51.242Z",
+        "timezone": "America/New_York",
+        "channel": "email"
+      },
+      "result": {
+        "id": "826be0fd-1812-45fe-9f85-4e4c42ed99db",
+        "title": "Star Gazer · Email connection test",
+        "kind": "connection_test",
+        "needsGuide": false,
+        "organizerId": "account-organizer",
+        "visibility": "circle",
+        "status": "invited",
+        "statusLabel": "Gathering your group",
+        "revision": 1,
+        "version": 1,
+        "target": "stargazing",
+        "start": "2026-11-17T23:44:51.242Z",
+        "end": "2026-11-18T00:14:51.242Z",
+        "timezone": "America/New_York",
+        "site": {
+          "id": "connection-test",
+          "name": "Local connection test",
+          "location": {
+            "lat": 0,
+            "lon": 0
+          },
+          "meetingPoint": {
+            "lat": 0,
+            "lon": 0
+          },
+          "walkMinutes": 0,
+          "access": "confirmed",
+          "accessNote": "Invitation test only. No physical outing is planned.",
+          "accessWindows": [
+            {
+              "start": "2026-11-17T23:44:51.242Z",
+              "end": "2026-11-18T00:14:51.242Z"
+            }
+          ],
+          "bortle": null,
+          "skyQualitySource": null
+        },
+        "minPeople": 2,
+        "maxPeople": 2,
+        "deadline": "2026-11-17T23:44:51.242Z",
+        "remaining": 0,
+        "driverPlaces": 0,
+        "reasons": [],
+        "viewerId": "account-organizer",
+        "organizer": true,
+        "canJoin": false,
+        "canComment": true,
+        "migrationPaused": false,
+        "people": [
+          {
+            "id": "account-organizer",
+            "name": "organizer",
+            "avatar": "star",
+            "experience": "beginner",
+            "equipment": [],
+            "interests": [],
+            "interestNote": "",
+            "response": "accepted",
+            "channel": "email",
+            "revision": 1,
+            "transport": "walk",
+            "selfArranged": false,
+            "confirmed": true,
+            "organizer": true,
+            "roles": [],
+            "reservedUntil": "2026-11-17T23:44:51.242Z",
+            "preferences": {
+              "name": "organizer",
+              "avatar": "star",
+              "timezone": "America/New_York",
+              "interests": [],
+              "experience": "beginner",
+              "happyToTeach": false,
+              "equipment": [],
+              "shareEquipment": false,
+              "origin": {
+                "name": "Invitation connection test",
+                "location": {
+                  "lat": 0,
+                  "lon": 0
+                }
+              },
+              "slots": [],
+              "travel": [
+                "walk"
+              ],
+              "maxWalkMinutes": 0,
+              "maxTravelMinutes": 1,
+              "channel": "email"
+            },
+            "availability": []
+          },
+          {
+            "id": "3c29b6e1-5b38-4c9c-ab51-c116a46449ec",
+            "name": "guest",
+            "avatar": "star",
+            "experience": "beginner",
+            "equipment": [],
+            "interests": [],
+            "interestNote": "",
+            "response": "pending",
+            "channel": "email",
+            "revision": 1,
+            "transport": "walk",
+            "selfArranged": false,
+            "confirmed": false,
+            "organizer": false,
+            "roles": [],
+            "reservedUntil": "2026-11-17T23:44:51.242Z"
+          }
+        ],
+        "equipment": [],
+        "alternatives": [],
+        "routes": [],
+        "carpools": [],
+        "comments": [],
+        "calendar": {},
+        "deliveryMode": "server",
+        "invitationHoldHours": 24,
+        "pendingTransport": [],
+        "needsDriver": false,
+        "meeting": {
+          "meetAt": "2026-11-17T23:29:51.242Z",
+          "leaveAt": "2026-11-18T00:29:51.242Z"
+        },
+        "accessConfirmed": true
+      }
+    },
+    {
+      "tool": "add_comment",
+      "arguments": {
+        "outingId": "826be0fd-1812-45fe-9f85-4e4c42ed99db",
+        "text": "Testing the shared service through the installed Codex package."
+      },
+      "result": {
+        "id": "826be0fd-1812-45fe-9f85-4e4c42ed99db",
+        "title": "Star Gazer · Email connection test",
+        "kind": "connection_test",
+        "needsGuide": false,
+        "organizerId": "account-organizer",
+        "visibility": "circle",
+        "status": "invited",
+        "statusLabel": "Gathering your group",
+        "revision": 1,
+        "version": 1,
+        "target": "stargazing",
+        "start": "2026-11-17T23:44:51.242Z",
+        "end": "2026-11-18T00:14:51.242Z",
+        "timezone": "America/New_York",
+        "site": {
+          "id": "connection-test",
+          "name": "Local connection test",
+          "location": {
+            "lat": 0,
+            "lon": 0
+          },
+          "meetingPoint": {
+            "lat": 0,
+            "lon": 0
+          },
+          "walkMinutes": 0,
+          "access": "confirmed",
+          "accessNote": "Invitation test only. No physical outing is planned.",
+          "accessWindows": [
+            {
+              "start": "2026-11-17T23:44:51.242Z",
+              "end": "2026-11-18T00:14:51.242Z"
+            }
+          ],
+          "bortle": null,
+          "skyQualitySource": null
+        },
+        "minPeople": 2,
+        "maxPeople": 2,
+        "deadline": "2026-11-17T23:44:51.242Z",
+        "remaining": 0,
+        "driverPlaces": 0,
+        "reasons": [
+          "Waiting for 1 more person to accept."
+        ],
+        "viewerId": "account-organizer",
+        "organizer": true,
+        "canJoin": false,
+        "canComment": true,
+        "migrationPaused": false,
+        "people": [
+          {
+            "id": "account-organizer",
+            "name": "organizer",
+            "avatar": "star",
+            "experience": "beginner",
+            "equipment": [],
+            "interests": [],
+            "interestNote": "",
+            "response": "accepted",
+            "channel": "email",
+            "revision": 1,
+            "transport": "walk",
+            "selfArranged": false,
+            "confirmed": true,
+            "organizer": true,
+            "roles": [],
+            "reservedUntil": "2026-11-17T23:44:51.242Z",
+            "preferences": {
+              "name": "organizer",
+              "avatar": "star",
+              "timezone": "America/New_York",
+              "interests": [],
+              "experience": "beginner",
+              "happyToTeach": false,
+              "equipment": [],
+              "shareEquipment": false,
+              "origin": {
+                "name": "Invitation connection test",
+                "location": {
+                  "lat": 0,
+                  "lon": 0
+                }
+              },
+              "slots": [],
+              "travel": [
+                "walk"
+              ],
+              "maxWalkMinutes": 0,
+              "maxTravelMinutes": 1,
+              "channel": "email"
+            },
+            "availability": []
+          },
+          {
+            "id": "3c29b6e1-5b38-4c9c-ab51-c116a46449ec",
+            "name": "guest",
+            "avatar": "star",
+            "experience": "beginner",
+            "equipment": [],
+            "interests": [],
+            "interestNote": "",
+            "response": "pending",
+            "channel": "email",
+            "revision": 1,
+            "transport": "walk",
+            "selfArranged": false,
+            "confirmed": false,
+            "organizer": false,
+            "roles": [],
+            "reservedUntil": "2026-11-17T23:44:51.242Z"
+          }
+        ],
+        "equipment": [],
+        "alternatives": [],
+        "routes": [],
+        "carpools": [],
+        "comments": [
+          {
+            "id": "85509acf-fa6a-4ee9-8ed9-fc090fccf4b4",
+            "text": "Testing the shared service through the installed Codex package.",
+            "createdAt": "2026-11-15T23:44:51.252Z",
+            "authorId": "account-organizer",
+            "authorName": "organizer"
+          }
+        ],
+        "calendar": {},
+        "deliveryMode": "server",
+        "invitationHoldHours": 24,
+        "pendingTransport": [],
+        "needsDriver": false,
+        "meeting": {
+          "meetAt": "2026-11-17T23:29:51.242Z",
+          "leaveAt": "2026-11-18T00:29:51.242Z"
+        },
+        "accessConfirmed": true
+      }
+    },
+    {
+      "tool": "cancel_outing",
+      "arguments": {
+        "outingId": "826be0fd-1812-45fe-9f85-4e4c42ed99db",
+        "reason": "Local installation check complete."
+      },
+      "result": {
+        "id": "826be0fd-1812-45fe-9f85-4e4c42ed99db",
+        "title": "Star Gazer · Email connection test",
+        "kind": "connection_test",
+        "needsGuide": false,
+        "organizerId": "account-organizer",
+        "visibility": "circle",
+        "status": "cancelled",
+        "statusLabel": "Cancelled",
+        "revision": 1,
+        "version": 2,
+        "target": "stargazing",
+        "start": "2026-11-17T23:44:51.242Z",
+        "end": "2026-11-18T00:14:51.242Z",
+        "timezone": "America/New_York",
+        "site": {
+          "id": "connection-test",
+          "name": "Local connection test",
+          "location": {
+            "lat": 0,
+            "lon": 0
+          },
+          "meetingPoint": {
+            "lat": 0,
+            "lon": 0
+          },
+          "walkMinutes": 0,
+          "access": "confirmed",
+          "accessNote": "Invitation test only. No physical outing is planned.",
+          "accessWindows": [
+            {
+              "start": "2026-11-17T23:44:51.242Z",
+              "end": "2026-11-18T00:14:51.242Z"
+            }
+          ],
+          "bortle": null,
+          "skyQualitySource": null
+        },
+        "minPeople": 2,
+        "maxPeople": 2,
+        "deadline": "2026-11-17T23:44:51.242Z",
+        "remaining": 0,
+        "driverPlaces": 0,
+        "reasons": [
+          "Local installation check complete."
+        ],
+        "viewerId": "account-organizer",
+        "organizer": true,
+        "canJoin": false,
+        "canComment": false,
+        "migrationPaused": false,
+        "people": [
+          {
+            "id": "account-organizer",
+            "name": "organizer",
+            "avatar": "star",
+            "experience": "beginner",
+            "equipment": [],
+            "interests": [],
+            "interestNote": "",
+            "response": "accepted",
+            "channel": "email",
+            "revision": 1,
+            "transport": "walk",
+            "selfArranged": false,
+            "confirmed": true,
+            "organizer": true,
+            "roles": [],
+            "reservedUntil": "2026-11-17T23:44:51.242Z",
+            "preferences": {
+              "name": "organizer",
+              "avatar": "star",
+              "timezone": "America/New_York",
+              "interests": [],
+              "experience": "beginner",
+              "happyToTeach": false,
+              "equipment": [],
+              "shareEquipment": false,
+              "origin": {
+                "name": "Invitation connection test",
+                "location": {
+                  "lat": 0,
+                  "lon": 0
+                }
+              },
+              "slots": [],
+              "travel": [
+                "walk"
+              ],
+              "maxWalkMinutes": 0,
+              "maxTravelMinutes": 1,
+              "channel": "email"
+            },
+            "availability": []
+          },
+          {
+            "id": "3c29b6e1-5b38-4c9c-ab51-c116a46449ec",
+            "name": "guest",
+            "avatar": "star",
+            "experience": "beginner",
+            "equipment": [],
+            "interests": [],
+            "interestNote": "",
+            "response": "pending",
+            "channel": "email",
+            "revision": 1,
+            "transport": "walk",
+            "selfArranged": false,
+            "confirmed": false,
+            "organizer": false,
+            "roles": [],
+            "reservedUntil": "2026-11-17T23:44:51.242Z"
+          }
+        ],
+        "equipment": [],
+        "alternatives": [],
+        "routes": [],
+        "carpools": [],
+        "comments": [
+          {
+            "id": "85509acf-fa6a-4ee9-8ed9-fc090fccf4b4",
+            "text": "Testing the shared service through the installed Codex package.",
+            "createdAt": "2026-11-15T23:44:51.252Z",
+            "authorId": "account-organizer",
+            "authorName": "organizer"
+          }
+        ],
+        "calendar": {},
+        "deliveryMode": "server",
+        "invitationHoldHours": 24,
+        "pendingTransport": [],
+        "needsDriver": false,
+        "meeting": {
+          "meetAt": "2026-11-17T23:29:51.242Z",
+          "leaveAt": "2026-11-18T00:29:51.242Z"
+        },
+        "accessConfirmed": true
+      }
+    }
+  ]
+}

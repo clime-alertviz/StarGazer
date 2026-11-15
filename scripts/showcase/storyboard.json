@@ -1,0 +1,155 @@
+[
+  {
+    "id": "00-intro",
+    "duration": 5,
+    "kind": "intro",
+    "chapter": "LITTLE PLANS, BIG SKIES",
+    "title": "Your next night.\nA little more wonder.",
+    "caption": "Look up, together.",
+    "voice": "A little curiosity. A whole sky of possibilities. Meet Star Gazer."
+  },
+  {
+    "id": "01-passport",
+    "duration": 5,
+    "capture": "02-passport",
+    "crop": [
+      642,
+      215,
+      1885,
+      1038
+    ],
+    "chapter": "01 / MAKE IT YOURS",
+    "title": "Hello,\nstargazer.",
+    "caption": "A few details. A little personality.",
+    "voice": "Pick your avatar, tell us a little about yourself, and start dreaming."
+  },
+  {
+    "id": "02-evening",
+    "duration": 6,
+    "capture": "03-evening",
+    "crop": [
+      900,
+      215,
+      1598,
+      1038
+    ],
+    "chapter": "02 / MAKE ROOM FOR THE NIGHT",
+    "title": "One evening.\nOr every week.",
+    "caption": "Leave room for the journey home.",
+    "voice": "Choose an evening, or make it a weekly habit. Leave time for the journey home."
+  },
+  {
+    "id": "03-discover",
+    "duration": 7,
+    "capture": "04-interests",
+    "crop": [
+      910,
+      215,
+      1890,
+      1038
+    ],
+    "chapter": "03 / FOLLOW YOUR CURIOSITY",
+    "title": "Oh, this\nlooks lovely.",
+    "caption": "Find an open evening as you plan.",
+    "voice": "While you plan, discover nights you could join. This one has a telescope, and someone happy to teach."
+  },
+  {
+    "id": "04-sky",
+    "duration": 6,
+    "capture": "06-sky",
+    "crop": [
+      640,
+      690,
+      2139,
+      1167
+    ],
+    "chapter": "04 / A WINDOW INTO THE NIGHT",
+    "title": "A good night\nto look up?",
+    "caption": "Check the sky and expected weather.",
+    "voice": "Before you say yes, check the sky, the weather, and who you will be sharing it with."
+  },
+  {
+    "id": "05-journey",
+    "duration": 6.5,
+    "capture": "07-lift",
+    "crop": [
+      930,
+      205,
+      1604,
+      1090
+    ],
+    "chapter": "05 / THERE AND BACK",
+    "title": "Your way\nto the stars.",
+    "caption": "Make your own way, or meet for a lift.",
+    "voice": "Make your own way, or choose a public pickup. Review the times, then join."
+  },
+  {
+    "id": "06-invitations",
+    "duration": 6,
+    "capture": "07-join",
+    "crop": [
+      930,
+      250,
+      1604,
+      1025
+    ],
+    "chapter": "YOUR INVITATION, YOUR WAY",
+    "title": "Something\nto look\nforward to.",
+    "caption": "Email or Google Calendar. Your choice.",
+    "voice": "Choose email or Google Calendar for invitations. You can always respond on the outing page."
+  },
+  {
+    "id": "07-joined",
+    "duration": 5.5,
+    "capture": "09-joined",
+    "crop": [
+      640,
+      105,
+      2140,
+      859
+    ],
+    "chapter": "06 / YOU ARE IN",
+    "title": "A place\nfor you.",
+    "caption": "The people. The plan. One shared page.",
+    "voice": "You are in. One page keeps the people, the plan, and your journey together."
+  },
+  {
+    "id": "08-circle",
+    "duration": 6,
+    "capture": "10-circle-invite",
+    "crop": [
+      1450,
+      372,
+      2140,
+      867
+    ],
+    "chapter": "07 / GOOD COMPANY, OVER TIME",
+    "title": "Grow your\nconstellation.",
+    "caption": "Invite someone into your circle.",
+    "voice": "Found your kind of people? Invite them into your circle for another night under the stars."
+  },
+  {
+    "id": "09-organize",
+    "duration": 6,
+    "capture": "11-organize",
+    "crop": [
+      640,
+      205,
+      1890,
+      1040
+    ],
+    "chapter": "OR MAKE A NIGHT OF YOUR OWN",
+    "title": "Your evening.\nYour invitation.",
+    "caption": "Invite your circle. Welcome new faces.",
+    "voice": "Or create your own evening. Invite your circle, and leave room for new faces."
+  },
+  {
+    "id": "10-outro",
+    "duration": 5.5,
+    "kind": "outro",
+    "chapter": "LOOK UP, TOGETHER",
+    "title": "Less planning.\nMore wonder.",
+    "caption": "StarGazer",
+    "voice": "Less planning. More wonder. Star Gazer. Look up, together."
+  }
+]

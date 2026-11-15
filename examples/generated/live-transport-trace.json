@@ -1,0 +1,818 @@
+{
+  "provenance": {
+    "recordedAt": "2026-11-15T00:58:56.802Z",
+    "mode": "live-providers-synthetic-participants",
+    "coordinates": "Public Prague test points; no participant home",
+    "siteAccess": "Unverified; no real outing or ride agreement",
+    "calendarWrite": false,
+    "redaction": "Synthetic emails removed and credential values excluded"
+  },
+  "checks": {
+    "models": {
+      "free_flow": {
+        "minutes": 7,
+        "pickupLegs": 2
+      },
+      "approximated": {
+        "minutes": 21,
+        "pickupLegs": 2
+      }
+    },
+    "planStatus": "needs_access_check",
+    "carpoolCount": 1,
+    "liveTraffic": false,
+    "departureTimePrediction": false
+  },
+  "calls": [
+    {
+      "tool": "geoapify_call",
+      "arguments": {
+        "tool": "calculate_route_matrix",
+        "arguments": {
+          "sources": [
+            {
+              "lat": 50.0755,
+              "lon": 14.4378
+            },
+            {
+              "lat": 50.078,
+              "lon": 14.44
+            },
+            {
+              "lat": 50.064,
+              "lon": 14.4184
+            }
+          ],
+          "targets": [
+            {
+              "lat": 50.0755,
+              "lon": 14.4378
+            },
+            {
+              "lat": 50.078,
+              "lon": 14.44
+            },
+            {
+              "lat": 50.064,
+              "lon": 14.4184
+            }
+          ],
+          "mode": "drive",
+          "units": "metric",
+          "traffic": "free_flow"
+        }
+      },
+      "result": {
+        "sources": [
+          {
+            "lat": 50.0755,
+            "lon": 14.437752
+          },
+          {
+            "lat": 50.078011,
+            "lon": 14.440003
+          },
+          {
+            "lat": 50.06424,
+            "lon": 14.418413
+          }
+        ],
+        "targets": [
+          {
+            "lat": 50.0755,
+            "lon": 14.437752
+          },
+          {
+            "lat": 50.078011,
+            "lon": 14.440003
+          },
+          {
+            "lat": 50.06424,
+            "lon": 14.418413
+          }
+        ],
+        "sources_to_targets": [
+          [
+            {
+              "distance": 0,
+              "time": 0,
+              "source_index": 0,
+              "target_index": 0
+            },
+            {
+              "distance": 778,
+              "time": 97,
+              "source_index": 0,
+              "target_index": 1
+            },
+            {
+              "distance": 3028,
+              "time": 225,
+              "source_index": 0,
+              "target_index": 2
+            }
+          ],
+          [
+            {
+              "distance": 787,
+              "time": 87,
+              "source_index": 1,
+              "target_index": 0
+            },
+            {
+              "distance": 0,
+              "time": 0,
+              "source_index": 1,
+              "target_index": 1
+            },
+            {
+              "distance": 3368,
+              "time": 267,
+              "source_index": 1,
+              "target_index": 2
+            }
+          ],
+          [
+            {
+              "distance": 2813,
+              "time": 230,
+              "source_index": 2,
+              "target_index": 0
+            },
+            {
+              "distance": 3430,
+              "time": 298,
+              "source_index": 2,
+              "target_index": 1
+            },
+            {
+              "distance": 0,
+              "time": 0,
+              "source_index": 2,
+              "target_index": 2
+            }
+          ]
+        ],
+        "units": "metric",
+        "distance_units": "meters",
+        "time_units": "seconds"
+      }
+    },
+    {
+      "tool": "geoapify_call",
+      "arguments": {
+        "tool": "calculate_route",
+        "arguments": {
+          "waypoints": [
+            {
+              "lat": 50.0755,
+              "lon": 14.4378
+            },
+            {
+              "lat": 50.078,
+              "lon": 14.44
+            },
+            {
+              "lat": 50.064,
+              "lon": 14.4184
+            }
+          ],
+          "mode": "drive",
+          "units": "metric",
+          "traffic": "free_flow",
+          "waypoint_mode": "stopover",
+          "optimize_stops": false,
+          "geometry_scope": "none"
+        }
+      },
+      "result": {
+        "distance": 4146,
+        "units": "metric",
+        "distance_units": "meters",
+        "time": 363.798,
+        "time_units": "seconds",
+        "waypoints": [
+          {
+            "lat": 50.0755,
+            "lon": 14.4378
+          },
+          {
+            "lat": 50.078,
+            "lon": 14.44
+          },
+          {
+            "lat": 50.064,
+            "lon": 14.4184
+          }
+        ],
+        "legs": [
+          {
+            "distance": 778,
+            "time": 96.741
+          },
+          {
+            "distance": 3368,
+            "time": 267.056
+          }
+        ]
+      }
+    },
+    {
+      "tool": "geoapify_call",
+      "arguments": {
+        "tool": "calculate_route_matrix",
+        "arguments": {
+          "sources": [
+            {
+              "lat": 50.0755,
+              "lon": 14.4378
+            },
+            {
+              "lat": 50.078,
+              "lon": 14.44
+            },
+            {
+              "lat": 50.064,
+              "lon": 14.4184
+            }
+          ],
+          "targets": [
+            {
+              "lat": 50.0755,
+              "lon": 14.4378
+            },
+            {
+              "lat": 50.078,
+              "lon": 14.44
+            },
+            {
+              "lat": 50.064,
+              "lon": 14.4184
+            }
+          ],
+          "mode": "drive",
+          "units": "metric",
+          "traffic": "approximated"
+        }
+      },
+      "result": {
+        "sources": [
+          {
+            "lat": 50.0755,
+            "lon": 14.437752
+          },
+          {
+            "lat": 50.078011,
+            "lon": 14.440003
+          },
+          {
+            "lat": 50.06424,
+            "lon": 14.418413
+          }
+        ],
+        "targets": [
+          {
+            "lat": 50.0755,
+            "lon": 14.437752
+          },
+          {
+            "lat": 50.078011,
+            "lon": 14.440003
+          },
+          {
+            "lat": 50.06424,
+            "lon": 14.418413
+          }
+        ],
+        "sources_to_targets": [
+          [
+            {
+              "distance": 0,
+              "time": 0,
+              "source_index": 0,
+              "target_index": 0
+            },
+            {
+              "distance": 778,
+              "time": 324,
+              "source_index": 0,
+              "target_index": 1
+            },
+            {
+              "distance": 3028,
+              "time": 752,
+              "source_index": 0,
+              "target_index": 2
+            }
+          ],
+          [
+            {
+              "distance": 787,
+              "time": 294,
+              "source_index": 1,
+              "target_index": 0
+            },
+            {
+              "distance": 0,
+              "time": 0,
+              "source_index": 1,
+              "target_index": 1
+            },
+            {
+              "distance": 3368,
+              "time": 890,
+              "source_index": 1,
+              "target_index": 2
+            }
+          ],
+          [
+            {
+              "distance": 2797,
+              "time": 727,
+              "source_index": 2,
+              "target_index": 0
+            },
+            {
+              "distance": 3414,
+              "time": 949,
+              "source_index": 2,
+              "target_index": 1
+            },
+            {
+              "distance": 0,
+              "time": 0,
+              "source_index": 2,
+              "target_index": 2
+            }
+          ]
+        ],
+        "units": "metric",
+        "distance_units": "meters",
+        "time_units": "seconds"
+      }
+    },
+    {
+      "tool": "geoapify_call",
+      "arguments": {
+        "tool": "calculate_route",
+        "arguments": {
+          "waypoints": [
+            {
+              "lat": 50.0755,
+              "lon": 14.4378
+            },
+            {
+              "lat": 50.078,
+              "lon": 14.44
+            },
+            {
+              "lat": 50.064,
+              "lon": 14.4184
+            }
+          ],
+          "mode": "drive",
+          "units": "metric",
+          "traffic": "approximated",
+          "waypoint_mode": "stopover",
+          "optimize_stops": false,
+          "geometry_scope": "none"
+        }
+      },
+      "result": {
+        "distance": 4146,
+        "units": "metric",
+        "distance_units": "meters",
+        "time": 1214.164,
+        "time_units": "seconds",
+        "waypoints": [
+          {
+            "lat": 50.0755,
+            "lon": 14.4378
+          },
+          {
+            "lat": 50.078,
+            "lon": 14.44
+          },
+          {
+            "lat": 50.064,
+            "lon": 14.4184
+          }
+        ],
+        "legs": [
+          {
+            "distance": 778,
+            "time": 324.213
+          },
+          {
+            "distance": 3368,
+            "time": 889.95
+          }
+        ]
+      }
+    },
+    {
+      "tool": "plan_outing",
+      "arguments": {
+        "request": {
+          "organizerId": "driver",
+          "target": "Saturn",
+          "start": "2026-11-16T17:00:00.000Z",
+          "end": "2026-11-16T22:00:00.000Z",
+          "timezone": "Europe/Prague",
+          "durationMinutes": 30,
+          "minPeople": 2,
+          "maxPeople": 2,
+          "needsGuide": true
+        },
+        "participants": [
+          {
+            "timezone": "Europe/Prague",
+            "interests": [
+              "Saturn"
+            ],
+            "maxTravelMinutes": 120,
+            "maxWalkMinutes": 30,
+            "groupSize": {
+              "min": 2,
+              "max": 2
+            },
+            "preference": "balanced",
+            "availability": [
+              {
+                "start": "2026-11-16T15:00:00.000Z",
+                "end": "2026-11-17T00:00:00.000Z"
+              }
+            ],
+            "id": "driver",
+            "name": "Synthetic driver",
+            "email": "[email redacted]",
+            "origin": {
+              "lat": 50.0755,
+              "lon": 14.4378
+            },
+            "experience": "beginner",
+            "happyToTeach": false,
+            "equipment": [],
+            "shareEquipment": false,
+            "transport": "drive",
+            "car": {
+              "available": true,
+              "offerRides": true,
+              "passengerSeats": 1,
+              "maxDetourMinutes": 30
+            }
+          },
+          {
+            "timezone": "Europe/Prague",
+            "interests": [
+              "Saturn"
+            ],
+            "maxTravelMinutes": 120,
+            "maxWalkMinutes": 30,
+            "groupSize": {
+              "min": 2,
+              "max": 2
+            },
+            "preference": "balanced",
+            "availability": [
+              {
+                "start": "2026-11-16T15:00:00.000Z",
+                "end": "2026-11-17T00:00:00.000Z"
+              }
+            ],
+            "id": "rider",
+            "name": "Synthetic telescope owner",
+            "email": "[email redacted]",
+            "origin": {
+              "lat": 50.078,
+              "lon": 14.44
+            },
+            "experience": "experienced",
+            "happyToTeach": true,
+            "equipment": [
+              "telescope"
+            ],
+            "shareEquipment": true,
+            "transport": "ride",
+            "pickup": {
+              "name": "Public test pickup; not an agreed real meeting",
+              "location": {
+                "lat": 50.078,
+                "lon": 14.44
+              }
+            }
+          }
+        ],
+        "sites": [
+          {
+            "id": "public-test",
+            "name": "Vyšehrad — access unverified",
+            "location": {
+              "lat": 50.064,
+              "lon": 14.4184
+            },
+            "meetingPoint": {
+              "lat": 50.064,
+              "lon": 14.4184
+            },
+            "walkMinutes": 0,
+            "access": "unverified",
+            "accessNote": "Synthetic participant test only; no actual night access or pickup agreement established.",
+            "accessWindows": [
+              {
+                "start": "2026-11-16T15:00:00.000Z",
+                "end": "2026-11-17T00:00:00.000Z"
+              }
+            ],
+            "bortle": null,
+            "skyQualitySource": null
+          }
+        ]
+      },
+      "result": {
+        "status": "needs_access_check",
+        "planId": "841b6096-2d06-4d02-8b6d-0059cbb33dd3",
+        "mode": "live",
+        "createdAt": "2026-11-15T00:58:53.884Z",
+        "request": {
+          "organizerId": "driver",
+          "target": "Saturn",
+          "start": "2026-11-16T17:00:00.000Z",
+          "end": "2026-11-16T22:00:00.000Z",
+          "timezone": "Europe/Prague",
+          "durationMinutes": 30,
+          "minPeople": 2,
+          "maxPeople": 2,
+          "needsGuide": true,
+          "trafficModel": "approximated",
+          "drivingBufferMinutes": 10,
+          "pickupStopMinutes": 3,
+          "maxCloudCover": 40,
+          "maxWindKmh": 25,
+          "minTemperatureC": -5,
+          "maxPrecipitationProbability": 20
+        },
+        "observingStart": "2026-11-16T19:30:00.000Z",
+        "observingEnd": "2026-11-16T20:00:00.000Z",
+        "meetingStart": "2026-11-16T19:15:00.000Z",
+        "meetingEnd": "2026-11-16T20:00:00.000Z",
+        "site": {
+          "id": "public-test",
+          "name": "Vyšehrad — access unverified",
+          "location": {
+            "lat": 50.064,
+            "lon": 14.4184
+          },
+          "meetingPoint": {
+            "lat": 50.064,
+            "lon": 14.4184
+          },
+          "walkMinutes": 0,
+          "access": "unverified",
+          "accessNote": "Synthetic participant test only; no actual night access or pickup agreement established.",
+          "accessWindows": [
+            {
+              "start": "2026-11-16T15:00:00.000Z",
+              "end": "2026-11-17T00:00:00.000Z"
+            }
+          ],
+          "bortle": null,
+          "skyQualitySource": null
+        },
+        "participants": [
+          {
+            "id": "driver",
+            "name": "Synthetic driver",
+            "email": "[email redacted]",
+            "origin": {
+              "lat": 50.0755,
+              "lon": 14.4378
+            },
+            "timezone": "Europe/Prague",
+            "interests": [
+              "Saturn"
+            ],
+            "experience": "beginner",
+            "happyToTeach": false,
+            "equipment": [],
+            "shareEquipment": false,
+            "transport": "drive",
+            "car": {
+              "available": true,
+              "offerRides": true,
+              "passengerSeats": 1,
+              "maxDetourMinutes": 30
+            },
+            "maxTravelMinutes": 120,
+            "maxWalkMinutes": 30,
+            "groupSize": {
+              "min": 2,
+              "max": 2
+            },
+            "preference": "balanced",
+            "availability": [
+              {
+                "start": "2026-11-16T15:00:00.000Z",
+                "end": "2026-11-17T00:00:00.000Z"
+              }
+            ]
+          },
+          {
+            "id": "rider",
+            "name": "Synthetic telescope owner",
+            "email": "[email redacted]",
+            "origin": {
+              "lat": 50.078,
+              "lon": 14.44
+            },
+            "timezone": "Europe/Prague",
+            "interests": [
+              "Saturn"
+            ],
+            "experience": "experienced",
+            "happyToTeach": true,
+            "equipment": [
+              "telescope"
+            ],
+            "shareEquipment": true,
+            "transport": "ride",
+            "pickup": {
+              "name": "Public test pickup; not an agreed real meeting",
+              "location": {
+                "lat": 50.078,
+                "lon": 14.44
+              }
+            },
+            "maxTravelMinutes": 120,
+            "maxWalkMinutes": 30,
+            "groupSize": {
+              "min": 2,
+              "max": 2
+            },
+            "preference": "balanced",
+            "availability": [
+              {
+                "start": "2026-11-16T15:00:00.000Z",
+                "end": "2026-11-17T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "routes": [
+          {
+            "participantId": "driver",
+            "name": "Synthetic driver",
+            "mode": "drive",
+            "outbound": {
+              "minutes": 34,
+              "distanceMeters": 4146
+            },
+            "return": {
+              "minutes": 34,
+              "distanceMeters": 4201
+            },
+            "walkOutMinutes": 0,
+            "walkBackMinutes": 0,
+            "departAt": "2026-11-16T18:41:00.000Z",
+            "homeBy": "2026-11-16T20:34:00.000Z",
+            "navigationUrl": "https://www.google.com/maps/dir/?api=1&destination=50.064%2C14.4184&travelmode=driving"
+          },
+          {
+            "participantId": "rider",
+            "name": "Synthetic telescope owner",
+            "mode": "ride",
+            "outbound": {
+              "minutes": 28,
+              "distanceMeters": 3368
+            },
+            "return": {
+              "minutes": 26,
+              "distanceMeters": 3414
+            },
+            "walkOutMinutes": 0,
+            "walkBackMinutes": 0,
+            "driverId": "driver",
+            "departAt": "2026-11-16T18:47:00.000Z",
+            "homeBy": "2026-11-16T20:26:00.000Z",
+            "navigationUrl": "https://www.google.com/maps/dir/?api=1&destination=50.064%2C14.4184&travelmode=driving",
+            "pickupNavigationUrl": "https://www.google.com/maps/dir/?api=1&destination=50.078%2C14.44&travelmode=walking"
+          }
+        ],
+        "carpools": [
+          {
+            "driverId": "driver",
+            "driverName": "Synthetic driver",
+            "passengerIds": [
+              "rider"
+            ],
+            "passengerSeats": 1,
+            "detourOutMinutes": 11,
+            "detourBackMinutes": 11,
+            "pickups": [
+              {
+                "participantId": "rider",
+                "name": "Synthetic telescope owner",
+                "pickup": {
+                  "name": "Public test pickup; not an agreed real meeting",
+                  "location": {
+                    "lat": 50.078,
+                    "lon": 14.44
+                  }
+                },
+                "pickupAt": "2026-11-16T18:47:00.000Z",
+                "dropoffAt": "2026-11-16T20:26:00.000Z"
+              }
+            ],
+            "outboundNavigationUrl": "https://www.google.com/maps/dir/?api=1&destination=50.064%2C14.4184&travelmode=driving&waypoints=50.078%2C14.44",
+            "returnNavigationUrl": "https://www.google.com/maps/dir/?api=1&destination=50.078%2C14.44&travelmode=driving&origin=50.064%2C14.4184",
+            "returnOrder": [
+              "rider"
+            ],
+            "status": "proposed_confirm_with_driver_and_riders"
+          }
+        ],
+        "equipment": [
+          "Synthetic telescope owner offers a shared telescope; confirm transport and setup with them."
+        ],
+        "traffic": {
+          "model": "approximated",
+          "drivingBufferMinutes": 10,
+          "pickupStopMinutes": 3,
+          "liveTraffic": false,
+          "departureTimePrediction": false,
+          "description": "Geoapify approximated traffic adjusts road speeds for likely congestion. It is not live traffic or a departure-time forecast."
+        },
+        "astronomy": {
+          "suitable": true,
+          "minTargetAltitude": 40.61420292118538,
+          "maxSunAltitude": -39.75412510616306,
+          "maxMoonAltitude": 12.577050781242917,
+          "moonIllumination": 0.4357410788189468,
+          "moonPenalty": 0,
+          "sampleMinutes": 15
+        },
+        "weather": {
+          "suitable": true,
+          "maxCloudCover": 9,
+          "maxWindKmh": 10.8,
+          "minTemperatureC": 7.6,
+          "maxPrecipitationProbability": 8,
+          "minVisibilityM": 33025,
+          "source": "Open-Meteo",
+          "fetchedAt": "2026-11-15T00:58:54.678Z"
+        },
+        "score": 0.78,
+        "scoring": "Mean participant utility: sky weight best_sky=0.85, balanced=0.5, shortest_journey=0.15; remaining weight is travel. Confirmed access ranks first. Score is a heuristic, not a probability.",
+        "alternatives": [
+          {
+            "site": "Vyšehrad — access unverified",
+            "observingStart": "2026-11-16T19:00:00.000Z",
+            "participants": [
+              "driver",
+              "rider"
+            ],
+            "score": 0.7788,
+            "detailedRoutesChecked": false
+          },
+          {
+            "site": "Vyšehrad — access unverified",
+            "observingStart": "2026-11-16T21:00:00.000Z",
+            "participants": [
+              "driver",
+              "rider"
+            ],
+            "score": 0.6997,
+            "detailedRoutesChecked": false
+          },
+          {
+            "site": "Vyšehrad — access unverified",
+            "observingStart": "2026-11-16T21:30:00.000Z",
+            "participants": [
+              "driver",
+              "rider"
+            ],
+            "score": 0.6966,
+            "detailedRoutesChecked": false
+          }
+        ],
+        "exclusions": {
+          "poor_weather": 6
+        },
+        "warnings": [
+          "Night access needs confirmation before an invitation can be prepared.",
+          "Light pollution is unknown; no dark-sky claim has been made.",
+          "Forecasts are provisional. Recheck conditions before departure.",
+          "Target altitude assumes a level horizon; trees, terrain and atmospheric seeing are not modelled.",
+          "Driving uses approximated traffic plus 10 minutes of buffer each way. No live traffic or departure-time prediction. Navigation links may select a different route.",
+          "Carpool offers and public pickup points must be confirmed by drivers and riders. Return drop-offs reverse the pickup order. Passenger seats must already allow for equipment.",
+          "Availability comes from profiles. RSVP and equipment-sharing acceptance are still pending."
+        ],
+        "sources": [
+          "https://www.geoapify.com/",
+          "https://open-meteo.com/",
+          "https://github.com/cosinekitty/astronomy"
+        ]
+      }
+    }
+  ]
+}

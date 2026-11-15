@@ -1,0 +1,47 @@
+{
+  "provenance": {
+    "recordedAt": "2026-11-15T00:40:50.775Z",
+    "mode": "live-read-only",
+    "coordinates": "Public central Prague coordinate; not a participant home or approved observing site",
+    "weather": "Actual Open-Meteo response",
+    "astronomy": "Actual Astronomy Engine calculation",
+    "redaction": "No credentials, personal profiles or attendee addresses were collected",
+    "calendarWrite": false
+  },
+  "calls": [
+    {
+      "tool": "get_observing_conditions",
+      "arguments": {
+        "location": {
+          "lat": 50.0755,
+          "lon": 14.4378
+        },
+        "start": "2026-11-16T19:00:00.000Z",
+        "end": "2026-11-16T20:00:00.000Z",
+        "target": "Saturn"
+      },
+      "result": {
+        "mode": "live",
+        "weather": {
+          "suitable": true,
+          "maxCloudCover": 37,
+          "maxWindKmh": 10.7,
+          "minTemperatureC": 7.6,
+          "maxPrecipitationProbability": 8,
+          "minVisibilityM": 33310,
+          "source": "Open-Meteo",
+          "fetchedAt": "2026-11-15T00:40:50.558Z"
+        },
+        "astronomy": {
+          "suitable": true,
+          "minTargetAltitude": 39.540070233640094,
+          "maxSunAltitude": -35.1217101137897,
+          "maxMoonAltitude": 15.42076932030605,
+          "moonIllumination": 0.43375547806862214,
+          "moonPenalty": 0,
+          "sampleMinutes": 15
+        }
+      }
+    }
+  ]
+}

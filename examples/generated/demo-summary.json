@@ -1,0 +1,137 @@
+{
+  "label": "OFFLINE DEMO — not a real forecast or invitation",
+  "recordedAt": "2026-11-15T19:21:42.795Z",
+  "selectedSite": "Demo ridge (fictional access)",
+  "selectedPeople": [
+    "Anna (demo)",
+    "Eva (demo)",
+    "Petr (demo)"
+  ],
+  "observingStart": "2026-11-20T19:00:00.000Z",
+  "observingEnd": "2026-11-20T20:00:00.000Z",
+  "timezone": "Europe/Prague",
+  "meetingStart": "2026-11-20T18:35:00.000Z",
+  "meetingEnd": "2026-11-20T20:25:00.000Z",
+  "cloudCover": 12,
+  "targetAltitude": 40,
+  "equipment": [
+    "Petr (demo) offers a shared telescope; confirm transport and setup with them."
+  ],
+  "routes": [
+    {
+      "participantId": "anna",
+      "name": "Anna (demo)",
+      "mode": "drive",
+      "outbound": {
+        "minutes": 54,
+        "distanceMeters": 24000
+      },
+      "return": {
+        "minutes": 57,
+        "distanceMeters": 25200
+      },
+      "walkOutMinutes": 0,
+      "walkBackMinutes": 0,
+      "departAt": "2026-11-20T17:41:00.000Z",
+      "homeBy": "2026-11-20T21:22:00.000Z",
+      "navigationUrl": "https://www.google.com/maps/dir/?api=1&destination=49.913%2C14.699&travelmode=driving"
+    },
+    {
+      "participantId": "eva",
+      "name": "Eva (demo)",
+      "mode": "drive",
+      "outbound": {
+        "minutes": 32,
+        "distanceMeters": 12000
+      },
+      "return": {
+        "minutes": 35,
+        "distanceMeters": 13200
+      },
+      "walkOutMinutes": 0,
+      "walkBackMinutes": 0,
+      "departAt": "2026-11-20T18:03:00.000Z",
+      "homeBy": "2026-11-20T21:00:00.000Z",
+      "navigationUrl": "https://www.google.com/maps/dir/?api=1&destination=49.913%2C14.699&travelmode=driving"
+    },
+    {
+      "participantId": "petr",
+      "name": "Petr (demo)",
+      "mode": "drive",
+      "outbound": {
+        "minutes": 43,
+        "distanceMeters": 18000
+      },
+      "return": {
+        "minutes": 46,
+        "distanceMeters": 19200
+      },
+      "walkOutMinutes": 0,
+      "walkBackMinutes": 0,
+      "departAt": "2026-11-20T17:52:00.000Z",
+      "homeBy": "2026-11-20T21:11:00.000Z",
+      "navigationUrl": "https://www.google.com/maps/dir/?api=1&destination=49.913%2C14.699&travelmode=driving"
+    }
+  ],
+  "invitationStatus": "demo_do_not_send",
+  "shortestJourneySite": "Demo meadow (fictional access)",
+  "noSharedTelescope": "no_match",
+  "carpools": [
+    {
+      "driverId": "anna",
+      "driverName": "Anna (demo)",
+      "passengerIds": [
+        "petr",
+        "eva"
+      ],
+      "passengerSeats": 2,
+      "detourOutMinutes": 12,
+      "detourBackMinutes": 12,
+      "pickups": [
+        {
+          "participantId": "petr",
+          "name": "Petr (demo)",
+          "pickup": {
+            "name": "Demo library entrance",
+            "location": {
+              "lat": 50.035,
+              "lon": 14.5
+            }
+          },
+          "pickupAt": "2026-11-20T17:40:00.000Z",
+          "dropoffAt": "2026-11-20T21:20:00.000Z"
+        },
+        {
+          "participantId": "eva",
+          "name": "Eva (demo)",
+          "pickup": {
+            "name": "Demo station forecourt",
+            "location": {
+              "lat": 50.001,
+              "lon": 14.6
+            }
+          },
+          "pickupAt": "2026-11-20T18:00:00.000Z",
+          "dropoffAt": "2026-11-20T21:00:00.000Z"
+        }
+      ],
+      "outboundNavigationUrl": "https://www.google.com/maps/dir/?api=1&destination=49.913%2C14.699&travelmode=driving&waypoints=50.035%2C14.5%7C50.001%2C14.6",
+      "returnNavigationUrl": "https://www.google.com/maps/dir/?api=1&destination=50.035%2C14.5&travelmode=driving&waypoints=50.001%2C14.6&origin=49.913%2C14.699",
+      "returnOrder": [
+        "eva",
+        "petr"
+      ],
+      "status": "proposed_confirm_with_driver_and_riders"
+    }
+  ],
+  "carpoolSite": "Demo ridge (fictional access)",
+  "carpoolTraffic": {
+    "model": "approximated",
+    "drivingBufferMinutes": 10,
+    "pickupStopMinutes": 3,
+    "liveTraffic": false,
+    "departureTimePrediction": false,
+    "description": "Geoapify approximated traffic adjusts road speeds for likely congestion. It is not live traffic or a departure-time forecast."
+  },
+  "insufficientSeats": "no_match"
+}

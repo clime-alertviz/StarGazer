@@ -1,0 +1,126 @@
+{
+  "checkedAt": "2026-11-15T22:58:03.377Z",
+  "status": "passed",
+  "provenance": "Real Codex app-server model turn; deterministic weather and Geoapify fixtures, real Astronomy Engine, temporary SQLite database.",
+  "selected": {
+    "site": "Central meadow",
+    "start": "2026-11-17T18:00:00.000Z",
+    "end": "2026-11-17T19:00:00.000Z",
+    "transport": "walk",
+    "participants": [
+      {
+        "id": "organizer",
+        "transport": "walk"
+      },
+      {
+        "id": "teacher",
+        "transport": "walk"
+      }
+    ]
+  },
+  "matching": [
+    {
+      "id": "photo",
+      "reason": "Quiet night photography best matches Alex’s photography interest and explicit preference for a quiet session; a good view and travel fit are not confirmed."
+    },
+    {
+      "id": "social",
+      "reason": "Stargazing matches Alex’s interests, but a lively social evening is less aligned with the preference for quiet photography."
+    }
+  ],
+  "summary": "Choose Alex and Sam at Central meadow on 17 November, observing 19:00–20:00 Prague time. Sam offers experienced guidance and explicitly enjoys teaching quiet night photography, unlike Jamie's preference for lively evenings. Both meadow and Quiet hill passed validation; meadow avoids the hill's extra journey, with essentially identical sky/weather evidence. Validator schedules departure 18:35 and return by 20:25 including final walks, setup and packing. Both walk and bring their offered cameras/tripods. Forecast gives 5% cloud, 5 km/h wind, 8°C and no precipitation; astronomy is suitable, though the approximately half-lit Moon affects faint objects. Provider matrix reports a generic five-minute route even for the coincident meadow origin; validation treats that segment as zero, so allow five extra minutes conservatively. Night access and the final path must be confirmed; quietness, horizon and light pollution are not verified. No unresolved guide or transport requirement; no invitations sent.",
+  "trace": [
+    {
+      "tool": "read_planning_context",
+      "status": "ok"
+    },
+    {
+      "tool": "list_place_categories",
+      "status": "ok"
+    },
+    {
+      "tool": "search_places",
+      "status": "ok"
+    },
+    {
+      "tool": "discover_sites",
+      "status": "ok"
+    },
+    {
+      "tool": "calculate_route_matrix",
+      "status": "ok"
+    },
+    {
+      "tool": "get_weather_forecast",
+      "status": "ok"
+    },
+    {
+      "tool": "calculate_astronomy",
+      "status": "ok"
+    },
+    {
+      "tool": "register_site",
+      "status": "ok"
+    },
+    {
+      "tool": "register_site",
+      "status": "ok"
+    },
+    {
+      "tool": "calculate_route",
+      "status": "ok"
+    },
+    {
+      "tool": "get_weather_forecast",
+      "status": "ok"
+    },
+    {
+      "tool": "calculate_astronomy",
+      "status": "ok"
+    },
+    {
+      "tool": "evaluate_candidate",
+      "arguments": {
+        "siteId": "spot-0",
+        "start": "2026-11-17T18:00:00Z",
+        "participantIds": [
+          "organizer",
+          "teacher"
+        ],
+        "transports": {
+          "organizer": "walk",
+          "teacher": "walk"
+        },
+        "allowIncomplete": false
+      },
+      "status": "needs_access_check",
+      "candidateId": "candidate-1"
+    },
+    {
+      "tool": "evaluate_candidate",
+      "arguments": {
+        "siteId": "spot-1",
+        "start": "2026-11-17T18:00:00Z",
+        "participantIds": [
+          "organizer",
+          "teacher"
+        ],
+        "transports": {
+          "organizer": "walk",
+          "teacher": "walk"
+        },
+        "allowIncomplete": false
+      },
+      "status": "needs_access_check",
+      "candidateId": "candidate-2"
+    },
+    {
+      "tool": "calculate_route",
+      "status": "ok"
+    },
+    {
+      "tool": "finish_plan",
+      "status": "needs_access_check"
+    }
+  ]
+}

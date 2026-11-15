@@ -1,0 +1,45 @@
+{
+  "name": "star-gazer",
+  "version": "0.4.0",
+  "private": true,
+  "description": "A shared stargazing service with a web GUI and authenticated Codex MCP tools.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test test/*.test.js",
+    "demo": "node scripts/demo.js",
+    "smoke": "node scripts/smoke.js",
+    "check": "node scripts/check.js",
+    "walkthrough": "python3 scripts/render-walkthrough.py",
+    "package": "node scripts/package.js",
+    "verify:install": "node scripts/verify-install.js",
+    "test:live-plan": "node scripts/live-plan.js",
+    "test:live-transport": "node scripts/live-transport.js",
+    "web": "node --env-file-if-exists=.env web/hub.js",
+    "test:live-web": "node scripts/verify-web-live.js",
+    "test:live-client": "node scripts/verify-client-solver.js",
+    "test:live-solver": "node scripts/verify-solver-live.js",
+    "web:legacy": "node --env-file-if-exists=.env web/server.js",
+    "seed": "node --env-file-if-exists=.env scripts/seed-community.js",
+    "web:demo": "PORT=${PORT:-4318} STAR_GAZER_DATA_DIR=private/community-demo node --env-file-if-exists=.env web/hub.js",
+    "codex": "node scripts/codex-local.js",
+    "test:live-providers": "node --env-file-if-exists=.env scripts/verify-provider-live.js",
+    "check:submission": "node scripts/check-submission.js",
+    "tutorial": "node scripts/tutorial.js"
+  },
+  "dependencies": {
+    "@js-temporal/polyfill": "0.5.1",
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "astronomy-engine": "2.1.19",
+    "nodemailer": "10.5.0",
+    "yaml": "2.9.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@openai/codex": "0.169.0"
+  }
+}

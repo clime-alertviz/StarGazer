@@ -1,0 +1,102 @@
+{
+  "checkedAt": "2026-11-15T23:24:01.599Z",
+  "status": "passed",
+  "provenance": "Actual Codex client model uses StarGazer HTTP MCP plus independent Geoapify and sky tool groups. Backend model throws if invoked. Fixture Geoapify/weather; real Astronomy Engine; temporary SQLite.",
+  "backendModelCalls": 0,
+  "selected": {
+    "site": "Central meadow",
+    "start": "2026-11-17T18:00:00.000Z",
+    "people": [
+      {
+        "name": "Alex",
+        "transport": "walk"
+      },
+      {
+        "name": "Sam",
+        "transport": "walk"
+      }
+    ]
+  },
+  "summary": "Compared Central meadow and Quiet hill with Alex and Sam: both pass sky/weather and journey checks, pending access verification. Central meadow wins on checked travel (zero versus five minutes each way), with no verified sky or quietness advantage at Quiet hill. Sam explicitly enjoys teaching quiet night photography and is experienced; Jamie prefers lively social evenings and does not offer teaching. Both selected people list cameras and tripods. Weather is test-fixture data, not a real forecast. Moon about 53% illuminated above horizon may reduce faint-sky contrast. Verify dated night access, meeting point, final walk and horizon before invitations; no invitations requested.",
+  "trace": [
+    {
+      "tool": "get_state",
+      "status": "ok"
+    },
+    {
+      "tool": "begin_planning",
+      "status": "ok"
+    },
+    {
+      "tool": "list_place_categories",
+      "status": "ok",
+      "group": "geoapify"
+    },
+    {
+      "tool": "search_places",
+      "status": "ok",
+      "group": "geoapify"
+    },
+    {
+      "tool": "calculate_route_matrix",
+      "status": "ok",
+      "group": "geoapify"
+    },
+    {
+      "tool": "calculate_route_matrix",
+      "status": "ok",
+      "group": "geoapify"
+    },
+    {
+      "tool": "register_planning_site",
+      "status": "ok"
+    },
+    {
+      "tool": "register_planning_site",
+      "status": "ok"
+    },
+    {
+      "tool": "get_weather_forecast",
+      "status": "ok",
+      "group": "sky"
+    },
+    {
+      "tool": "calculate_astronomy",
+      "status": "ok",
+      "group": "sky"
+    },
+    {
+      "tool": "get_weather_forecast",
+      "status": "ok",
+      "group": "sky"
+    },
+    {
+      "tool": "calculate_astronomy",
+      "status": "ok",
+      "group": "sky"
+    },
+    {
+      "tool": "calculate_route",
+      "status": "ok",
+      "group": "geoapify"
+    },
+    {
+      "tool": "check_plan_candidate",
+      "status": "ok",
+      "siteId": "researched-1",
+      "start": "2026-11-17T18:00:00Z",
+      "result": "needs_access_check"
+    },
+    {
+      "tool": "check_plan_candidate",
+      "status": "ok",
+      "siteId": "researched-2",
+      "start": "2026-11-17T18:00:00Z",
+      "result": "needs_access_check"
+    },
+    {
+      "tool": "save_plan_candidate",
+      "status": "ok"
+    }
+  ]
+}

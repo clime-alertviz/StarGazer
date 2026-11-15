@@ -1,0 +1,38 @@
+{
+  "checkedAt": "2026-11-15T23:02:16.710Z",
+  "status": "passed",
+  "provenance": "Actual independent stdio MCP processes call live Geoapify MCP and Open-Meteo; real Astronomy Engine. No StarGazer database, token or backend LLM.",
+  "place": "Slavkov u Brna, South Moravian Region, Czechia",
+  "viewpoints": 2,
+  "forecastRetrieved": "2026-11-15T23:02:16.456Z",
+  "trace": [
+    {
+      "tool": "geocode_address",
+      "status": "passed"
+    },
+    {
+      "tool": "list_place_categories",
+      "status": "passed"
+    },
+    {
+      "tool": "search_places",
+      "status": "passed"
+    },
+    {
+      "tool": "calculate_route_matrix",
+      "status": "passed"
+    },
+    {
+      "tool": "calculate_route",
+      "status": "passed"
+    },
+    {
+      "tool": "get_weather_forecast",
+      "status": "passed"
+    },
+    {
+      "tool": "calculate_astronomy",
+      "status": "passed"
+    }
+  ]
+}

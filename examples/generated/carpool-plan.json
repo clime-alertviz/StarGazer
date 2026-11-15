@@ -1,0 +1,1337 @@
+{
+  "status": "proposal",
+  "planId": "1094906c-dd2d-4f3b-8c58-ff41f2602e8d",
+  "mode": "demo",
+  "createdAt": "2026-11-15T12:00:00.000Z",
+  "request": {
+    "organizerId": "anna",
+    "target": "Saturn",
+    "start": "2026-11-20T18:00:00+01:00",
+    "end": "2026-11-20T23:00:00+01:00",
+    "timezone": "Europe/Prague",
+    "durationMinutes": 60,
+    "minPeople": 3,
+    "maxPeople": 3,
+    "needsGuide": true,
+    "trafficModel": "approximated",
+    "drivingBufferMinutes": 10,
+    "pickupStopMinutes": 3,
+    "maxCloudCover": 40,
+    "maxWindKmh": 25,
+    "minTemperatureC": -5,
+    "maxPrecipitationProbability": 20
+  },
+  "observingStart": "2026-11-20T19:00:00.000Z",
+  "observingEnd": "2026-11-20T20:00:00.000Z",
+  "meetingStart": "2026-11-20T18:35:00.000Z",
+  "meetingEnd": "2026-11-20T20:25:00.000Z",
+  "setupMinutes": 15,
+  "packUpMinutes": 15,
+  "site": {
+    "id": "demo-ridge",
+    "name": "Demo ridge (fictional access)",
+    "location": {
+      "lat": 49.91,
+      "lon": 14.7
+    },
+    "meetingPoint": {
+      "lat": 49.913,
+      "lon": 14.699
+    },
+    "walkMinutes": 10,
+    "access": "confirmed",
+    "accessNote": "DEMO ONLY: assume permission for this fictional meeting point. Not a checked real observing site.",
+    "accessWindows": [
+      {
+        "start": "2026-11-20T16:00:00+01:00",
+        "end": "2026-11-21T01:00:00+01:00"
+      }
+    ],
+    "bortle": 4,
+    "skyQualitySource": "Synthetic demo estimate; no measured light-pollution data."
+  },
+  "participants": [
+    {
+      "id": "anna",
+      "name": "Anna (demo)",
+      "email": "anna@example.test",
+      "origin": {
+        "lat": 50.0755,
+        "lon": 14.4378
+      },
+      "timezone": "Europe/Prague",
+      "interests": [
+        "Saturn",
+        "stargazing"
+      ],
+      "experience": "beginner",
+      "happyToTeach": false,
+      "equipment": [],
+      "shareEquipment": false,
+      "transport": "drive",
+      "car": {
+        "available": true,
+        "offerRides": true,
+        "passengerSeats": 2,
+        "maxDetourMinutes": 25
+      },
+      "maxTravelMinutes": 100,
+      "maxWalkMinutes": 15,
+      "groupSize": {
+        "min": 2,
+        "max": 4
+      },
+      "preference": "balanced",
+      "availability": [
+        {
+          "start": "2026-11-20T17:00:00+01:00",
+          "end": "2026-11-20T23:30:00+01:00"
+        }
+      ]
+    },
+    {
+      "id": "eva",
+      "name": "Eva (demo)",
+      "email": "eva@example.test",
+      "origin": {
+        "lat": 50,
+        "lon": 14.6
+      },
+      "timezone": "Europe/Prague",
+      "interests": [
+        "Saturn",
+        "stargazing"
+      ],
+      "experience": "beginner",
+      "happyToTeach": false,
+      "equipment": [
+        "camera",
+        "tripod"
+      ],
+      "shareEquipment": true,
+      "transport": "ride",
+      "pickup": {
+        "name": "Demo station forecourt",
+        "location": {
+          "lat": 50.001,
+          "lon": 14.6
+        }
+      },
+      "maxTravelMinutes": 60,
+      "maxWalkMinutes": 15,
+      "groupSize": {
+        "min": 2,
+        "max": 4
+      },
+      "preference": "balanced",
+      "availability": [
+        {
+          "start": "2026-11-20T17:00:00+01:00",
+          "end": "2026-11-20T23:30:00+01:00"
+        }
+      ]
+    },
+    {
+      "id": "petr",
+      "name": "Petr (demo)",
+      "email": "petr@example.test",
+      "origin": {
+        "lat": 50.034,
+        "lon": 14.5
+      },
+      "timezone": "Europe/Prague",
+      "interests": [
+        "Saturn",
+        "stargazing"
+      ],
+      "experience": "experienced",
+      "happyToTeach": true,
+      "equipment": [
+        "telescope",
+        "binoculars"
+      ],
+      "shareEquipment": true,
+      "transport": "ride",
+      "pickup": {
+        "name": "Demo library entrance",
+        "location": {
+          "lat": 50.035,
+          "lon": 14.5
+        }
+      },
+      "maxTravelMinutes": 70,
+      "maxWalkMinutes": 20,
+      "groupSize": {
+        "min": 2,
+        "max": 4
+      },
+      "preference": "best_sky",
+      "availability": [
+        {
+          "start": "2026-11-20T17:00:00+01:00",
+          "end": "2026-11-20T23:30:00+01:00"
+        }
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "participantId": "anna",
+      "name": "Anna (demo)",
+      "mode": "drive",
+      "outbound": {
+        "minutes": 66,
+        "distanceMeters": 27000
+      },
+      "return": {
+        "minutes": 69,
+        "distanceMeters": 28200
+      },
+      "walkOutMinutes": 0,
+      "walkBackMinutes": 0,
+      "departAt": "2026-11-20T17:29:00.000Z",
+      "homeBy": "2026-11-20T21:34:00.000Z",
+      "navigationUrl": "https://www.google.com/maps/dir/?api=1&destination=49.913%2C14.699&travelmode=driving"
+    },
+    {
+      "participantId": "eva",
+      "name": "Eva (demo)",
+      "mode": "ride",
+      "outbound": {
+        "minutes": 36,
+        "distanceMeters": 12600
+      },
+      "return": {
+        "minutes": 36,
+        "distanceMeters": 13800
+      },
+      "walkOutMinutes": 1,
+      "walkBackMinutes": 1,
+      "driverId": "anna",
+      "departAt": "2026-11-20T17:59:00.000Z",
+      "homeBy": "2026-11-20T21:01:00.000Z",
+      "navigationUrl": "https://www.google.com/maps/dir/?api=1&destination=49.913%2C14.699&travelmode=driving",
+      "pickupNavigationUrl": "https://www.google.com/maps/dir/?api=1&destination=50.001%2C14.6&travelmode=walking"
+    },
+    {
+      "participantId": "petr",
+      "name": "Petr (demo)",
+      "mode": "ride",
+      "outbound": {
+        "minutes": 56,
+        "distanceMeters": 21600
+      },
+      "return": {
+        "minutes": 56,
+        "distanceMeters": 22800
+      },
+      "walkOutMinutes": 1,
+      "walkBackMinutes": 1,
+      "driverId": "anna",
+      "departAt": "2026-11-20T17:39:00.000Z",
+      "homeBy": "2026-11-20T21:21:00.000Z",
+      "navigationUrl": "https://www.google.com/maps/dir/?api=1&destination=49.913%2C14.699&travelmode=driving",
+      "pickupNavigationUrl": "https://www.google.com/maps/dir/?api=1&destination=50.035%2C14.5&travelmode=walking"
+    }
+  ],
+  "carpools": [
+    {
+      "driverId": "anna",
+      "driverName": "Anna (demo)",
+      "passengerIds": [
+        "petr",
+        "eva"
+      ],
+      "passengerSeats": 2,
+      "detourOutMinutes": 12,
+      "detourBackMinutes": 12,
+      "pickups": [
+        {
+          "participantId": "petr",
+          "name": "Petr (demo)",
+          "pickup": {
+            "name": "Demo library entrance",
+            "location": {
+              "lat": 50.035,
+              "lon": 14.5
+            }
+          },
+          "pickupAt": "2026-11-20T17:40:00.000Z",
+          "dropoffAt": "2026-11-20T21:20:00.000Z"
+        },
+        {
+          "participantId": "eva",
+          "name": "Eva (demo)",
+          "pickup": {
+            "name": "Demo station forecourt",
+            "location": {
+              "lat": 50.001,
+              "lon": 14.6
+            }
+          },
+          "pickupAt": "2026-11-20T18:00:00.000Z",
+          "dropoffAt": "2026-11-20T21:00:00.000Z"
+        }
+      ],
+      "outboundNavigationUrl": "https://www.google.com/maps/dir/?api=1&destination=49.913%2C14.699&travelmode=driving&waypoints=50.035%2C14.5%7C50.001%2C14.6",
+      "returnNavigationUrl": "https://www.google.com/maps/dir/?api=1&destination=50.035%2C14.5&travelmode=driving&waypoints=50.001%2C14.6&origin=49.913%2C14.699",
+      "returnOrder": [
+        "eva",
+        "petr"
+      ],
+      "status": "proposed_confirm_with_driver_and_riders"
+    }
+  ],
+  "equipment": [
+    "Petr (demo) offers a shared telescope; confirm transport and setup with them."
+  ],
+  "traffic": {
+    "model": "approximated",
+    "drivingBufferMinutes": 10,
+    "pickupStopMinutes": 3,
+    "liveTraffic": false,
+    "departureTimePrediction": false,
+    "description": "Geoapify approximated traffic adjusts road speeds for likely congestion. It is not live traffic or a departure-time forecast."
+  },
+  "astronomy": {
+    "suitable": true,
+    "minTargetAltitude": 40.368088675630275,
+    "maxSunAltitude": -35.89684780275395,
+    "maxMoonAltitude": 45.558343703545674,
+    "moonIllumination": 0.8137993891818252,
+    "moonPenalty": 0,
+    "sampleMinutes": 15
+  },
+  "weather": {
+    "suitable": true,
+    "maxCloudCover": 12,
+    "maxWindKmh": 8,
+    "minTemperatureC": 4,
+    "maxPrecipitationProbability": 5,
+    "minVisibilityM": 24000,
+    "source": "Synthetic Open-Meteo-shaped fixture (not a forecast)",
+    "fetchedAt": "2026-11-15T12:00:00.000Z"
+  },
+  "score": 0.5662,
+  "scoring": "Mean participant utility: sky weight best_sky=0.85, balanced=0.5, shortest_journey=0.15; remaining weight is travel. Confirmed access ranks first. Score is a heuristic, not a probability.",
+  "alternatives": [
+    {
+      "site": "Demo ridge (fictional access)",
+      "observingStart": "2026-11-20T19:30:00.000Z",
+      "participants": [
+        "anna",
+        "eva",
+        "petr"
+      ],
+      "score": 0.5652,
+      "detailedRoutesChecked": false
+    },
+    {
+      "site": "Demo ridge (fictional access)",
+      "observingStart": "2026-11-20T18:30:00.000Z",
+      "participants": [
+        "anna",
+        "eva",
+        "petr"
+      ],
+      "score": 0.5643,
+      "detailedRoutesChecked": false
+    },
+    {
+      "site": "Demo ridge (fictional access)",
+      "observingStart": "2026-11-20T18:00:00.000Z",
+      "participants": [
+        "anna",
+        "eva",
+        "petr"
+      ],
+      "score": 0.5613,
+      "detailedRoutesChecked": false
+    }
+  ],
+  "exclusions": {
+    "no_shared_telescope": 1,
+    "travel_or_availability": 26
+  },
+  "warnings": [
+    "DEMO: fictional profiles, site access, weather and journeys. Astronomy is calculated for the recorded date. Do not send invitations.",
+    "Forecasts are provisional. Recheck conditions before departure.",
+    "Target altitude assumes a level horizon; trees, terrain and atmospheric seeing are not modelled.",
+    "Driving uses approximated traffic plus 10 minutes of buffer each way. No live traffic or departure-time prediction. Navigation links may select a different route.",
+    "Carpool offers and public pickup points must be confirmed by drivers and riders. Return drop-offs reverse the pickup order. Passenger seats must already allow for equipment.",
+    "Availability comes from profiles. RSVP and equipment-sharing acceptance are still pending."
+  ],
+  "sources": [
+    "https://www.geoapify.com/",
+    "https://open-meteo.com/",
+    "https://github.com/cosinekitty/astronomy"
+  ],
+  "evidence": {
+    "label": "Executed fixture calls; no Geoapify network requests",
+    "geoapifyCalls": [
+      {
+        "provider": "Geoapify MCP fixture — NO NETWORK",
+        "tool": "calculate_route_matrix",
+        "arguments": {
+          "sources": [
+            {
+              "lat": 50.0755,
+              "lon": 14.4378
+            },
+            {
+              "lat": 50.001,
+              "lon": 14.6
+            },
+            {
+              "lat": 50.035,
+              "lon": 14.5
+            },
+            {
+              "lat": 49.913,
+              "lon": 14.699
+            },
+            {
+              "lat": 50.012,
+              "lon": 14.599
+            }
+          ],
+          "targets": [
+            {
+              "lat": 50.0755,
+              "lon": 14.4378
+            },
+            {
+              "lat": 50.001,
+              "lon": 14.6
+            },
+            {
+              "lat": 50.035,
+              "lon": 14.5
+            },
+            {
+              "lat": 49.913,
+              "lon": 14.699
+            },
+            {
+              "lat": 50.012,
+              "lon": 14.599
+            }
+          ],
+          "mode": "drive",
+          "units": "metric",
+          "traffic": "approximated"
+        },
+        "result": {
+          "sources": [
+            {
+              "lat": 50.0755,
+              "lon": 14.4378
+            },
+            {
+              "lat": 50.001,
+              "lon": 14.6
+            },
+            {
+              "lat": 50.035,
+              "lon": 14.5
+            },
+            {
+              "lat": 49.913,
+              "lon": 14.699
+            },
+            {
+              "lat": 50.012,
+              "lon": 14.599
+            }
+          ],
+          "targets": [
+            {
+              "lat": 50.0755,
+              "lon": 14.4378
+            },
+            {
+              "lat": 50.001,
+              "lon": 14.6
+            },
+            {
+              "lat": 50.035,
+              "lon": 14.5
+            },
+            {
+              "lat": 49.913,
+              "lon": 14.699
+            },
+            {
+              "lat": 50.012,
+              "lon": 14.599
+            }
+          ],
+          "units": "metric",
+          "distance_units": "meters",
+          "time_units": "seconds",
+          "sources_to_targets": [
+            [
+              {
+                "time": 0,
+                "distance": 0
+              },
+              {
+                "time": 1680,
+                "distance": 15000
+              },
+              {
+                "time": 660,
+                "distance": 6000
+              },
+              {
+                "time": 2640,
+                "distance": 24000
+              },
+              {
+                "time": 1860,
+                "distance": 16800
+              }
+            ],
+            [
+              {
+                "time": 1680,
+                "distance": 15000
+              },
+              {
+                "time": 0,
+                "distance": 0
+              },
+              {
+                "time": 1020,
+                "distance": 9000
+              },
+              {
+                "time": 1320,
+                "distance": 12000
+              },
+              {
+                "time": 840,
+                "distance": 7200
+              }
+            ],
+            [
+              {
+                "time": 660,
+                "distance": 6000
+              },
+              {
+                "time": 1020,
+                "distance": 9000
+              },
+              {
+                "time": 0,
+                "distance": 0
+              },
+              {
+                "time": 1980,
+                "distance": 18000
+              },
+              {
+                "time": 1200,
+                "distance": 10800
+              }
+            ],
+            [
+              {
+                "time": 2820,
+                "distance": 25200
+              },
+              {
+                "time": 1500,
+                "distance": 13200
+              },
+              {
+                "time": 2160,
+                "distance": 19200
+              },
+              {
+                "time": 0,
+                "distance": 0
+              },
+              {
+                "time": 1320,
+                "distance": 12000
+              }
+            ],
+            [
+              {
+                "time": 1980,
+                "distance": 18000
+              },
+              {
+                "time": 960,
+                "distance": 8400
+              },
+              {
+                "time": 1320,
+                "distance": 12000
+              },
+              {
+                "time": 1320,
+                "distance": 12000
+              },
+              {
+                "time": 0,
+                "distance": 0
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "provider": "Geoapify MCP fixture — NO NETWORK",
+        "tool": "calculate_route_matrix",
+        "arguments": {
+          "sources": [
+            {
+              "lat": 50.08,
+              "lon": 14.43
+            },
+            {
+              "lat": 50,
+              "lon": 14.6
+            },
+            {
+              "lat": 50.034,
+              "lon": 14.5
+            },
+            {
+              "lat": 50.001,
+              "lon": 14.6
+            },
+            {
+              "lat": 50.035,
+              "lon": 14.5
+            },
+            {
+              "lat": 49.913,
+              "lon": 14.699
+            },
+            {
+              "lat": 50.012,
+              "lon": 14.599
+            }
+          ],
+          "targets": [
+            {
+              "lat": 50.08,
+              "lon": 14.43
+            },
+            {
+              "lat": 50,
+              "lon": 14.6
+            },
+            {
+              "lat": 50.034,
+              "lon": 14.5
+            },
+            {
+              "lat": 50.001,
+              "lon": 14.6
+            },
+            {
+              "lat": 50.035,
+              "lon": 14.5
+            },
+            {
+              "lat": 49.913,
+              "lon": 14.699
+            },
+            {
+              "lat": 50.012,
+              "lon": 14.599
+            }
+          ],
+          "mode": "walk",
+          "units": "metric"
+        },
+        "result": {
+          "sources": [
+            {
+              "lat": 50.08,
+              "lon": 14.43
+            },
+            {
+              "lat": 50,
+              "lon": 14.6
+            },
+            {
+              "lat": 50.034,
+              "lon": 14.5
+            },
+            {
+              "lat": 50.001,
+              "lon": 14.6
+            },
+            {
+              "lat": 50.035,
+              "lon": 14.5
+            },
+            {
+              "lat": 49.913,
+              "lon": 14.699
+            },
+            {
+              "lat": 50.012,
+              "lon": 14.599
+            }
+          ],
+          "targets": [
+            {
+              "lat": 50.08,
+              "lon": 14.43
+            },
+            {
+              "lat": 50,
+              "lon": 14.6
+            },
+            {
+              "lat": 50.034,
+              "lon": 14.5
+            },
+            {
+              "lat": 50.001,
+              "lon": 14.6
+            },
+            {
+              "lat": 50.035,
+              "lon": 14.5
+            },
+            {
+              "lat": 49.913,
+              "lon": 14.699
+            },
+            {
+              "lat": 50.012,
+              "lon": 14.599
+            }
+          ],
+          "units": "metric",
+          "distance_units": "meters",
+          "time_units": "seconds",
+          "sources_to_targets": [
+            [
+              {
+                "time": 0,
+                "distance": 0
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              }
+            ],
+            [
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 0,
+                "distance": 0
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 60,
+                "distance": 600
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              }
+            ],
+            [
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 0,
+                "distance": 0
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 60,
+                "distance": 600
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              }
+            ],
+            [
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 60,
+                "distance": 600
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 0,
+                "distance": 0
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              }
+            ],
+            [
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 60,
+                "distance": 600
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 0,
+                "distance": 0
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              }
+            ],
+            [
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 0,
+                "distance": 0
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              }
+            ],
+            [
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 12600,
+                "distance": 126000
+              },
+              {
+                "time": 0,
+                "distance": 0
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "provider": "Geoapify MCP fixture — NO NETWORK",
+        "tool": "calculate_route",
+        "arguments": {
+          "waypoints": [
+            {
+              "lat": 50.034,
+              "lon": 14.5
+            },
+            {
+              "lat": 50.035,
+              "lon": 14.5
+            }
+          ],
+          "mode": "walk",
+          "units": "metric",
+          "geometry_scope": "none",
+          "include_instructions": true,
+          "waypoint_mode": "stopover",
+          "optimize_stops": false
+        },
+        "result": {
+          "time": 60,
+          "distance": 600,
+          "time_units": "seconds",
+          "distance_units": "meters",
+          "waypoints": [
+            {
+              "lat": 50.034,
+              "lon": 14.5
+            },
+            {
+              "lat": 50.035,
+              "lon": 14.5
+            }
+          ],
+          "legs": [
+            {
+              "time": 60,
+              "distance": 600
+            }
+          ]
+        }
+      },
+      {
+        "provider": "Geoapify MCP fixture — NO NETWORK",
+        "tool": "calculate_route",
+        "arguments": {
+          "waypoints": [
+            {
+              "lat": 50.035,
+              "lon": 14.5
+            },
+            {
+              "lat": 50.034,
+              "lon": 14.5
+            }
+          ],
+          "mode": "walk",
+          "units": "metric",
+          "geometry_scope": "none",
+          "include_instructions": true,
+          "waypoint_mode": "stopover",
+          "optimize_stops": false
+        },
+        "result": {
+          "time": 60,
+          "distance": 600,
+          "time_units": "seconds",
+          "distance_units": "meters",
+          "waypoints": [
+            {
+              "lat": 50.035,
+              "lon": 14.5
+            },
+            {
+              "lat": 50.034,
+              "lon": 14.5
+            }
+          ],
+          "legs": [
+            {
+              "time": 60,
+              "distance": 600
+            }
+          ]
+        }
+      },
+      {
+        "provider": "Geoapify MCP fixture — NO NETWORK",
+        "tool": "calculate_route",
+        "arguments": {
+          "waypoints": [
+            {
+              "lat": 50,
+              "lon": 14.6
+            },
+            {
+              "lat": 50.001,
+              "lon": 14.6
+            }
+          ],
+          "mode": "walk",
+          "units": "metric",
+          "geometry_scope": "none",
+          "include_instructions": true,
+          "waypoint_mode": "stopover",
+          "optimize_stops": false
+        },
+        "result": {
+          "time": 60,
+          "distance": 600,
+          "time_units": "seconds",
+          "distance_units": "meters",
+          "waypoints": [
+            {
+              "lat": 50,
+              "lon": 14.6
+            },
+            {
+              "lat": 50.001,
+              "lon": 14.6
+            }
+          ],
+          "legs": [
+            {
+              "time": 60,
+              "distance": 600
+            }
+          ]
+        }
+      },
+      {
+        "provider": "Geoapify MCP fixture — NO NETWORK",
+        "tool": "calculate_route",
+        "arguments": {
+          "waypoints": [
+            {
+              "lat": 50.001,
+              "lon": 14.6
+            },
+            {
+              "lat": 50,
+              "lon": 14.6
+            }
+          ],
+          "mode": "walk",
+          "units": "metric",
+          "geometry_scope": "none",
+          "include_instructions": true,
+          "waypoint_mode": "stopover",
+          "optimize_stops": false
+        },
+        "result": {
+          "time": 60,
+          "distance": 600,
+          "time_units": "seconds",
+          "distance_units": "meters",
+          "waypoints": [
+            {
+              "lat": 50.001,
+              "lon": 14.6
+            },
+            {
+              "lat": 50,
+              "lon": 14.6
+            }
+          ],
+          "legs": [
+            {
+              "time": 60,
+              "distance": 600
+            }
+          ]
+        }
+      },
+      {
+        "provider": "Geoapify MCP fixture — NO NETWORK",
+        "tool": "calculate_route",
+        "arguments": {
+          "waypoints": [
+            {
+              "lat": 50.0755,
+              "lon": 14.4378
+            },
+            {
+              "lat": 50.035,
+              "lon": 14.5
+            },
+            {
+              "lat": 50.001,
+              "lon": 14.6
+            },
+            {
+              "lat": 49.913,
+              "lon": 14.699
+            }
+          ],
+          "mode": "drive",
+          "units": "metric",
+          "geometry_scope": "none",
+          "include_instructions": true,
+          "waypoint_mode": "stopover",
+          "optimize_stops": false,
+          "traffic": "approximated"
+        },
+        "result": {
+          "time": 3000,
+          "distance": 27000,
+          "time_units": "seconds",
+          "distance_units": "meters",
+          "waypoints": [
+            {
+              "lat": 50.0755,
+              "lon": 14.4378
+            },
+            {
+              "lat": 50.035,
+              "lon": 14.5
+            },
+            {
+              "lat": 50.001,
+              "lon": 14.6
+            },
+            {
+              "lat": 49.913,
+              "lon": 14.699
+            }
+          ],
+          "legs": [
+            {
+              "time": 660,
+              "distance": 6000
+            },
+            {
+              "time": 1020,
+              "distance": 9000
+            },
+            {
+              "time": 1320,
+              "distance": 12000
+            }
+          ]
+        }
+      },
+      {
+        "provider": "Geoapify MCP fixture — NO NETWORK",
+        "tool": "calculate_route",
+        "arguments": {
+          "waypoints": [
+            {
+              "lat": 49.913,
+              "lon": 14.699
+            },
+            {
+              "lat": 50.001,
+              "lon": 14.6
+            },
+            {
+              "lat": 50.035,
+              "lon": 14.5
+            },
+            {
+              "lat": 50.0755,
+              "lon": 14.4378
+            }
+          ],
+          "mode": "drive",
+          "units": "metric",
+          "geometry_scope": "none",
+          "include_instructions": true,
+          "waypoint_mode": "stopover",
+          "optimize_stops": false,
+          "traffic": "approximated"
+        },
+        "result": {
+          "time": 3180,
+          "distance": 28200,
+          "time_units": "seconds",
+          "distance_units": "meters",
+          "waypoints": [
+            {
+              "lat": 49.913,
+              "lon": 14.699
+            },
+            {
+              "lat": 50.001,
+              "lon": 14.6
+            },
+            {
+              "lat": 50.035,
+              "lon": 14.5
+            },
+            {
+              "lat": 50.0755,
+              "lon": 14.4378
+            }
+          ],
+          "legs": [
+            {
+              "time": 1500,
+              "distance": 13200
+            },
+            {
+              "time": 1020,
+              "distance": 9000
+            },
+            {
+              "time": 660,
+              "distance": 6000
+            }
+          ]
+        }
+      },
+      {
+        "provider": "Geoapify MCP fixture — NO NETWORK",
+        "tool": "calculate_route",
+        "arguments": {
+          "waypoints": [
+            {
+              "lat": 50.0755,
+              "lon": 14.4378
+            },
+            {
+              "lat": 49.913,
+              "lon": 14.699
+            }
+          ],
+          "mode": "drive",
+          "units": "metric",
+          "geometry_scope": "none",
+          "include_instructions": true,
+          "waypoint_mode": "stopover",
+          "optimize_stops": false,
+          "traffic": "approximated"
+        },
+        "result": {
+          "time": 2640,
+          "distance": 24000,
+          "time_units": "seconds",
+          "distance_units": "meters",
+          "waypoints": [
+            {
+              "lat": 50.0755,
+              "lon": 14.4378
+            },
+            {
+              "lat": 49.913,
+              "lon": 14.699
+            }
+          ],
+          "legs": [
+            {
+              "time": 2640,
+              "distance": 24000
+            }
+          ]
+        }
+      },
+      {
+        "provider": "Geoapify MCP fixture — NO NETWORK",
+        "tool": "calculate_route",
+        "arguments": {
+          "waypoints": [
+            {
+              "lat": 49.913,
+              "lon": 14.699
+            },
+            {
+              "lat": 50.0755,
+              "lon": 14.4378
+            }
+          ],
+          "mode": "drive",
+          "units": "metric",
+          "geometry_scope": "none",
+          "include_instructions": true,
+          "waypoint_mode": "stopover",
+          "optimize_stops": false,
+          "traffic": "approximated"
+        },
+        "result": {
+          "time": 2820,
+          "distance": 25200,
+          "time_units": "seconds",
+          "distance_units": "meters",
+          "waypoints": [
+            {
+              "lat": 49.913,
+              "lon": 14.699
+            },
+            {
+              "lat": 50.0755,
+              "lon": 14.4378
+            }
+          ],
+          "legs": [
+            {
+              "time": 2820,
+              "distance": 25200
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

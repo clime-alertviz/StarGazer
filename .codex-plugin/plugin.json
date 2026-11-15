@@ -1,0 +1,18 @@
+{
+  "name": "star-gazer",
+  "version": "0.4.0",
+  "description": "Find, organize and join stargazing outings through the shared StarGazer MCP service.",
+  "author": {
+    "name": "Michal Novotn\u00fd"
+  },
+  "license": "MIT",
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "requires_local_executor": true,
+  "interface": {
+    "displayName": "StarGazer",
+    "shortDescription": "Find the night, the place and the company",
+    "developerName": "Michal Novotn\u00fd",
+    "category": "Productivity"
+  }
+}

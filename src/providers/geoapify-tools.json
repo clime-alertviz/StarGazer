@@ -1,0 +1,414 @@
+{
+  "source": "https://apidocs.geoapify.com/docs/mcp/",
+  "fetchedAt": "2026-11-15T22:53:53.837Z",
+  "tools": [
+    {
+      "name": "geocode_address",
+      "description": "Use this tool when the input is one free-text address, landmark, city, or place query and coordinates are needed. Use geocode_structured_address when address components are already separated, or reverse_geocode_coordinates when the input is coordinates.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "query"
+        ],
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024,
+            "description": "Street address or free-text location query to geocode."
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "default": 5,
+            "description": "Maximum number of results to return."
+          },
+          "lang": {
+            "type": "string",
+            "default": "en",
+            "description": "Result language as a supported two-letter language code."
+          },
+          "country_codes": {
+            "type": "array",
+            "maxItems": 10,
+            "items": {
+              "type": "string"
+            },
+            "description": "Optional ISO 3166-1 alpha-2 country code filters, for example \"de\" or \"us\". Values are case-insensitive and normalized to lowercase."
+          }
+        }
+      }
+    },
+    {
+      "name": "search_places",
+      "description": "Use this tool to find places of one exact supported category around known coordinates. Call list_place_categories first when the category is unknown, and geocode an address first when the search center is not yet coordinates.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "category",
+          "lat",
+          "lon"
+        ],
+        "properties": {
+          "category": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 64,
+            "pattern": "^[a-z0-9_-]+(?:\\.[a-z0-9_-]+)*$",
+            "description": "Place category to find. Call list_place_categories first to get the supported category values."
+          },
+          "lat": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90,
+            "description": "Latitude of the search center."
+          },
+          "lon": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180,
+            "description": "Longitude of the search center."
+          },
+          "radius_meters": {
+            "type": "number",
+            "minimum": 1,
+            "description": "Optional search radius in meters. When omitted, returns the nearest matching places without a hard distance limit."
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 20,
+            "description": "Maximum number of places to return."
+          },
+          "lang": {
+            "type": "string",
+            "default": "en",
+            "description": "Result language as a supported two-letter language code."
+          }
+        }
+      }
+    },
+    {
+      "name": "list_place_categories",
+      "description": "Use this zero-credit tool to discover the exact category value required by search_places. It accepts no arguments and returns category names only; use search_places afterward to find actual places.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
+    },
+    {
+      "name": "calculate_route",
+      "description": "Use this tool for one ordered route with total and per-leg travel cost plus optional geometry or turn instructions. Use calculate_route_matrix instead to compare travel times and distances across many source-target pairs.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "waypoints"
+        ],
+        "properties": {
+          "waypoints": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "lat",
+                "lon"
+              ],
+              "properties": {
+                "lat": {
+                  "type": "number",
+                  "minimum": -90,
+                  "maximum": 90,
+                  "description": "Waypoint latitude."
+                },
+                "lon": {
+                  "type": "number",
+                  "minimum": -180,
+                  "maximum": 180,
+                  "description": "Waypoint longitude."
+                }
+              }
+            },
+            "description": "Ordered route waypoints. Provide at least an origin and destination."
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "drive",
+              "light_truck",
+              "medium_truck",
+              "truck",
+              "heavy_truck",
+              "truck_dangerous_goods",
+              "long_truck",
+              "bus",
+              "scooter",
+              "motorcycle",
+              "bicycle",
+              "mountain_bike",
+              "road_bike",
+              "walk",
+              "hike",
+              "transit",
+              "approximated_transit"
+            ],
+            "default": "drive",
+            "description": "Travel or vehicle mode used to calculate the route."
+          },
+          "waypoint_mode": {
+            "type": "string",
+            "enum": [
+              "stopover",
+              "through_stop",
+              "pass_through"
+            ],
+            "default": "stopover",
+            "description": "How intermediate waypoints are treated."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "balanced",
+              "short",
+              "less_maneuvers"
+            ],
+            "default": "balanced",
+            "description": "Route optimization preference."
+          },
+          "avoid": {
+            "type": "array",
+            "maxItems": 3,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "tolls",
+                "ferries",
+                "highways"
+              ]
+            },
+            "description": "Route features to avoid. Supported values are \"tolls\", \"ferries\", and \"highways\"."
+          },
+          "geometry_scope": {
+            "type": "string",
+            "enum": [
+              "none",
+              "route",
+              "legs",
+              "steps"
+            ],
+            "default": "route",
+            "description": "Geometry detail to return: none, route only, route and legs, or route, legs, and instruction steps."
+          },
+          "geometry_format": {
+            "type": "string",
+            "enum": [
+              "geojson",
+              "polyline"
+            ],
+            "default": "geojson",
+            "description": "Return geometry as a GeoJSON geometry object or an encoded precision-5 polyline."
+          },
+          "include_instructions": {
+            "type": "boolean",
+            "default": false,
+            "description": "Include detailed turn-by-turn instruction steps."
+          },
+          "optimize_stops": {
+            "type": "boolean",
+            "default": false,
+            "description": "Optimize the order of intermediate stops while preserving the first and last waypoint."
+          },
+          "units": {
+            "type": "string",
+            "enum": [
+              "metric",
+              "imperial"
+            ],
+            "default": "metric",
+            "description": "Distance and speed units."
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "bg",
+              "ca",
+              "cs",
+              "da",
+              "de",
+              "el",
+              "en-GB",
+              "en",
+              "es",
+              "et",
+              "fi",
+              "fr",
+              "hi",
+              "hu",
+              "it",
+              "ja",
+              "nb-NO",
+              "nl",
+              "pl",
+              "pt-BR",
+              "pt",
+              "ro",
+              "ru",
+              "sk",
+              "sl",
+              "sv",
+              "tr",
+              "uk"
+            ],
+            "default": "en",
+            "description": "Language used for turn-by-turn instructions."
+          },
+          "traffic": {
+            "type": "string",
+            "enum": [
+              "free_flow",
+              "approximated"
+            ],
+            "default": "free_flow",
+            "description": "Traffic model used for motorized routing."
+          }
+        }
+      }
+    },
+    {
+      "name": "calculate_route_matrix",
+      "description": "Use this tool to compare pairwise travel times and distances between multiple sources and targets. It does not return route geometry or instructions; use calculate_route for one detailed ordered route.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sources"
+        ],
+        "properties": {
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1000,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "lat",
+                "lon"
+              ],
+              "properties": {
+                "lat": {
+                  "type": "number",
+                  "minimum": -90,
+                  "maximum": 90,
+                  "description": "Location latitude."
+                },
+                "lon": {
+                  "type": "number",
+                  "minimum": -180,
+                  "maximum": 180,
+                  "description": "Location longitude."
+                }
+              }
+            },
+            "description": "Matrix source locations. sources.length multiplied by targets.length must not exceed 1000."
+          },
+          "targets": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1000,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "lat",
+                "lon"
+              ],
+              "properties": {
+                "lat": {
+                  "type": "number",
+                  "minimum": -90,
+                  "maximum": 90,
+                  "description": "Location latitude."
+                },
+                "lon": {
+                  "type": "number",
+                  "minimum": -180,
+                  "maximum": 180,
+                  "description": "Location longitude."
+                }
+              }
+            },
+            "description": "Matrix target locations. Defaults to the source locations when omitted. sources.length multiplied by targets.length must not exceed 1000."
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "drive",
+              "truck",
+              "light_truck",
+              "medium_truck",
+              "bus",
+              "motorcycle",
+              "scooter",
+              "bicycle",
+              "walk",
+              "hike"
+            ],
+            "default": "drive",
+            "description": "Travel or vehicle mode used to calculate the matrix."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "balanced",
+              "short",
+              "less_maneuvers"
+            ],
+            "default": "balanced",
+            "description": "Route optimization preference."
+          },
+          "traffic": {
+            "type": "string",
+            "enum": [
+              "free_flow",
+              "approximated"
+            ],
+            "default": "free_flow",
+            "description": "Traffic model used for motorized routing."
+          },
+          "avoid": {
+            "type": "array",
+            "maxItems": 3,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "tolls",
+                "highways",
+                "ferries"
+              ]
+            },
+            "description": "Route features to avoid. Supported values are \"tolls\", \"highways\", and \"ferries\"."
+          },
+          "units": {
+            "type": "string",
+            "enum": [
+              "metric",
+              "imperial"
+            ],
+            "default": "metric",
+            "description": "Distance and speed units."
+          }
+        }
+      }
+    }
+  ]
+}

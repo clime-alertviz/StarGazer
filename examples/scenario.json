@@ -1,0 +1,26 @@
+{
+  "request": {
+    "organizerId": "anna", "target": "Saturn",
+    "start": "2026-11-20T18:00:00+01:00", "end": "2026-11-20T23:00:00+01:00",
+    "timezone": "Europe/Prague", "durationMinutes": 60,
+    "minPeople": 3, "maxPeople": 3, "needsGuide": true
+  },
+  "sites": [
+    {
+      "id": "demo-ridge", "name": "Demo ridge (fictional access)",
+      "location": { "lat": 49.91, "lon": 14.70 }, "meetingPoint": { "lat": 49.913, "lon": 14.699 },
+      "walkMinutes": 10, "access": "confirmed",
+      "accessNote": "DEMO ONLY: assume permission for this fictional meeting point. Not a checked real observing site.",
+      "accessWindows": [{ "start": "2026-11-20T16:00:00+01:00", "end": "2026-11-21T01:00:00+01:00" }],
+      "bortle": 4, "skyQualitySource": "Synthetic demo estimate; no measured light-pollution data."
+    },
+    {
+      "id": "demo-meadow", "name": "Demo meadow (fictional access)",
+      "location": { "lat": 50.01, "lon": 14.60 }, "meetingPoint": { "lat": 50.012, "lon": 14.599 },
+      "walkMinutes": 5, "access": "confirmed",
+      "accessNote": "DEMO ONLY: assume permission for this fictional meeting point. Not a checked real observing site.",
+      "accessWindows": [{ "start": "2026-11-20T16:00:00+01:00", "end": "2026-11-21T01:00:00+01:00" }],
+      "bortle": 6, "skyQualitySource": "Synthetic demo estimate; no measured light-pollution data."
+    }
+  ]
+}

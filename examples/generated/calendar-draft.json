@@ -1,0 +1,24 @@
+{
+  "planId": "2a0ba767-1538-4fd8-8645-6b177a16490b",
+  "status": "demo_do_not_send",
+  "tool": "google_calendar.create_event",
+  "arguments": {
+    "calendar_id": "primary",
+    "title": "Star Gazer · Saturn at Demo ridge (fictional access)",
+    "start_time": "2026-11-20T18:35:00.000Z",
+    "end_time": "2026-11-20T20:25:00.000Z",
+    "timezone_str": "Europe/Prague",
+    "attendees": [
+      "anna@example.test",
+      "eva@example.test",
+      "petr@example.test"
+    ],
+    "location": "Demo ridge (fictional access) — meeting point 49.913, 14.699",
+    "description": "Star Gazer plan: 2a0ba767-1538-4fd8-8645-6b177a16490b\nGoal: Observe Saturn.\nMeet: 20 Nov 2026, 19:35 (Europe/Prague).\nObserve: 20 Nov 2026, 20:00 – 20 Nov 2026, 21:00.\nReturn to meeting point by 20 Nov 2026, 21:25. Travel to/from the meeting point is outside this event.\nMeeting point: 49.913, 14.699.\nObserving spot: 49.91, 14.7; 10 min walk each way.\nNight access: DEMO ONLY: assume permission for this fictional meeting point. Not a checked real observing site.\nAllow 15 minutes to set up and 15 minutes to pack up, included in the event.\n\nEquipment:\n- Petr (demo) offers a shared telescope; confirm transport and setup with them.\n\nGeoapify approximated traffic adjusts road speeds for likely congestion. It is not live traffic or a departure-time forecast. Driving buffer: 10 min each way; pickup/drop-off dwell: 3 min per stop.\n\nForecast retrieved 2026-11-15T12:00:00.000Z: cloud ≤12%, wind ≤8 km/h, temperature ≥4°C.\nMoon illuminated 81%; target altitude ≥40°.\n\nNavigation to the meeting point (choose your own origin):\ndrive: https://www.google.com/maps/dir/?api=1&destination=49.913%2C14.699&travelmode=driving\n\nPlease RSVP in Google Calendar. Equipment and attendance remain subject to agreement.\nDEMO: fictional profiles, site access, weather and journeys. Astronomy is calculated for the recorded date. Do not send invitations.\nForecasts are provisional. Recheck conditions before departure.\nTarget altitude assumes a level horizon; trees, terrain and atmospheric seeing are not modelled.\nDriving uses approximated traffic plus 10 minutes of buffer each way. No live traffic or departure-time prediction. Navigation links may select a different route.\nAvailability comes from profiles. RSVP and equipment-sharing acceptance are still pending.\n\nLocation and journey calculations: https://www.geoapify.com/\nWeather: https://open-meteo.com/ (CC BY 4.0). Astronomy: Astronomy Engine (MIT).",
+    "notify": true,
+    "visibility": "private",
+    "guests_can_modify": false,
+    "add_google_meet": false
+  },
+  "nextStep": "Inspect this payload only. Fixture participants must never receive a Calendar invitation."
+}

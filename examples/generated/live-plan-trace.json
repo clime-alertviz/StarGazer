@@ -1,0 +1,1642 @@
+{
+  "provenance": {
+    "recordedAt": "2026-11-15T00:40:56.629Z",
+    "mode": "live-providers-synthetic-profile",
+    "weatherAndJourneys": "Actual network responses",
+    "participant": "Fictional profile; public starting point, no real recipient",
+    "siteAccess": "Unverified; window is a test assumption, not opening-hours evidence",
+    "calendarWrite": false,
+    "redaction": "Credentials excluded; synthetic email redacted"
+  },
+  "calls": [
+    {
+      "tool": "get_geoapify_tools",
+      "arguments": {},
+      "result": {
+        "tools": [
+          {
+            "name": "geocode_address",
+            "title": "Geocoding: Geocode Address",
+            "description": "Use this tool when the input is one free-text address, landmark, city, or place query and coordinates are needed. Use geocode_structured_address when address components are already separated, or reverse_geocode_coordinates when the input is coordinates.",
+            "inputSchema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "query"
+              ],
+              "properties": {
+                "query": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1024,
+                  "description": "Street address or free-text location query to geocode."
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 10,
+                  "default": 5,
+                  "description": "Maximum number of results to return."
+                },
+                "lang": {
+                  "type": "string",
+                  "default": "en",
+                  "description": "Result language as a supported two-letter language code."
+                },
+                "country_codes": {
+                  "type": "array",
+                  "maxItems": 10,
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Optional ISO 3166-1 alpha-2 country code filters, for example \"de\" or \"us\". Values are case-insensitive and normalized to lowercase."
+                }
+              }
+            },
+            "outputSchema": {
+              "type": "object",
+              "description": "Compact geocoding result for a free-text query.",
+              "additionalProperties": false,
+              "required": [
+                "query",
+                "count",
+                "results"
+              ],
+              "properties": {
+                "query": {
+                  "type": "string",
+                  "description": "Normalized query supplied to the tool."
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "Number of results returned."
+                },
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "description": "Compact MCP projection of a public Geoapify geocoding result.",
+                    "properties": {
+                      "formatted": {
+                        "type": "string",
+                        "description": "Complete formatted address."
+                      },
+                      "address_line1": {
+                        "type": "string",
+                        "description": "Primary address line."
+                      },
+                      "address_line2": {
+                        "type": "string",
+                        "description": "Secondary address line."
+                      },
+                      "lon": {
+                        "type": "number",
+                        "minimum": -180,
+                        "maximum": 180,
+                        "description": "Longitude in decimal degrees."
+                      },
+                      "lat": {
+                        "type": "number",
+                        "minimum": -90,
+                        "maximum": 90,
+                        "description": "Latitude in decimal degrees."
+                      },
+                      "place_id": {
+                        "type": "string",
+                        "minLength": 3,
+                        "maxLength": 2048,
+                        "description": "Stable Geoapify place identifier."
+                      },
+                      "result_type": {
+                        "type": "string",
+                        "enum": [
+                          "unknown",
+                          "amenity_name",
+                          "amenity",
+                          "building",
+                          "street",
+                          "postcode",
+                          "suburb",
+                          "district",
+                          "city",
+                          "county",
+                          "state",
+                          "country"
+                        ],
+                        "description": "Granularity of the matched result."
+                      },
+                      "rank": {
+                        "type": "object",
+                        "description": "Match quality, confidence, importance, and popularity metadata.",
+                        "additionalProperties": false,
+                        "properties": {
+                          "confidence": {
+                            "type": "number"
+                          },
+                          "confidence_city_level": {
+                            "type": "number"
+                          },
+                          "confidence_street_level": {
+                            "type": "number"
+                          },
+                          "confidence_building_level": {
+                            "type": "number"
+                          },
+                          "match_type": {
+                            "type": "string",
+                            "enum": [
+                              "full_match",
+                              "inner_part",
+                              "match_by_building",
+                              "match_by_street",
+                              "match_by_postcode",
+                              "match_by_city_or_disrict",
+                              "match_by_country_or_state"
+                            ]
+                          },
+                          "importance": {
+                            "type": "number"
+                          },
+                          "popularity": {
+                            "type": "number"
+                          }
+                        }
+                      },
+                      "confidence": {
+                        "type": "number",
+                        "description": "Confidence score copied from rank.confidence."
+                      },
+                      "housenumber": {
+                        "type": "string"
+                      },
+                      "street": {
+                        "type": "string"
+                      },
+                      "postcode": {
+                        "type": "string"
+                      },
+                      "city": {
+                        "type": "string"
+                      },
+                      "county": {
+                        "type": "string"
+                      },
+                      "state": {
+                        "type": "string"
+                      },
+                      "country": {
+                        "type": "string"
+                      },
+                      "country_code": {
+                        "type": "string"
+                      },
+                      "timezone": {
+                        "type": "object",
+                        "description": "Timezone information for the result location.",
+                        "additionalProperties": false,
+                        "required": [
+                          "name",
+                          "offset_STD",
+                          "offset_DST",
+                          "offset_STD_seconds",
+                          "offset_DST_seconds"
+                        ],
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "name_alt": {
+                            "type": "string"
+                          },
+                          "country_codes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "offset_STD": {
+                            "type": "string"
+                          },
+                          "offset_DST": {
+                            "type": "string"
+                          },
+                          "offset_STD_seconds": {
+                            "type": "number"
+                          },
+                          "offset_DST_seconds": {
+                            "type": "number"
+                          },
+                          "abbreviation_STD": {
+                            "type": "string"
+                          },
+                          "abbreviation_DST": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "bbox": {
+                        "type": "object",
+                        "description": "Result bounding box in WGS84 longitude/latitude coordinates.",
+                        "additionalProperties": false,
+                        "required": [
+                          "lon1",
+                          "lat1",
+                          "lon2",
+                          "lat2"
+                        ],
+                        "properties": {
+                          "lon1": {
+                            "type": "number",
+                            "minimum": -180,
+                            "maximum": 180
+                          },
+                          "lat1": {
+                            "type": "number",
+                            "minimum": -90,
+                            "maximum": 90
+                          },
+                          "lon2": {
+                            "type": "number",
+                            "minimum": -180,
+                            "maximum": 180
+                          },
+                          "lat2": {
+                            "type": "number",
+                            "minimum": -90,
+                            "maximum": 90
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "description": "Geocoding results ordered by relevance."
+                }
+              }
+            },
+            "_meta": {
+              "geoapify/category": "Geocoding"
+            }
+          },
+          {
+            "name": "search_places",
+            "title": "Places: Search Places",
+            "description": "Use this tool to find places of one exact supported category around known coordinates. Call list_place_categories first when the category is unknown, and geocode an address first when the search center is not yet coordinates.",
+            "inputSchema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "category",
+                "lat",
+                "lon"
+              ],
+              "properties": {
+                "category": {
+                  "type": "string",
+                  "minLength": 3,
+                  "maxLength": 64,
+                  "pattern": "^[a-z0-9_-]+(?:\\.[a-z0-9_-]+)*$",
+                  "description": "Place category to find. Call list_place_categories first to get the supported category values."
+                },
+                "lat": {
+                  "type": "number",
+                  "minimum": -90,
+                  "maximum": 90,
+                  "description": "Latitude of the search center."
+                },
+                "lon": {
+                  "type": "number",
+                  "minimum": -180,
+                  "maximum": 180,
+                  "description": "Longitude of the search center."
+                },
+                "radius_meters": {
+                  "type": "number",
+                  "minimum": 1,
+                  "description": "Optional search radius in meters. When omitted, returns the nearest matching places without a hard distance limit."
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100,
+                  "default": 20,
+                  "description": "Maximum number of places to return."
+                },
+                "lang": {
+                  "type": "string",
+                  "default": "en",
+                  "description": "Result language as a supported two-letter language code."
+                }
+              }
+            },
+            "outputSchema": {
+              "type": "object",
+              "description": "Places matching one category around a coordinate.",
+              "additionalProperties": false,
+              "required": [
+                "category",
+                "coordinates",
+                "count",
+                "results"
+              ],
+              "properties": {
+                "category": {
+                  "type": "string",
+                  "description": "The supported place category used for this search."
+                },
+                "coordinates": {
+                  "type": "object",
+                  "description": "Search center in latitude/longitude form.",
+                  "additionalProperties": false,
+                  "required": [
+                    "lat",
+                    "lon"
+                  ],
+                  "properties": {
+                    "lat": {
+                      "type": "number",
+                      "minimum": -90,
+                      "maximum": 90
+                    },
+                    "lon": {
+                      "type": "number",
+                      "minimum": -180,
+                      "maximum": 180
+                    }
+                  }
+                },
+                "radius_meters": {
+                  "type": "number",
+                  "description": "Applied search radius in meters when supplied."
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "Number of places returned."
+                },
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "description": "Public place properties after the MCP compact-output filters are applied. Besides the listed fields, a place can include address components (country, state, city, postcode, street, housenumber), opening_hours, website, brand, operator, and detail groups such as contact, facilities, catering, and accommodation. See the focused tool specification for the complete contract.",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "formatted": {
+                        "type": "string"
+                      },
+                      "lat": {
+                        "type": "number",
+                        "minimum": -90,
+                        "maximum": 90
+                      },
+                      "lon": {
+                        "type": "number",
+                        "minimum": -180,
+                        "maximum": 180
+                      },
+                      "categories": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "distance": {
+                        "type": "number"
+                      },
+                      "place_id": {
+                        "type": "string",
+                        "minLength": 3,
+                        "maxLength": 2048
+                      },
+                      "datasource": {
+                        "type": "object",
+                        "description": "Data source with attribution and license details."
+                      }
+                    }
+                  },
+                  "description": "Matching places ordered by proximity and relevance."
+                }
+              }
+            },
+            "_meta": {
+              "geoapify/category": "Places"
+            }
+          },
+          {
+            "name": "list_place_categories",
+            "title": "Places: List Place Categories",
+            "description": "Use this zero-credit tool to discover the exact category value required by search_places. It accepts no arguments and returns category names only; use search_places afterward to find actual places.",
+            "inputSchema": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {}
+            },
+            "outputSchema": {
+              "type": "object",
+              "description": "Supported category catalog for search_places.",
+              "additionalProperties": false,
+              "required": [
+                "count",
+                "categories"
+              ],
+              "properties": {
+                "count": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "Number of category values returned."
+                },
+                "categories": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Exact category strings accepted by search_places."
+                }
+              }
+            },
+            "_meta": {
+              "geoapify/category": "Places"
+            }
+          },
+          {
+            "name": "calculate_route",
+            "title": "Routing: Calculate Route",
+            "description": "Use this tool for one ordered route with total and per-leg travel cost plus optional geometry or turn instructions. Use calculate_route_matrix instead to compare travel times and distances across many source-target pairs.",
+            "inputSchema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "waypoints"
+              ],
+              "properties": {
+                "waypoints": {
+                  "type": "array",
+                  "minItems": 2,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "lat",
+                      "lon"
+                    ],
+                    "properties": {
+                      "lat": {
+                        "type": "number",
+                        "minimum": -90,
+                        "maximum": 90,
+                        "description": "Waypoint latitude."
+                      },
+                      "lon": {
+                        "type": "number",
+                        "minimum": -180,
+                        "maximum": 180,
+                        "description": "Waypoint longitude."
+                      }
+                    }
+                  },
+                  "description": "Ordered route waypoints. Provide at least an origin and destination."
+                },
+                "mode": {
+                  "type": "string",
+                  "enum": [
+                    "drive",
+                    "light_truck",
+                    "medium_truck",
+                    "truck",
+                    "heavy_truck",
+                    "truck_dangerous_goods",
+                    "long_truck",
+                    "bus",
+                    "scooter",
+                    "motorcycle",
+                    "bicycle",
+                    "mountain_bike",
+                    "road_bike",
+                    "walk",
+                    "hike",
+                    "transit",
+                    "approximated_transit"
+                  ],
+                  "default": "drive",
+                  "description": "Travel or vehicle mode used to calculate the route."
+                },
+                "waypoint_mode": {
+                  "type": "string",
+                  "enum": [
+                    "stopover",
+                    "through_stop",
+                    "pass_through"
+                  ],
+                  "default": "stopover",
+                  "description": "How intermediate waypoints are treated."
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "balanced",
+                    "short",
+                    "less_maneuvers"
+                  ],
+                  "default": "balanced",
+                  "description": "Route optimization preference."
+                },
+                "avoid": {
+                  "type": "array",
+                  "maxItems": 3,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "tolls",
+                      "ferries",
+                      "highways"
+                    ]
+                  },
+                  "description": "Route features to avoid. Supported values are \"tolls\", \"ferries\", and \"highways\"."
+                },
+                "geometry_scope": {
+                  "type": "string",
+                  "enum": [
+                    "none",
+                    "route",
+                    "legs",
+                    "steps"
+                  ],
+                  "default": "route",
+                  "description": "Geometry detail to return: none, route only, route and legs, or route, legs, and instruction steps."
+                },
+                "geometry_format": {
+                  "type": "string",
+                  "enum": [
+                    "geojson",
+                    "polyline"
+                  ],
+                  "default": "geojson",
+                  "description": "Return geometry as a GeoJSON geometry object or an encoded precision-5 polyline."
+                },
+                "include_instructions": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Include detailed turn-by-turn instruction steps."
+                },
+                "optimize_stops": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Optimize the order of intermediate stops while preserving the first and last waypoint."
+                },
+                "units": {
+                  "type": "string",
+                  "enum": [
+                    "metric",
+                    "imperial"
+                  ],
+                  "default": "metric",
+                  "description": "Distance and speed units."
+                },
+                "lang": {
+                  "type": "string",
+                  "enum": [
+                    "bg",
+                    "ca",
+                    "cs",
+                    "da",
+                    "de",
+                    "el",
+                    "en-GB",
+                    "en",
+                    "es",
+                    "et",
+                    "fi",
+                    "fr",
+                    "hi",
+                    "hu",
+                    "it",
+                    "ja",
+                    "nb-NO",
+                    "nl",
+                    "pl",
+                    "pt-BR",
+                    "pt",
+                    "ro",
+                    "ru",
+                    "sk",
+                    "sl",
+                    "sv",
+                    "tr",
+                    "uk"
+                  ],
+                  "default": "en",
+                  "description": "Language used for turn-by-turn instructions."
+                },
+                "traffic": {
+                  "type": "string",
+                  "enum": [
+                    "free_flow",
+                    "approximated"
+                  ],
+                  "default": "free_flow",
+                  "description": "Traffic model used for motorized routing."
+                }
+              }
+            },
+            "outputSchema": {
+              "type": "object",
+              "description": "Route totals, resolved waypoints, legs, and optional geometry.",
+              "additionalProperties": false,
+              "required": [
+                "distance",
+                "units",
+                "distance_units",
+                "time",
+                "time_units",
+                "waypoints",
+                "legs"
+              ],
+              "properties": {
+                "distance": {
+                  "type": "number",
+                  "description": "Total route distance in distance_units."
+                },
+                "units": {
+                  "type": "string",
+                  "enum": [
+                    "metric",
+                    "imperial"
+                  ],
+                  "description": "Requested unit system."
+                },
+                "distance_units": {
+                  "type": "string",
+                  "enum": [
+                    "meters",
+                    "miles"
+                  ],
+                  "description": "Unit used by distance fields."
+                },
+                "time": {
+                  "type": "number",
+                  "description": "Estimated total travel time in seconds."
+                },
+                "time_units": {
+                  "type": "string",
+                  "enum": [
+                    "seconds"
+                  ],
+                  "description": "Unit used by time fields."
+                },
+                "waypoints": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "description": "A resolved location in latitude/longitude form.",
+                    "additionalProperties": false,
+                    "required": [
+                      "lat",
+                      "lon"
+                    ],
+                    "properties": {
+                      "lat": {
+                        "type": "number",
+                        "minimum": -90,
+                        "maximum": 90
+                      },
+                      "lon": {
+                        "type": "number",
+                        "minimum": -180,
+                        "maximum": 180
+                      }
+                    }
+                  },
+                  "description": "Resolved route waypoints in request order, or optimized order when enabled."
+                },
+                "legs": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "time",
+                      "distance"
+                    ],
+                    "properties": {
+                      "time": {
+                        "type": "number"
+                      },
+                      "distance": {
+                        "type": "number"
+                      },
+                      "steps": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "required": [
+                            "time",
+                            "distance"
+                          ],
+                          "properties": {
+                            "time": {
+                              "type": "number"
+                            },
+                            "distance": {
+                              "type": "number"
+                            },
+                            "instruction": {
+                              "type": "object",
+                              "additionalProperties": false,
+                              "required": [
+                                "text"
+                              ],
+                              "properties": {
+                                "text": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                },
+                                "transition_instruction": {
+                                  "type": "string"
+                                },
+                                "pre_transition_instruction": {
+                                  "type": "string"
+                                },
+                                "post_transition_instruction": {
+                                  "type": "string"
+                                },
+                                "contains_next_instruction": {
+                                  "type": "boolean"
+                                },
+                                "streets": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "exit_number": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "exit_road_name": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "exit_towards": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "roundabout_exit": {
+                                  "type": "number"
+                                }
+                              }
+                            },
+                            "toll": {
+                              "type": "boolean"
+                            },
+                            "ferry": {
+                              "type": "boolean"
+                            },
+                            "bridge": {
+                              "type": "boolean"
+                            },
+                            "tunnel": {
+                              "type": "boolean"
+                            },
+                            "elevation": {
+                              "type": "number"
+                            },
+                            "elevation_gain": {
+                              "type": "number"
+                            },
+                            "max_elevation": {
+                              "type": "number"
+                            },
+                            "min_elevation": {
+                              "type": "number"
+                            },
+                            "admin_area": {
+                              "type": "array",
+                              "items": {
+                                "type": "integer"
+                              }
+                            },
+                            "speed": {
+                              "type": "number"
+                            },
+                            "speed_limit": {
+                              "type": "number"
+                            },
+                            "truck_limit": {
+                              "type": "number"
+                            },
+                            "surface": {
+                              "type": "string"
+                            },
+                            "lane_count": {
+                              "type": "number"
+                            },
+                            "road_class": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "roundabout": {
+                              "type": "boolean"
+                            },
+                            "rightside": {
+                              "type": "boolean"
+                            },
+                            "traversability": {
+                              "type": "string"
+                            },
+                            "from_stop_id": {
+                              "type": "string"
+                            },
+                            "from_stop_name": {
+                              "type": "string"
+                            },
+                            "to_stop_id": {
+                              "type": "string"
+                            },
+                            "to_stop_name": {
+                              "type": "string"
+                            },
+                            "geometry": {
+                              "oneOf": [
+                                {
+                                  "type": "object",
+                                  "additionalProperties": false,
+                                  "required": [
+                                    "type",
+                                    "coordinates"
+                                  ],
+                                  "properties": {
+                                    "type": {
+                                      "const": "LineString"
+                                    },
+                                    "coordinates": {
+                                      "type": "array",
+                                      "minItems": 2,
+                                      "items": {
+                                        "type": "array",
+                                        "minItems": 2,
+                                        "maxItems": 2,
+                                        "items": {
+                                          "type": "number",
+                                          "minimum": -180,
+                                          "maximum": 180
+                                        },
+                                        "description": "A [longitude, latitude] pair; longitude is -180 to 180 and latitude is -90 to 90."
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "string",
+                                  "description": "Precision-5 encoded polyline."
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      },
+                      "country_code": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "elevation": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        }
+                      },
+                      "elevation_range": {
+                        "type": "array",
+                        "items": {
+                          "type": "array",
+                          "minItems": 2,
+                          "maxItems": 2,
+                          "items": {
+                            "type": "number"
+                          },
+                          "description": "An [elevation, distance] pair."
+                        }
+                      },
+                      "agency_name": {
+                        "type": "string"
+                      },
+                      "agency_id": {
+                        "type": "string"
+                      },
+                      "agency_url": {
+                        "type": "string"
+                      },
+                      "route_id": {
+                        "type": "string"
+                      },
+                      "route_short_name": {
+                        "type": "string"
+                      },
+                      "route_long_name": {
+                        "type": "string"
+                      },
+                      "trip_id": {
+                        "type": "string"
+                      },
+                      "geometry": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                              "type",
+                              "coordinates"
+                            ],
+                            "properties": {
+                              "type": {
+                                "const": "LineString"
+                              },
+                              "coordinates": {
+                                "type": "array",
+                                "minItems": 2,
+                                "items": {
+                                  "type": "array",
+                                  "minItems": 2,
+                                  "maxItems": 2,
+                                  "items": {
+                                    "type": "number",
+                                    "minimum": -180,
+                                    "maximum": 180
+                                  },
+                                  "description": "A [longitude, latitude] pair; longitude is -180 to 180 and latitude is -90 to 90."
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "string",
+                            "description": "Precision-5 encoded polyline."
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "Route segment between each consecutive waypoint pair."
+                },
+                "geometry": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "type",
+                        "coordinates"
+                      ],
+                      "properties": {
+                        "type": {
+                          "const": "LineString"
+                        },
+                        "coordinates": {
+                          "type": "array",
+                          "minItems": 2,
+                          "items": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": {
+                              "type": "number",
+                              "minimum": -180,
+                              "maximum": 180
+                            },
+                            "description": "A [longitude, latitude] pair; longitude is -180 to 180 and latitude is -90 to 90."
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "type",
+                        "coordinates"
+                      ],
+                      "properties": {
+                        "type": {
+                          "const": "MultiLineString"
+                        },
+                        "coordinates": {
+                          "type": "array",
+                          "items": {
+                            "type": "array",
+                            "minItems": 2,
+                            "items": {
+                              "type": "array",
+                              "minItems": 2,
+                              "maxItems": 2,
+                              "items": {
+                                "type": "number",
+                                "minimum": -180,
+                                "maximum": 180
+                              },
+                              "description": "A [longitude, latitude] pair; longitude is -180 to 180 and latitude is -90 to 90."
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "description": "Precision-5 encoded polyline."
+                    }
+                  ],
+                  "description": "Optional route geometry in the requested geometry format."
+                }
+              }
+            },
+            "_meta": {
+              "geoapify/category": "Routing"
+            }
+          },
+          {
+            "name": "calculate_route_matrix",
+            "title": "Routing: Calculate Route Matrix",
+            "description": "Use this tool to compare pairwise travel times and distances between multiple sources and targets. It does not return route geometry or instructions; use calculate_route for one detailed ordered route.",
+            "inputSchema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "sources"
+              ],
+              "properties": {
+                "sources": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 1000,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "lat",
+                      "lon"
+                    ],
+                    "properties": {
+                      "lat": {
+                        "type": "number",
+                        "minimum": -90,
+                        "maximum": 90,
+                        "description": "Location latitude."
+                      },
+                      "lon": {
+                        "type": "number",
+                        "minimum": -180,
+                        "maximum": 180,
+                        "description": "Location longitude."
+                      }
+                    }
+                  },
+                  "description": "Matrix source locations. sources.length multiplied by targets.length must not exceed 1000."
+                },
+                "targets": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 1000,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "lat",
+                      "lon"
+                    ],
+                    "properties": {
+                      "lat": {
+                        "type": "number",
+                        "minimum": -90,
+                        "maximum": 90,
+                        "description": "Location latitude."
+                      },
+                      "lon": {
+                        "type": "number",
+                        "minimum": -180,
+                        "maximum": 180,
+                        "description": "Location longitude."
+                      }
+                    }
+                  },
+                  "description": "Matrix target locations. Defaults to the source locations when omitted. sources.length multiplied by targets.length must not exceed 1000."
+                },
+                "mode": {
+                  "type": "string",
+                  "enum": [
+                    "drive",
+                    "truck",
+                    "light_truck",
+                    "medium_truck",
+                    "bus",
+                    "motorcycle",
+                    "scooter",
+                    "bicycle",
+                    "walk",
+                    "hike"
+                  ],
+                  "default": "drive",
+                  "description": "Travel or vehicle mode used to calculate the matrix."
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "balanced",
+                    "short",
+                    "less_maneuvers"
+                  ],
+                  "default": "balanced",
+                  "description": "Route optimization preference."
+                },
+                "traffic": {
+                  "type": "string",
+                  "enum": [
+                    "free_flow",
+                    "approximated"
+                  ],
+                  "default": "free_flow",
+                  "description": "Traffic model used for motorized routing."
+                },
+                "avoid": {
+                  "type": "array",
+                  "maxItems": 3,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "tolls",
+                      "highways",
+                      "ferries"
+                    ]
+                  },
+                  "description": "Route features to avoid. Supported values are \"tolls\", \"highways\", and \"ferries\"."
+                },
+                "units": {
+                  "type": "string",
+                  "enum": [
+                    "metric",
+                    "imperial"
+                  ],
+                  "default": "metric",
+                  "description": "Distance and speed units."
+                }
+              }
+            },
+            "outputSchema": {
+              "type": "object",
+              "description": "Resolved matrix locations and source-to-target travel costs.",
+              "additionalProperties": false,
+              "required": [
+                "sources",
+                "targets",
+                "sources_to_targets",
+                "units",
+                "distance_units",
+                "time_units"
+              ],
+              "properties": {
+                "sources": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "description": "A resolved location in latitude/longitude form.",
+                    "additionalProperties": false,
+                    "required": [
+                      "lat",
+                      "lon"
+                    ],
+                    "properties": {
+                      "lat": {
+                        "type": "number",
+                        "minimum": -90,
+                        "maximum": 90
+                      },
+                      "lon": {
+                        "type": "number",
+                        "minimum": -180,
+                        "maximum": 180
+                      }
+                    }
+                  },
+                  "description": "Resolved source locations."
+                },
+                "targets": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "description": "A resolved location in latitude/longitude form.",
+                    "additionalProperties": false,
+                    "required": [
+                      "lat",
+                      "lon"
+                    ],
+                    "properties": {
+                      "lat": {
+                        "type": "number",
+                        "minimum": -90,
+                        "maximum": 90
+                      },
+                      "lon": {
+                        "type": "number",
+                        "minimum": -180,
+                        "maximum": 180
+                      }
+                    }
+                  },
+                  "description": "Resolved target locations."
+                },
+                "sources_to_targets": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "distance",
+                        "time",
+                        "source_index",
+                        "target_index"
+                      ],
+                      "properties": {
+                        "distance": {
+                          "type": [
+                            "number",
+                            "null"
+                          ]
+                        },
+                        "time": {
+                          "type": [
+                            "number",
+                            "null"
+                          ]
+                        },
+                        "source_index": {
+                          "type": "integer"
+                        },
+                        "target_index": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  },
+                  "description": "Rows correspond to sources and columns correspond to targets."
+                },
+                "units": {
+                  "type": "string",
+                  "enum": [
+                    "metric",
+                    "imperial"
+                  ],
+                  "description": "Requested unit system."
+                },
+                "distance_units": {
+                  "type": "string",
+                  "enum": [
+                    "meters",
+                    "miles"
+                  ],
+                  "description": "Unit used by matrix distance values."
+                },
+                "time_units": {
+                  "type": "string",
+                  "enum": [
+                    "seconds"
+                  ],
+                  "description": "Unit used by matrix time values."
+                }
+              }
+            },
+            "_meta": {
+              "geoapify/category": "Routing"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tool": "geoapify_call",
+      "arguments": {
+        "tool": "geocode_address",
+        "arguments": {
+          "query": "Vyšehrad, Prague, Czechia"
+        }
+      },
+      "result": {
+        "query": "Vyšehrad, Prague, Czechia",
+        "count": 1,
+        "results": [
+          {
+            "formatted": "Vyšehrad, Prague, Czechia",
+            "address_line1": "Vyšehrad",
+            "address_line2": "Prague, Czechia",
+            "lon": 14.4173861,
+            "lat": 50.0644233,
+            "place_id": "51279c82a1b3d52c4059da4ccf053f084940f00103f901d38ac11100000000c002059203095679c5a16568726164",
+            "result_type": "suburb",
+            "rank": {
+              "importance": 0.14675101625085826,
+              "popularity": 8.995467104553104,
+              "confidence": 1,
+              "confidence_city_level": 1,
+              "match_type": "full_match"
+            },
+            "confidence": 1,
+            "postcode": "128 00",
+            "city": "Prague",
+            "county": "obvod Praha 2",
+            "country": "Czechia",
+            "country_code": "cz",
+            "timezone": {
+              "name": "Europe/Prague",
+              "offset_STD": "+01:00",
+              "offset_DST": "+02:00",
+              "offset_STD_seconds": 3600,
+              "offset_DST_seconds": 7200,
+              "abbreviation_STD": "CET",
+              "abbreviation_DST": "CEST"
+            },
+            "bbox": {
+              "lon1": 14.3973861,
+              "lat1": 50.0444233,
+              "lon2": 14.4373861,
+              "lat2": 50.0844233
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tool": "plan_outing",
+      "arguments": {
+        "request": {
+          "organizerId": "reviewer",
+          "target": "stargazing",
+          "start": "2026-11-16T17:00:00.000Z",
+          "end": "2026-11-16T22:00:00.000Z",
+          "timezone": "Europe/Prague",
+          "durationMinutes": 30,
+          "minPeople": 1,
+          "maxPeople": 1
+        },
+        "participants": [
+          {
+            "id": "reviewer",
+            "name": "Synthetic reviewer",
+            "email": "[email redacted]",
+            "origin": {
+              "lat": 50.0755,
+              "lon": 14.4378
+            },
+            "timezone": "Europe/Prague",
+            "interests": [
+              "stargazing"
+            ],
+            "experience": "beginner",
+            "happyToTeach": false,
+            "equipment": [],
+            "shareEquipment": false,
+            "transport": "walk",
+            "maxTravelMinutes": 90,
+            "maxWalkMinutes": 30,
+            "groupSize": {
+              "min": 1,
+              "max": 1
+            },
+            "preference": "balanced",
+            "availability": [
+              {
+                "start": "2026-11-16T15:00:00.000Z",
+                "end": "2026-11-17T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "sites": [
+          {
+            "id": "vysehrad-candidate",
+            "name": "Vyšehrad — unverified observing candidate",
+            "location": {
+              "lat": 50.064,
+              "lon": 14.4184
+            },
+            "meetingPoint": {
+              "lat": 50.064,
+              "lon": 14.4184
+            },
+            "walkMinutes": 0,
+            "access": "unverified",
+            "accessNote": "Read-only integration test. Night access and a clear horizon have not been checked; this is not a recommendation to visit.",
+            "accessWindows": [
+              {
+                "start": "2026-11-16T15:00:00.000Z",
+                "end": "2026-11-17T00:00:00.000Z"
+              }
+            ],
+            "bortle": null,
+            "skyQualitySource": null
+          }
+        ]
+      },
+      "result": {
+        "status": "needs_access_check",
+        "planId": "0538ee90-4bae-4df7-80f2-40011dce0fba",
+        "mode": "live",
+        "createdAt": "2026-11-15T00:40:54.932Z",
+        "request": {
+          "organizerId": "reviewer",
+          "target": "stargazing",
+          "start": "2026-11-16T17:00:00.000Z",
+          "end": "2026-11-16T22:00:00.000Z",
+          "timezone": "Europe/Prague",
+          "durationMinutes": 30,
+          "minPeople": 1,
+          "maxPeople": 1,
+          "needsGuide": false,
+          "maxCloudCover": 40,
+          "maxWindKmh": 25,
+          "minTemperatureC": -5,
+          "maxPrecipitationProbability": 20
+        },
+        "observingStart": "2026-11-16T19:00:00.000Z",
+        "observingEnd": "2026-11-16T19:30:00.000Z",
+        "meetingStart": "2026-11-16T18:45:00.000Z",
+        "meetingEnd": "2026-11-16T19:30:00.000Z",
+        "site": {
+          "id": "vysehrad-candidate",
+          "name": "Vyšehrad — unverified observing candidate",
+          "location": {
+            "lat": 50.064,
+            "lon": 14.4184
+          },
+          "meetingPoint": {
+            "lat": 50.064,
+            "lon": 14.4184
+          },
+          "walkMinutes": 0,
+          "access": "unverified",
+          "accessNote": "Read-only integration test. Night access and a clear horizon have not been checked; this is not a recommendation to visit.",
+          "accessWindows": [
+            {
+              "start": "2026-11-16T15:00:00.000Z",
+              "end": "2026-11-17T00:00:00.000Z"
+            }
+          ],
+          "bortle": null,
+          "skyQualitySource": null
+        },
+        "participants": [
+          {
+            "id": "reviewer",
+            "name": "Synthetic reviewer",
+            "email": "[email redacted]",
+            "origin": {
+              "lat": 50.0755,
+              "lon": 14.4378
+            },
+            "timezone": "Europe/Prague",
+            "interests": [
+              "stargazing"
+            ],
+            "experience": "beginner",
+            "happyToTeach": false,
+            "equipment": [],
+            "shareEquipment": false,
+            "transport": "walk",
+            "maxTravelMinutes": 90,
+            "maxWalkMinutes": 30,
+            "groupSize": {
+              "min": 1,
+              "max": 1
+            },
+            "preference": "balanced",
+            "availability": [
+              {
+                "start": "2026-11-16T15:00:00.000Z",
+                "end": "2026-11-17T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "routes": [
+          {
+            "participantId": "reviewer",
+            "name": "Synthetic reviewer",
+            "mode": "walk",
+            "outbound": {
+              "minutes": 42,
+              "distanceMeters": 2690
+            },
+            "return": {
+              "minutes": 43,
+              "distanceMeters": 2701
+            },
+            "departAt": "2026-11-16T18:03:00.000Z",
+            "homeBy": "2026-11-16T20:13:00.000Z",
+            "navigationUrl": "https://www.google.com/maps/dir/?api=1&destination=50.064%2C14.4184&travelmode=walking"
+          }
+        ],
+        "equipment": [
+          "Bring warm layers and a dim red light. Binoculars are optional."
+        ],
+        "astronomy": {
+          "suitable": true,
+          "minTargetAltitude": null,
+          "maxSunAltitude": -35.11221553645535,
+          "maxMoonAltitude": 15.437390496031085,
+          "moonIllumination": 0.43375547806862214,
+          "moonPenalty": 0.4357410788189468,
+          "sampleMinutes": 15
+        },
+        "weather": {
+          "suitable": true,
+          "maxCloudCover": 9,
+          "maxWindKmh": 10.8,
+          "minTemperatureC": 7.6,
+          "maxPrecipitationProbability": 8,
+          "minVisibilityM": 33025,
+          "source": "Open-Meteo",
+          "fetchedAt": "2026-11-15T00:40:55.534Z"
+        },
+        "score": 0.6405,
+        "scoring": "Mean participant utility: sky weight best_sky=0.85, balanced=0.5, shortest_journey=0.15; remaining weight is travel. Confirmed access ranks first. Score is a heuristic, not a probability.",
+        "alternatives": [
+          {
+            "site": "Vyšehrad — unverified observing candidate",
+            "observingStart": "2026-11-16T19:30:00.000Z",
+            "participants": [
+              "reviewer"
+            ],
+            "score": 0.6403,
+            "detailedRoutesChecked": false
+          },
+          {
+            "site": "Vyšehrad — unverified observing candidate",
+            "observingStart": "2026-11-16T21:30:00.000Z",
+            "participants": [
+              "reviewer"
+            ],
+            "score": 0.6271,
+            "detailedRoutesChecked": false
+          },
+          {
+            "site": "Vyšehrad — unverified observing candidate",
+            "observingStart": "2026-11-16T21:00:00.000Z",
+            "participants": [
+              "reviewer"
+            ],
+            "score": 0.5828,
+            "detailedRoutesChecked": false
+          }
+        ],
+        "exclusions": {
+          "not_dark_or_target_too_low": 1,
+          "poor_weather": 5
+        },
+        "warnings": [
+          "Night access needs confirmation before an invitation can be prepared.",
+          "Light pollution is unknown; no dark-sky claim has been made.",
+          "Forecasts are provisional. Recheck conditions before departure.",
+          "Target altitude assumes a level horizon; trees, terrain and atmospheric seeing are not modelled.",
+          "Journey estimates exclude live traffic. Navigation links open Google Maps and may select a different route.",
+          "Availability comes from profiles. RSVP and equipment-sharing acceptance are still pending."
+        ],
+        "sources": [
+          "https://www.geoapify.com/",
+          "https://open-meteo.com/",
+          "https://github.com/cosinekitty/astronomy"
+        ]
+      }
+    },
+    {
+      "tool": "prepare_calendar_invitation",
+      "arguments": {
+        "planId": "0538ee90-4bae-4df7-80f2-40011dce0fba"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Only an outing with confirmed night access can become an invitation."
+          }
+        ],
+        "isError": true
+      }
+    }
+  ]
+}

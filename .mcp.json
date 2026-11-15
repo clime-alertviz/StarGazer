@@ -1,0 +1,40 @@
+{
+  "mcpServers": {
+    "star_gazer": {
+      "command": "node",
+      "args": [
+        "./src/remote-client.js"
+      ],
+      "cwd": "./",
+      "tool_timeout_sec": 180,
+      "env_vars": [
+        "STAR_GAZER_URL",
+        "STAR_GAZER_TOKEN"
+      ]
+    },
+    "geoapify": {
+      "command": "node",
+      "args": [
+        "./src/provider-server.js",
+        "geoapify"
+      ],
+      "cwd": "./",
+      "tool_timeout_sec": 60,
+      "env_vars": [
+        "GEOAPIFY_API_KEY"
+      ]
+    },
+    "star_gazer_sky": {
+      "command": "node",
+      "args": [
+        "./src/provider-server.js",
+        "sky"
+      ],
+      "cwd": "./",
+      "tool_timeout_sec": 60,
+      "env_vars": [
+        "OPEN_METEO_API_KEY"
+      ]
+    }
+  }
+}
