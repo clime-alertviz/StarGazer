@@ -150,3 +150,21 @@ test('UTC timestamps preserve Prague DST change without ambiguous local times', 
   const fmt = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', timeZoneName: 'shortOffset', timeZone: 'Europe/Prague' });
   assert.notEqual(fmt.format(a), fmt.format(b));
 });
+
+
+test('weather review identifies every failed limit and incomplete data cannot be overridden', () => {
+  const f = demoForecast({ lat: 49.9 });
+  const start = Date.parse('2026-11-20T19:00:00Z'), end = start + 3600000;
+  const limits = { maxCloudCover:40, maxWindKmh:25, minTemperatureC:-5, maxPrecipitationProbability:20 };
+  const h = f.hours.find(h => Date.parse(h.at) === start);
+  Object.assign(h, { cloud_cover:45, wind_speed_10m:30, temperature_2m:-8, precipitation_probability:35, precipitation:0.1, visibility:4000 });
+  const review = assessWeather(f, start, end, limits);
+  assert.equal(review.suitable, false);
+  assert.equal(review.failures.length, 6);
+  assert.deepEqual(review.failures.find(x => x.field === 'cloud_cover'), {
+    field:'cloud_cover', label:'Cloud cover', value:45, limit:40, unit:'%', bound:'max', at:h.at,
+  });
+  assert.equal(review.failures.find(x => x.field === 'temperature_2m').bound, 'min');
+  h.visibility = null;
+  assert.equal(assessWeather(f, start, end, limits).reason, 'missing_weather');
+});

@@ -39,10 +39,21 @@ export function assessWeather(forecast, start, end, request) {
   const precipitationProbability = Math.max(...hours.map(h => h.precipitation_probability));
   const rain = Math.max(...hours.map(h => h.precipitation));
   const visibility = Math.min(...hours.map(h => h.visibility));
+  const checks = [
+    ['cloud_cover', 'Cloud cover', cloud, request.maxCloudCover, '%', 'max'],
+    ['wind_speed_10m', 'Wind', wind, request.maxWindKmh, 'km/h', 'max'],
+    ['temperature_2m', 'Temperature', temperature, request.minTemperatureC, '°C', 'min'],
+    ['precipitation_probability', 'Chance of rain', precipitationProbability, request.maxPrecipitationProbability, '%', 'max'],
+    ['precipitation', 'Rainfall', rain, 0, 'mm', 'max'],
+    ['visibility', 'Visibility', visibility, 5000, 'm', 'min'],
+  ];
+  const failures = checks.filter(([, , value, limit, , bound]) => bound === 'max' ? value > limit : value < limit)
+    .map(([field, label, value, limit, unit, bound]) => ({ field, label, value, limit, unit, bound, at: hours.find(h => h[field] === value).at }));
   return {
     suitable: cloud <= request.maxCloudCover && wind <= request.maxWindKmh && temperature >= request.minTemperatureC && precipitationProbability <= request.maxPrecipitationProbability && rain === 0 && visibility >= 5000,
     maxCloudCover: cloud, maxWindKmh: wind, minTemperatureC: temperature,
     maxPrecipitationProbability: precipitationProbability, minVisibilityM: visibility,
+    maxPrecipitationMm: rain, failures,
     source: forecast.source, fetchedAt: forecast.fetchedAt,
   };
 }

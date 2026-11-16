@@ -317,7 +317,7 @@ export function operations(hub, id, client = "local") {
     },
     invite_outing: {
       description:
-        "Publish the reviewed outing and send invitations to selected circle members. Reserves pending invitation places until expiry; open outings expose remaining places. This sends notifications.",
+        "Publish the reviewed outing and send invitations to selected circle members. Set confirmAccess only after the organizer confirms night access, the meeting point and final walk; this saves the confirmation with the invitations. Reserves pending invitation places until expiry; open outings expose remaining places. This sends notifications.",
       schema: z
         .object({
           outingId,
@@ -325,6 +325,7 @@ export function operations(hub, id, client = "local") {
           deadline: instant.optional(),
           holdHours: z.number().min(1).max(168).default(24),
           visibility: z.enum(["circle", "open"]).optional(),
+          confirmAccess: z.boolean().optional(),
         })
         .strict(),
       run: (data) => hub.invite(id, data),
@@ -361,7 +362,7 @@ export function operations(hub, id, client = "local") {
     },
     respond_outing: {
       description:
-        "Accept, decline or answer maybe for the exact displayed plan revision. Acceptance confirms the shown travel and equipment arrangements.",
+        "Guests accept, decline or answer maybe for the exact displayed plan revision. Acceptance confirms the shown travel and equipment arrangements. Organizers are attending by default: they can confirm changed arrangements with accepted, or use cancel_outing if they cannot attend.",
       schema: z
         .object({
           outingId,
@@ -391,7 +392,7 @@ export function operations(hub, id, client = "local") {
     },
     edit_outing: {
       description:
-        "Organizer revises the observing window or site. Optional availability explicitly replaces the organizer's available hours for this outing only. Rechecks active participants, journeys, sky and weather; other people's availability stays unchanged and decliners do not block edits. Updates the same Calendar event and requires reconfirmation on the page.",
+        "Organizer revises the observing window or site. Optional availability replaces only their available hours for this outing. Rechecks active participants, journeys, sky and weather; decliners do not block edits. A weather_review result saves nothing: show its warnings and, only after the organizer explicitly chooses Save anyway, repeat the same request with its confirmationKey as weatherConfirmation. Changed conditions require fresh review. Successful edits update the same Calendar event; the organizer stays accepted and guests reconfirm.",
       schema: z
         .object({
           outingId,
@@ -399,6 +400,7 @@ export function operations(hub, id, client = "local") {
           end: instant,
           site,
           deadline: instant.optional(),
+          weatherConfirmation: z.string().regex(/^[a-f0-9]{64}$/).optional(),
           availability: z
             .object({ start: instant, end: instant })
             .strict()

@@ -49,12 +49,14 @@ availability or travel limits still needs resolving.
    Choose circle members to consider, then click **Create outing**.
 4. The agent compares possible groups, places, conditions and journeys. Review
    **Why this plan**, the reports and your complete travel times on the draft.
-5. Check night access, the meeting point and final walk. Record that confirmation
-   under **Edit time, place or night access** when needed.
-6. Under **Review & invite**, choose direct invitations and any remaining open
-   places, set the response deadline, then invite.
+5. Under **Review & invite**, choose direct invitations, any remaining open
+   places and the response deadline.
+6. Check night access, the meeting point and final walk. Tick the two checkboxes
+   immediately above **Invite selected & open outing**, then invite. The checks
+   are saved with the invitations; no separate edit is needed.
 7. Guests respond by their chosen channel or on the page. The outing confirms
-   once the minimum group and required equipment/transport have accepted.
+   once the minimum group and required equipment/transport have accepted. As the
+   organizer you are already attending; cancel the outing if you can no longer go.
 
 An open draft can start with just you. A driver is only needed for car-dependent
 journeys; walking and cycling outings do not require one. An unresolved lift
@@ -63,8 +65,14 @@ stays visible until it is arranged.
 ## Before heading out
 
 Refresh the weather, check responses and review the journey home. The organizer
-can edit the time/place or cancel. Material changes request reconfirmation on
-the page and update the existing Calendar event. **Settings → Profile &
+can edit the time/place or cancel. If an edit exceeds the weather preferences,
+**Check & update plan** shows the failing measurement, time and limit without
+saving. Adjust the time or choose **Save anyway** to keep the warning visible.
+Journey, availability and astronomy checks still apply. A worsening forecast
+requires review again.
+
+Material changes ask guests to reconfirm on the page and update the existing
+Calendar event. Saving your own edit confirms your attendance as organizer. **Settings → Profile &
 preferences** lets you edit remembered defaults without changing past agreements.
 
 For real emails and Calendar invitations, follow [provider setup](providers.md).

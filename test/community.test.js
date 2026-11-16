@@ -913,7 +913,8 @@ test("four-hour revision excludes decliners and requires fresh responses; astron
     site,
   });
   assert.equal(o.revision, 2);
-  assert.equal(o.people[0].response, "pending");
+  assert.equal(o.people[0].response, "accepted");
+  assert.equal(o.people[0].revision, o.revision);
   assert.equal(o.people[1].response, "declined");
   assert.ok(f.hub.view(o.id, f.owner.id).astronomy.sampleMinutes);
 });
@@ -1690,15 +1691,12 @@ test("deadline-only edits keep reviewed routes without contacting providers", as
   );
 });
 
-test("inviting another person never re-accepts a declined organizer", async (t) => {
+test("inviting another person never re-accepts a legacy declined organizer", async (t) => {
   const f = await fixture(t),
     o = await outing(f, { maxPeople: 3 });
   await publish(f, o);
-  await f.hub.respond(f.owner.id, {
-    outingId: o.id,
-    response: "declined",
-    revision: o.revision,
-  });
+  // Records created before organizers stopped using guest RSVP controls.
+  o.people.find(p => p.userId === f.owner.id).response = "declined";
   await f.hub.circleInvite(f.owner.id, { email: f.guest.email });
   await f.hub.circleRespond(f.guest.id, {
     invitationId: f.hub.data.connections[0].id,
@@ -2280,4 +2278,130 @@ test("browsing other dates keeps availability matching strict and hides unavaila
     (await f.hub.discover(f.guest.id, { anyDate: true })).length,
     0,
   );
+});
+
+test("access checks are saved atomically with invitations through the MCP operation", async (t) => {
+  const f = await fixture(t), o = await outing(f);
+  o.site = { ...o.site, access: "unverified" };
+  const connection = await f.hub.circleInvite(f.owner.id, { email: f.guest.email });
+  await f.hub.circleRespond(f.guest.id, { invitationId: connection.id, accept: true });
+  const args = { outingId: o.id, participantIds: [f.guest.id] };
+  await assert.rejects(f.hub.invite(f.owner.id, args), /Confirm night access/);
+  const before = f.hub.data.messages.length;
+  const geoCall = f.hub.geo.call;
+  f.hub.geo.call = async () => { throw Error("Route unavailable"); };
+  await assert.rejects(f.hub.invite(f.owner.id, { ...args, confirmAccess: true }));
+  assert.equal(o.site.access, "unverified");
+  assert.equal(o.status, "draft");
+  assert.equal(f.hub.data.messages.length, before);
+  f.hub.geo.call = geoCall;
+  const op = operations(f.hub, f.owner.id).invite_outing;
+  const result = await op.run(op.schema.parse({ ...args, confirmAccess: true }));
+  assert.equal(result.accessConfirmed, true);
+  assert.equal(o.status, "invited");
+  assert.equal(o.site.accessWindows[0].start, result.meeting.meetAt);
+  assert.equal(o.site.accessWindows[0].end, result.meeting.leaveAt);
+  assert.equal(f.hub.data.messages.filter(m => m.to === f.guest.email && m.subject.startsWith("You’re invited")).length, 1);
+});
+
+test("organizers attend by default and cancel instead of giving a guest RSVP", async (t) => {
+  const f = await fixture(t), o = await outing(f);
+  await publish(f, o);
+  for (const response of ["tentative", "declined"])
+    await assert.rejects(f.hub.respond(f.owner.id, { outingId:o.id, response, revision:o.revision }), /cancel the outing/);
+  assert.equal(o.people[0].response, "accepted");
+  await f.hub.join(f.guest.id, { outingId:o.id });
+  await f.hub.respond(f.guest.id, { outingId:o.id, response:"tentative", revision:o.revision });
+  assert.equal(o.people[1].response, "tentative");
+  await f.hub.cancel(f.owner.id, { outingId:o.id, reason:"I cannot attend." });
+  assert.equal(o.status, "cancelled");
+});
+
+function cloudyForecast(after, cloud = 45) {
+  return async () => {
+    const f = await forecast();
+    for (const h of f.hours) if (Date.parse(h.at) >= Date.parse(after)) h.cloud_cover = cloud;
+    return f;
+  };
+}
+function longerEvening(o) {
+  return { outingId:o.id, start:o.start, end:new Date(Date.parse(o.end) + 3600000).toISOString(), site:o.site };
+}
+
+test("an extended evening reviews weather, saves only after acknowledgement and updates the same Calendar event", async (t) => {
+  const f = await fixture(t), o = await outing(f, { maxPeople:3 });
+  o.people[0].channel = "calendar";
+  await publish(f, o);
+  await f.hub.join(f.guest.id, { outingId:o.id });
+  await deliverCalendar(f.hub, o.id);
+  const calendarId = o.calendar.id;
+  const input = longerEvening(o), before = JSON.stringify(o), messages = f.hub.data.messages.length;
+  f.hub.forecast = cloudyForecast(o.end);
+  const op = operations(f.hub, f.owner.id).edit_outing;
+  const review = await op.run(op.schema.parse(input));
+  assert.equal(review.status, "weather_review");
+  assert.match(review.warnings[0], /Cloud cover: 45%.*Europe\/Prague.*maximum 40%/);
+  assert.equal(JSON.stringify(o), before);
+  assert.equal(f.hub.data.messages.length, messages);
+  const updated = await op.run(op.schema.parse({ ...input, weatherConfirmation: review.confirmationKey }));
+  assert.equal(updated.end, input.end);
+  assert.equal(updated.weather.suitable, false);
+  assert.equal(updated.weatherAccepted, true);
+  assert.equal(updated.people[0].confirmed, true);
+  assert.equal(updated.people[1].response, "pending");
+  assert.equal(updated.people[1].confirmed, false);
+  assert.equal(f.hub.data.messages.filter(m => m.to === f.owner.email && m.subject === "Plan changed · please reconfirm").length, 0);
+  assert.ok(f.hub.data.messages.some(m => m.to === f.guest.email && m.subject === "Plan changed · please reconfirm"));
+  assert.equal(f.hub.publicOuting(o.id).weatherAccepted, true);
+  assert.ok(f.hub.publicOutings().some(p => p.id === o.id));
+  await deliverCalendar(f.hub, o.id);
+  assert.equal(o.calendar.id, calendarId);
+  assert.equal(f.providers.events.size, 1);
+  assert.equal(f.providers.events.get(calendarId).end.dateTime, new Date(Date.parse(input.end) + 20 * 60000).toISOString());
+  await f.hub.respond(f.guest.id, { outingId:o.id, response:"accepted", revision:o.revision });
+  assert.equal(o.status, "confirmed");
+  await f.hub.weather(f.owner.id, { outingId:o.id });
+  assert.equal(o.status, "confirmed");
+  f.hub.forecast = cloudyForecast(o.start, 42);
+  await f.hub.weather(f.owner.id, { outingId:o.id });
+  assert.equal(f.hub.view(o.id, f.owner.id).weatherAccepted, true);
+  f.hub.forecast = cloudyForecast(o.start, 60);
+  await f.hub.weather(f.owner.id, { outingId:o.id });
+  assert.equal(o.status, "needs_review");
+  assert.equal(f.hub.view(o.id, f.owner.id).weatherAccepted, false);
+  assert.equal(f.hub.view(o.id, f.other.id).canJoin, false);
+});
+
+test("changed conditions, inputs or outing versions require another weather review", async (t) => {
+  const f = await fixture(t), o = await outing(f);
+  await publish(f, o);
+  const input = longerEvening(o), beforeEnd = o.end;
+  f.hub.forecast = cloudyForecast(o.end);
+  const review = await f.hub.edit(f.owner.id, input);
+  const confirmed = { ...input, weatherConfirmation:review.confirmationKey };
+  f.hub.forecast = cloudyForecast(o.end, 70);
+  const changed = await f.hub.edit(f.owner.id, confirmed);
+  assert.equal(changed.status, "weather_review");
+  assert.match(changed.warnings[0], /70%/);
+  assert.equal(o.end, beforeEnd);
+  f.hub.forecast = cloudyForecast(o.end);
+  const movedEnd = new Date(Date.parse(input.end) + 60000).toISOString();
+  assert.equal((await f.hub.edit(f.owner.id, { ...confirmed, end:movedEnd })).status, "weather_review");
+  o.version++;
+  assert.equal((await f.hub.edit(f.owner.id, confirmed)).status, "weather_review");
+  assert.equal(o.end, beforeEnd);
+});
+
+test("weather acknowledgement never bypasses journeys, availability or missing forecasts", async (t) => {
+  const f = await fixture(t), o = await outing(f);
+  await publish(f, o);
+  const input = longerEvening(o), beforeEnd = o.end;
+  f.hub.forecast = cloudyForecast(o.end);
+  const review = await f.hub.edit(f.owner.id, input);
+  o.people[0].availability = [{ start:o.start, end:o.end }];
+  await assert.rejects(f.hub.edit(f.owner.id, { ...input, weatherConfirmation:review.confirmationKey }), /availability|journey|fit/);
+  assert.equal(o.end, beforeEnd);
+  f.hub.forecast = async () => ({ hours:[] });
+  await assert.rejects(f.hub.edit(f.owner.id, { ...input, weatherConfirmation:review.confirmationKey }), /complete forecast/);
+  assert.equal(o.end, beforeEnd);
 });

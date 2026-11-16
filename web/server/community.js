@@ -34,6 +34,7 @@ import { prepareJoin, joinDetailsSchema, meetingTimes } from "./join.js";
 import { Traffic } from "./traffic.js";
 import { Identity } from "./identity.js";
 import { Providers, digest } from "./providers.js";
+import { weatherAllowed, weatherMessages, weatherReviewKey, acceptWeather } from './weather-review.js';
 
 const iso = () => new Date().toISOString();
 const closed = new Set(["cancelled", "completed", "not_formed"]);
@@ -366,7 +367,7 @@ export class Community {
       o.status !== "draft" &&
       !closed.has(o.status) &&
       Date.parse(o.start) > Date.now() &&
-      o.weather?.suitable !== false &&
+      weatherAllowed(o) &&
       o.astronomy?.suitable !== false &&
       this.capacity(o) - Number(this.reservedDetails(o, id)) < o.maxPeople
     );
@@ -573,6 +574,8 @@ export class Community {
       needsDriver: Boolean(o.pendingTransport?.length),
       meeting: meetingTimes(o),
       accessConfirmed: o.site.access === "confirmed",
+      weatherWarnings: weatherMessages(o.weather, o.timezone),
+      weatherAccepted: o.weather?.suitable === false && weatherAllowed(o),
     };
   }
   async trafficReport(id, outingId) {
@@ -620,6 +623,8 @@ export class Community {
         "suitable",
         "sampleMinutes",
       ]),
+      weatherWarnings: weatherMessages(o.weather, o.timezone),
+      weatherAccepted: o.weather?.suitable === false && weatherAllowed(o),
       weather: pick(o.weather, [
         "maxCloudCover",
         "maxWindKmh",
@@ -637,7 +642,7 @@ export class Community {
         (o) =>
           o &&
           (o.remaining > 0 || o.driverPlaces > 0) &&
-          o.weather?.suitable !== false &&
+          (o.weather?.suitable !== false || o.weatherAccepted) &&
           o.astronomy?.suitable !== false,
       )
       .sort((a, b) => Date.parse(a.start) - Date.parse(b.start))
@@ -1171,7 +1176,7 @@ export class Community {
       reasons.push("Night access needs confirmation.");
     if (o.astronomy?.suitable === false)
       reasons.push("Astronomical conditions need review.");
-    if (o.weather?.suitable === false)
+    if (!weatherAllowed(o))
       reasons.push("The forecast no longer meets the planning limits.");
     o.reasons = [...new Set(reasons)];
     const before = o.status;
@@ -1269,6 +1274,7 @@ export class Community {
         deadline: instant.optional(),
         holdHours: z.number().min(1).max(168).default(24),
         visibility: z.enum(["circle", "open"]).optional(),
+        confirmAccess: z.boolean().optional(),
       })
       .strict()
       .parse(raw);
@@ -1276,7 +1282,7 @@ export class Community {
     this.owner(o, id);
     this.evaluate(o);
     if (closed.has(o.status)) throw new Error("This outing is closed.");
-    if (o.site.access !== "confirmed")
+    if (o.site.access !== "confirmed" && data.confirmAccess !== true)
       throw new Error(
         "Confirm night access and the meeting point before inviting.",
       );
@@ -1352,6 +1358,13 @@ export class Community {
       const previousPeople = structuredClone(o.people);
       o.migrationPaused = false;
       o.unpublished = false;
+      if (data.confirmAccess) {
+        const meeting = meetingTimes(o);
+        o.site = {
+          ...o.site, access: 'confirmed',
+          accessWindows: [{ start: meeting.meetAt, end: meeting.leaveAt }],
+        };
+      }
       o.people = [
         ...people,
         ...o.people.filter(
@@ -1567,7 +1580,7 @@ export class Community {
       throw new Error(
         "This outing has already started. Choose another evening.",
       );
-    if (o.weather?.suitable === false || o.astronomy?.suitable === false)
+    if (!weatherAllowed(o) || o.astronomy?.suitable === false)
       throw new Error(
         "The observing conditions need the organizer’s review before more people can join.",
       );
@@ -1686,7 +1699,7 @@ export class Community {
       this.capacity(o) - Number(this.reservedDetails(o, id)) >= o.maxPeople
     )
       throw new Error("This outing has no open place.");
-    if (o.weather?.suitable === false || o.astronomy?.suitable === false)
+    if (!weatherAllowed(o) || o.astronomy?.suitable === false)
       throw new Error(
         "The observing conditions need the organizer’s review.",
       );
@@ -1784,6 +1797,8 @@ export class Community {
         );
       const p = o.people.find((p) => p.userId === id);
       if (!p) throw new Error("Join the outing before responding.");
+      if (id === o.organizerId && data.response !== 'accepted')
+        throw new Error('You are organizing and attending this outing. If you cannot attend, cancel the outing so guests are notified.');
       if (data.revision !== o.revision)
         throw new Error(
           "The plan changed. Review the latest version first.",
@@ -1925,6 +1940,7 @@ export class Community {
           end: instant,
           site: siteSchema,
           deadline: instant.optional(),
+          weatherConfirmation: z.string().regex(/^[a-f0-9]{64}$/).optional(),
           availability: z
             .object({ start: instant, end: instant })
             .strict()
@@ -2016,10 +2032,20 @@ export class Community {
             Date.parse(data.end),
             o.limits,
           );
-    if (material && weather && !weather.suitable)
-      throw new Error(
-        "The revised forecast does not meet the planning limits.",
-      );
+    let weatherAcceptance = o.weatherAcceptance, weatherReview;
+    if (material && weather && !weather.suitable) {
+      if (weather.reason || !weather.failures?.length)
+        throw new Error('A complete forecast is not available for the revised time. Try another time or retry when the forecast is available.');
+      const confirmationKey = weatherReviewKey(o, data, weather);
+      if (data.weatherConfirmation !== confirmationKey)
+        weatherReview = {
+          status: 'weather_review', confirmationKey,
+          warnings: weatherMessages(weather, o.timezone),
+          weather, start: data.start, end: data.end,
+          message: 'The forecast is outside the planning limits. Review the conditions before choosing Save anyway. Nothing has been updated.',
+        };
+      else weatherAcceptance = acceptWeather(next, weather, id);
+    } else if (material) weatherAcceptance = null;
     const travel =
       !material && !availabilityChanged
         ? {
@@ -2051,6 +2077,11 @@ export class Community {
       )
     )
       material = true;
+    if (weatherReview) {
+      if (o.version !== version)
+        throw new Error('The outing changed while the revision was being checked. Try again.');
+      return weatherReview;
+    }
     return this.lock(o.id, async () => {
       if (o.version !== version)
         throw new Error(
@@ -2080,6 +2111,7 @@ export class Community {
         deadline,
         astronomy: sky,
         weather,
+        weatherAcceptance,
         routes: travel.routes,
         carpools: travel.carpools,
         pendingTransport: travel.pendingTransport || [],
@@ -2093,19 +2125,25 @@ export class Community {
         o.revision++;
         o.confirmationNotified = false;
         for (const p of o.people.filter(active)) {
-          p.response = "pending";
+          p.response = p.userId === id ? 'accepted' : 'pending';
+          if (p.userId === id) {
+            p.revision = o.revision;
+            p.source = 'app';
+            p.answeredAt = iso();
+            p.journeyReview = false;
+          }
           p.conflict = null;
           p.reservedUntil = deadline;
           p.transport = travel.modes[p.userId];
         }
         o.status = o.status === "draft" ? "draft" : "needs_review";
-        o.reasons = ["The plan changed. Please reconfirm on this page."];
-        if (o.status !== "draft")
-          this.notify(
-            o,
-            "Plan changed · please reconfirm",
-            "Review the new time, site and ride on the outing page. An old Calendar Yes does not confirm this revision.",
-          );
+        o.reasons = o.status === "draft" ? [] : ["The plan changed. Guests need to reconfirm on this page."];
+        if (o.status !== "draft") {
+          for (const p of o.people.filter(p => active(p) && p.userId !== id))
+            this.notice(o, p, "Plan changed · please reconfirm",
+              "Review the new time, site and ride on the outing page. An old Calendar Yes does not confirm this revision.");
+          this.queueCalendar(o);
+        }
       } else if (deadlineChanged && o.status !== "draft") {
         this.notify(
           o,
@@ -2113,6 +2151,7 @@ export class Community {
           `Please respond by ${deadline}.`,
         );
       }
+      this.evaluate(o);
       await this.store.persist();
       return this.view(o.id, id);
     });
