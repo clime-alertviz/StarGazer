@@ -594,6 +594,52 @@ test("passenger joins only with a feasible offered seat and a public pickup", as
   assert.equal(o.carpools[0].passengerIds[0], f.guest.id);
   assert.equal(o.carpools[0].pickups[0].pickup.name, "Public station");
 });
+test("inviting checks a friend's availability before routing and preserves the draft on failure", async (t) => {
+  const f = await fixture(t), o = await outing(f);
+  const connection = await f.hub.circleInvite(f.owner.id, { email: f.guest.email });
+  await f.hub.circleRespond(f.guest.id, { invitationId: connection.id, accept: true });
+  // A leftover short profile slot cannot cover this evening, regardless of
+  // transport. A distant origin must not turn that into an opaque provider error.
+  f.guest.preferences.slots = [{ date: day, from: '18:00', until: '18:30', weekly: false }];
+  f.guest.preferences.origin = { name: 'Distant public station', location: { lat: 49.15, lon: 16.88 } };
+  const before = JSON.stringify(o), messages = JSON.stringify(f.hub.data.messages);
+  let queries = 0;
+  const geo = f.hub.geo;
+  f.hub.geo = { call: async () => { queries++; throw new Error('Routing should not be requested.'); } };
+  await assert.rejects(publish(f, o, [f.guest.id]), error => {
+    assert.match(error.message, /guest’s available evening/);
+    assert.match(error.message, /meet by.*stay until.*Europe\/Prague/);
+    assert.match(error.message, /leave them out of this invitation/);
+    return true;
+  });
+  assert.equal(queries, 0);
+  assert.equal(JSON.stringify(o), before);
+  assert.equal(JSON.stringify(f.hub.data.messages), messages);
+  // Leaving out the incompatible invitee still allows the open outing to be published.
+  f.hub.geo = geo;
+  await publish(f, o);
+  assert.equal(o.status, 'invited');
+  assert.equal(o.people.length, 1);
+});
+
+test("fixed availability checks include the final walk, setup and pack-up before provider calls", async (t) => {
+  const f = await fixture(t), o = await outing(f);
+  const baseline = structuredClone(o.people);
+  let queries = 0;
+  f.hub.geo = { call: async () => { queries++; throw new Error('Routing should not be requested.'); } };
+  for (const boundary of ['start', 'end']) {
+    const people = structuredClone(baseline);
+    people[0].availability = [{
+      start: new Date(Date.parse(o.start) - (15 + o.site.walkMinutes) * 60000).toISOString(),
+      end: new Date(Date.parse(o.end) + (15 + o.site.walkMinutes) * 60000).toISOString(),
+    }];
+    const slot = people[0].availability[0];
+    slot[boundary] = new Date(Date.parse(slot[boundary]) + (boundary === 'start' ? 1 : -1) * 60000).toISOString();
+    await assert.rejects(f.hub.routesFor(o, people), /available evening.*journey/);
+  }
+  assert.equal(queries, 0);
+});
+
 test("joining checks setup, pack-up and return availability, not just observing overlap", async (t) => {
   const f = await fixture(t),
     o = await outing(f);

@@ -746,6 +746,7 @@ export class Community {
       end = Date.parse(o.end),
       from = new Date(start - 86400000).toISOString(),
       until = new Date(end + 86400000).toISOString();
+    const meeting = meetingTimes(o);
     const variants = [],
       failures = [];
     function combine(index, list) {
@@ -781,6 +782,20 @@ export class Community {
           ? { availability: member.availability }
           : {}),
       }));
+      // Even a zero-minute journey must fit setup, observing and pack-up.
+      // Reject this fixed conflict before requesting potentially distant routes.
+      // Availability is the same across transport variants; a missing lift
+      // cannot resolve it either.
+      const unavailable = group.find(p => !p.availability.some(w =>
+        Date.parse(w.start) <= Date.parse(meeting.meetAt) &&
+        Date.parse(w.end) >= Date.parse(meeting.leaveAt)));
+      if (unavailable) {
+        const format = new Intl.DateTimeFormat('en-GB', {
+          timeZone: o.timezone, day: 'numeric', month: 'short',
+          hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
+        });
+        throw new Error(`${unavailable.name}’s available evening does not cover this outing. The group needs to meet by ${format.format(new Date(meeting.meetAt))} and stay until ${format.format(new Date(meeting.leaveAt))} (${o.timezone}), plus the journey there and home. Ask them to update their availability, adjust the outing time, or leave them out of this invitation.`);
+      }
       if (
         group.some(
           (p) =>
@@ -859,10 +874,7 @@ export class Community {
       const who = people.at(-1).userId;
       const f =
         failures.find((f) => f.participantId === who) || failures[0];
-      const name =
-        f.participantId === who
-          ? "Your"
-          : `${this.publicPerson(this.user(f.participantId)).name}’s`;
+      const name = `${this.publicPerson(this.user(f.participantId)).name}’s`;
       if (f.kind === "availability")
         throw new Error(
           `${name} available evening does not cover the journey, setup and return. Choose different travel arrangements or ask the organizer to review the time.`,

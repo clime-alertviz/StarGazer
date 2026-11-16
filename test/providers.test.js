@@ -33,8 +33,24 @@ test('MCP text JSON fallback is accepted, error results and unexpected units are
   const geo = new Geoapify({ apiKey: 'test', fetchImpl: async () => Response.json({ result: { content: [{ type: 'text', text: '{"ok":true}' }] } }) });
   assert.deepEqual(await geo.call('geocode_address', { query: 'Prague' }), { ok: true });
   const bad = new Geoapify({ apiKey: 'test', fetchImpl: async () => Response.json({ result: { isError: true, content: [{ type: 'text', text: 'secret' }] } }) });
-  await assert.rejects(bad.call('geocode_address', {}), /failed/);
+  await assert.rejects(bad.call('geocode_address', {}), /could not complete this location request/);
   assert.throws(() => matrixCell({ time_units: 'minutes' }, 0, 0), /seconds and meters/);
+});
+
+test('route matrix distance limits explain the location conflict without exposing upstream secrets', async () => {
+  const message = 'Route Matrix API request failed: Too long distance between locations. Distance should not exceed 100000 meters. https://example.test/?apiKey=secret';
+  for (const body of [
+    { result: { isError: true, content: [{ type: 'text', text: JSON.stringify({ statusCode: 400, message }) }] } },
+    { error: { code: -32603, message } },
+  ]) {
+    const geo = new Geoapify({ apiKey: 'secret', fetchImpl: async () => Response.json(body) });
+    await assert.rejects(geo.call('calculate_route_matrix', {}), error => {
+      assert.match(error.message, /locations are too far apart/);
+      assert.match(error.message, /starting points/);
+      assert.doesNotMatch(error.message, /secret|apiKey|example\.test|get_geoapify_tools/);
+      return true;
+    });
+  }
 });
 
 test('Open-Meteo requests explicit units and parses epoch seconds in UTC', async () => {

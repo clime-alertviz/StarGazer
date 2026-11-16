@@ -18,7 +18,14 @@ export class Geoapify {
     let body;
     try { body = await response.json(); }
     catch { throw new Error('Geoapify MCP returned invalid JSON. Retry later; the response body was not logged.'); }
-    if (body.error || body.result?.isError || !body.result) throw new Error(`Geoapify MCP ${params?.name ?? method} failed. Check inputs against get_geoapify_tools; no route was assumed.`);
+    if (body.error || body.result?.isError || !body.result) {
+      // Recognize this provider limit without exposing its raw response, which
+      // can contain credential-bearing URLs. It is not a malformed-input error.
+      const details = [body.error?.message, ...(body.result?.content ?? []).filter(c => c.type === 'text').map(c => c.text)].join(' ');
+      if (params?.name === 'calculate_route_matrix' && /Too long distance between locations|Distance should not exceed/i.test(details))
+        throw new Error('Geoapify could not compare these journeys because some locations are too far apart for its route matrix. Check the participants’ starting points and travel arrangements.');
+      throw new Error(`Geoapify could not complete ${params?.name === 'calculate_route_matrix' || params?.name === 'calculate_route' ? 'the journey check' : 'this location request'}. Please retry; if it still fails, check the selected locations and provider configuration.`);
+    }
     return body.result;
   }
   async list() {
