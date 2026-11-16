@@ -75,6 +75,14 @@ export const preferencesSchema = z
 // A remembered profile can grow from a single join; planning validates the full set.
 export const profileSchema = preferencesSchema.partial();
 
+export function missingPlanningDetails(p = {}) {
+  const missing = [];
+  if (!p?.slots?.length || !p.timezone) missing.push('availability');
+  if (!p?.origin) missing.push('starting point');
+  if (!p?.travel?.length) missing.push('travel method');
+  return missing;
+}
+
 // An in-progress form is a snapshot, not a patch to saved preferences. Missing
 // fields stay unknown instead of gaining defaults before matching sees them.
 export const discoveryPreferencesSchema = z

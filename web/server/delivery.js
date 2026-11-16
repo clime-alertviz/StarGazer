@@ -32,11 +32,15 @@ export function calendarPayload(hub, o, key) {
         `${p.preferences.name}: reserved until ${format(p.reservedUntil)}`,
     )
     .join("\n");
+  const missingDetails = o.people
+    .filter(p => active(p) && p.needsDetails)
+    .map(p => `${p.preferences.name}: availability and journey have not been checked. After responding, open the outing page to confirm meeting times and choose self-transport or a lift.`)
+    .join('\n');
   const padding =
     o.kind === "connection_test" ? 0 : (15 + o.site.walkMinutes) * 60000;
   const meeting = new Date(Date.parse(o.start) - padding).toISOString(),
     leaving = new Date(Date.parse(o.end) + padding).toISOString();
-  const description = `Star Gazer outing ${o.id}\nRevision ${o.revision}\n${hub.baseUrl}/outing/${o.id}\n\nRespond in Calendar or on the outing page. After a time, site or ride change, reconfirm on the page.\n\nTimes in ${o.timezone}.\nMeet: ${format(meeting)}. Ready to leave: ${format(leaving)}.\nObserving: ${format(o.start)} – ${format(o.end)}.\n${equipmentList(o).join("\n")}\n${rides}\n\n${o.site.accessNote}\nForecast checked: ${o.weather?.fetchedAt ? format(o.weather.fetchedAt) : "not available"}. Check the outing page before departure.\nReply by ${o.deadline ? format(o.deadline) : "the deadline on the outing page"}.\n${reservations}`;
+  const description = `Star Gazer outing ${o.id}\nRevision ${o.revision}\n${hub.baseUrl}/outing/${o.id}\n\nRespond in Calendar or on the outing page. After a time, site or ride change, reconfirm on the page.${missingDetails ? '\n' + missingDetails : ''}\n\nTimes in ${o.timezone}.\nMeet: ${format(meeting)}. Ready to leave: ${format(leaving)}.\nObserving: ${format(o.start)} – ${format(o.end)}.\n${equipmentList(o).join("\n")}\n${rides}\n\n${o.site.accessNote}\nForecast checked: ${o.weather?.fetchedAt ? format(o.weather.fetchedAt) : "not available"}. Check the outing page before departure.\nReply by ${o.deadline ? format(o.deadline) : "the deadline on the outing page"}.\n${reservations}`;
   return {
     summary: `${o.confirmationNotified ? "" : "[Provisional] "}${o.title}`,
     description,

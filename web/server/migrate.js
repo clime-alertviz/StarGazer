@@ -1,4 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { isDeepStrictEqual } from 'node:util';
+import { preferencesSchema } from './availability.js';
 
 function slot(start, end, timezone) {
   const a = Temporal.Instant.from(start).toZonedDateTimeISO(timezone),
@@ -10,7 +12,8 @@ function slot(start, end, timezone) {
     weekly: false,
   };
 }
-function preferences(person, entry, plan) {
+// The v2 shape lets us recognize exact fallback profiles already saved.
+function oldPreferences(person, entry, plan) {
   const timezone =
     person.timezone ||
     plan?.request.timezone ||
@@ -50,10 +53,44 @@ function preferences(person, entry, plan) {
   };
 }
 
+function preferences(person, entry, plan) {
+  const p = oldPreferences(person, entry, plan);
+  if (!person.origin) delete p.origin;
+  if (!person.availability?.length) delete p.slots;
+  if (!person.transport) delete p.travel;
+  // An invitation connection test is not a source of real travel preferences.
+  if (plan?.mode === 'calendar_test' && !entry) {
+    delete p.origin;
+    delete p.slots;
+    delete p.travel;
+  }
+  return p;
+}
+
+function repairFallbackProfiles(hub) {
+  for (const record of hub.store.state.outings) {
+    const plan = record.plan;
+    for (const person of plan?.participants || []) {
+      const user = hub.data.users.find(u => u.email === person.email?.toLowerCase());
+      const entry = hub.store.state.profiles.find(e => e.profile.email === person.email);
+      // Preserve anything a person has changed since import. Only remove the
+      // exact synthetic values from the old migration, never inferred real data.
+      if (user && isDeepStrictEqual(user.preferences, oldPreferences(person, entry, plan)))
+        user.preferences = preferences(person, entry, plan);
+    }
+  }
+}
+
 // Copy existing local records once; the original tables are preserved. Imported
 // Calendar events keep their IDs and are not rewritten by migration or startup.
 export async function migrateLegacy(hub) {
-  if (hub.data.legacyImportVersion >= 2) return;
+  if (hub.data.legacyImportVersion >= 3) return;
+  if (hub.data.legacyImportVersion >= 2) {
+    repairFallbackProfiles(hub);
+    hub.data.legacyImportVersion = 3;
+    await hub.store.persist();
+    return;
+  }
   for (const entry of hub.store.state.profiles) {
     const u = hub.identity.user(entry.profile.email);
     u.preferences ||= preferences(entry.profile, entry);
@@ -100,6 +137,7 @@ export async function migrateLegacy(hub) {
       return {
         userId: u.id,
         preferences: prefs,
+        needsDetails: p.mode !== 'calendar_test' && !preferencesSchema.safeParse(prefs).success,
         response: member.response,
         revision: member.revision || 1,
         source: member.source,
@@ -190,6 +228,6 @@ export async function migrateLegacy(hub) {
     });
   }
   hub.data.legacyImported = true;
-  hub.data.legacyImportVersion = 2;
+  hub.data.legacyImportVersion = 3;
   await hub.store.persist();
 }

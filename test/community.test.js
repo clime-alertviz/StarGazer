@@ -622,6 +622,76 @@ test("inviting checks a friend's availability before routing and preserves the d
   assert.equal(o.people.length, 1);
 });
 
+test("friends with no logistics can be invited and complete their reserved place with a short join", async (t) => {
+  const f = await fixture(t), o = await outing(f);
+  f.guest.preferences = null;
+  const c = await f.hub.circleInvite(f.owner.id, { email: f.guest.email });
+  await f.hub.circleRespond(f.guest.id, { invitationId: c.id, accept: true });
+  assert.deepEqual(f.hub.state(f.owner.id).circle[0].missingDetails, ['availability', 'starting point', 'travel method']);
+  const real = f.hub.geo.call;
+  f.hub.geo.call = async (name, args) => {
+    for (const point of args.sources || args.waypoints)
+      assert.ok([f.owner.preferences.origin.location, o.site.meetingPoint].some(p => p.lat === point.lat && p.lon === point.lon));
+    return real(name, args);
+  };
+  await publish(f, o, [f.guest.id]);
+  const member = o.people.find(p => p.userId === f.guest.id);
+  assert.equal(member.needsDetails, true);
+  assert.equal(member.preferences.origin, undefined);
+  assert.equal(member.preferences.slots, undefined);
+  assert.equal(member.preferences.travel, undefined);
+  assert.equal(member.transport, undefined);
+  assert.equal(f.guest.preferences, null);
+  assert.equal(o.routes.length, 1);
+  assert.equal(o.status, 'invited');
+  assert.equal(f.hub.capacity(o), o.maxPeople);
+  assert.equal(f.hub.view(o.id, f.guest.id).canJoin, true);
+  await assert.rejects(f.hub.respond(f.guest.id, { outingId:o.id, response:'accepted', revision:o.revision }), /Confirm your meeting times and travel choice/);
+  const details = { name:'Guest', mode:'self', confirmed:true, channel:'email' };
+  const preview = await f.hub.previewJoin(f.guest.id, { outingId:o.id, details });
+  await f.hub.join(f.guest.id, { outingId:o.id, details, expectedVersion:preview.version, expectedPreview:preview.previewKey });
+  assert.equal(o.people.length, 2);
+  assert.equal(o.status, 'confirmed');
+  assert.equal(o.people.find(p => p.userId === f.guest.id).response, 'accepted');
+  assert.equal(o.people.find(p => p.userId === f.guest.id).needsDetails, undefined);
+  assert.equal(f.guest.preferences.origin, undefined);
+  assert.equal(f.guest.preferences.slots, undefined);
+});
+
+test("Calendar acceptance cannot turn missing journey details into a confirmed participant", async (t) => {
+  const f = await fixture(t), o = await outing(f);
+  f.guest.preferences = { name:'Guest', channel:'calendar' };
+  const c = await f.hub.circleInvite(f.owner.id, { email:f.guest.email });
+  await f.hub.circleRespond(f.guest.id, { invitationId:c.id, accept:true });
+  await publish(f, o, [f.guest.id]);
+  await deliverCalendar(f.hub, o.id);
+  f.providers.events.get(o.calendar.id).attendees[0].responseStatus = 'accepted';
+  assert.match(f.providers.events.get(o.calendar.id).description, /availability and journey have not been checked/);
+  await syncCalendar(f.hub, o.id);
+  const member = o.people.find(p => p.userId === f.guest.id);
+  assert.equal(member.response, 'accepted');
+  assert.equal(member.needsDetails, true);
+  assert.equal(o.status, 'invited');
+  const view=f.hub.view(o.id, f.guest.id);
+  assert.equal(view.people.find(p => p.id === f.guest.id).confirmed, false);
+  assert.equal(view.canJoin, true);
+});
+
+test("expired invitations with missing details do not bypass a full group's capacity", async (t) => {
+  const f = await fixture(t), o = await outing(f);
+  f.guest.preferences = null;
+  const c = await f.hub.circleInvite(f.owner.id, { email:f.guest.email });
+  await f.hub.circleRespond(f.guest.id, { invitationId:c.id, accept:true });
+  await publish(f, o, [f.guest.id]);
+  o.people.find(p => p.userId === f.guest.id).reservedUntil=new Date(Date.now()-1).toISOString();
+  f.hub.evaluate(o);
+  await f.hub.join(f.other.id, { outingId:o.id });
+  const details={name:'Guest',mode:'self',confirmed:true};
+  assert.equal(f.hub.view(o.id,f.guest.id).canJoin,false);
+  await assert.rejects(f.hub.previewJoin(f.guest.id,{outingId:o.id,details}),/no open place/);
+  await assert.rejects(f.hub.join(f.guest.id,{outingId:o.id,details}),/full/);
+});
+
 test("fixed availability checks include the final walk, setup and pack-up before provider calls", async (t) => {
   const f = await fixture(t), o = await outing(f);
   const baseline = structuredClone(o.people);
@@ -1863,6 +1933,61 @@ test("inviting an extra guest reconfirms changed pickup times for existing rider
     assert.equal(p.journeyReview, true);
   }
   assert.equal(o.status, "needs_review");
+});
+
+test("legacy Calendar tests never invent a real starting point, travel method or availability", async (t) => {
+  const { migrateLegacy } = await import('../web/server/migrate.js');
+  const f = await fixture(t);
+  f.guest.preferences = null;
+  f.store.state.outings = [{
+    id:'old-test', savedAt:start,
+    plan:{
+      mode:'calendar_test',
+      request:{timezone:'Europe/Prague',organizerId:'guest',minPeople:1,maxPeople:2,target:'stargazing'},
+      participants:[{id:'guest',name:'Guest',email:f.guest.email,transport:'walk'}],
+      site, observingStart:start, observingEnd:end, meetingStart:start, meetingEnd:end,
+    },
+    invitation:{eventId:'keep-test-event'},
+  }];
+  await migrateLegacy(f.hub);
+  assert.equal(f.guest.preferences.origin, undefined);
+  assert.equal(f.guest.preferences.slots, undefined);
+  assert.equal(f.guest.preferences.travel, undefined);
+  assert.equal(f.hub.outing('old-test').calendar.id, 'keep-test-event');
+  assert.equal(f.hub.data.legacyImportVersion, 3);
+  assert.equal(f.providers.calls.length, 0);
+});
+
+test("migration repairs exact v2 test defaults, preserves edited profiles, and is idempotent", async (t) => {
+  const { migrateLegacy } = await import('../web/server/migrate.js');
+  const f = await fixture(t);
+  const generated = {
+    name:'Guest', avatar:'star', timezone:'Europe/Prague', interests:['Stargazing'],
+    interestNote:'', experience:'beginner', happyToTeach:false, equipment:[],
+    shareEquipment:false, channel:'email',
+    origin:{name:'Public meeting point',location:site.meetingPoint},
+    slots:[{date:'2030-11-17',from:'18:00',until:'18:30',weekly:false}],
+    travel:['walk'], maxTravelMinutes:60, maxWalkMinutes:20, preference:'balanced',
+  };
+  f.guest.preferences=structuredClone(generated);
+  f.other.preferences={...structuredClone(generated),origin:{name:'My chosen place',location:{lat:49.16,lon:16.88}}};
+  const edited=structuredClone(f.other.preferences);
+  f.store.state.outings=[{
+    id:'v2-test', savedAt:start, plan:{mode:'calendar_test',request:{timezone:'Europe/Prague'},site,
+      meetingStart:'2030-11-17T17:00:00Z',meetingEnd:'2030-11-17T17:30:00Z',
+      participants:[f.guest,f.other].map(u=>({id:u.id,email:u.email,name:'Guest',transport:'walk'})),
+    },
+  }];
+  f.hub.data.legacyImportVersion=2;
+  await migrateLegacy(f.hub);
+  assert.equal(f.guest.preferences.origin,undefined);
+  assert.equal(f.guest.preferences.slots,undefined);
+  assert.equal(f.guest.preferences.travel,undefined);
+  assert.deepEqual(f.other.preferences,edited);
+  const after=JSON.stringify(f.hub.data);
+  await migrateLegacy(f.hub);
+  assert.equal(JSON.stringify(f.hub.data),after);
+  assert.equal(f.providers.calls.length,0);
 });
 
 test("migration keeps pre-coordination outings and Calendar IDs without automatic messages or writes", async (t) => {

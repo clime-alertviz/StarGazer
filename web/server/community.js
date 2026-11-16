@@ -27,6 +27,7 @@ import {
   discoveryPreferencesSchema,
   plannerPerson,
   expandSlots,
+  missingPlanningDetails,
 } from "./availability.js";
 import { Addresses } from "./addresses.js";
 import { prepareJoin, joinDetailsSchema, meetingTimes } from "./join.js";
@@ -209,6 +210,7 @@ export class Community {
       equipment: user.preferences?.equipment || [],
       interests: user.preferences?.interests || [],
       interestNote: user.preferences?.interestNote || "",
+      missingDetails: missingPlanningDetails(user.preferences),
     };
   }
   state(id) {
@@ -353,7 +355,11 @@ export class Community {
       o.maxPeople - this.capacity(o) - this.driverPlace(o),
     );
   }
-  joinable(o) {
+  reservedDetails(o, id) {
+    return o.people.some(p => p.userId === id && p.needsDetails && active(p) &&
+      (!['pending', 'tentative'].includes(p.response) || !p.reservedUntil || Date.parse(p.reservedUntil) > Date.now()));
+  }
+  joinable(o, id) {
     return (
       !o.unpublished &&
       !o.migrationPaused &&
@@ -362,7 +368,7 @@ export class Community {
       Date.parse(o.start) > Date.now() &&
       o.weather?.suitable !== false &&
       o.astronomy?.suitable !== false &&
-      this.capacity(o) < o.maxPeople
+      this.capacity(o) - Number(this.reservedDetails(o, id)) < o.maxPeople
     );
   }
   requireCalendar(o, people) {
@@ -489,9 +495,9 @@ export class Community {
       viewerId: id,
       organizer: o.organizerId === id,
       canJoin:
-        (!member || !active(member)) &&
+        (!member || !active(member) || member.needsDetails) &&
         o.organizerId !== id &&
-        this.joinable(o),
+        this.joinable(o, id),
       canComment:
         participant && o.status !== "draft" && !closed.has(o.status),
       migrationPaused: Boolean(o.migrationPaused),
@@ -505,7 +511,8 @@ export class Community {
         revision: p.revision,
         transport: p.transport,
         selfArranged: Boolean(p.selfArranged),
-        confirmed: p.response === "accepted" && p.revision === o.revision,
+        needsDetails: Boolean(p.needsDetails),
+        confirmed: p.response === "accepted" && p.revision === o.revision && !p.needsDetails,
         organizer: p.userId === o.organizerId,
         conflict: p.conflict,
         roles: [
@@ -603,7 +610,7 @@ export class Community {
       maxPeople: o.maxPeople,
       remaining: this.openPlaces(o),
       driverPlaces: this.driverPlace(o),
-      going: o.people.filter((p) => p.response === "accepted").length,
+      going: o.people.filter((p) => p.response === "accepted" && !p.needsDetails).length,
       needsDriver: Boolean(o.pendingTransport?.length),
       astronomy: pick(o.astronomy, [
         "minTargetAltitude",
@@ -722,7 +729,7 @@ export class Community {
   }
   async routesFor(o, people, { allowPending = false } = {}) {
     const self = people.filter((p) => p.selfArranged),
-      routed = people.filter((p) => !p.selfArranged);
+      routed = people.filter((p) => !p.selfArranged && !p.needsDetails);
     const ownRoutes = self.map((p) => ({
       participantId: p.userId,
       mode: "self",
@@ -1114,7 +1121,7 @@ export class Community {
       }
     this.releaseBrokenRides(o);
     const accepted = o.people.filter(
-        (p) => p.response === "accepted" && p.revision === o.revision,
+        (p) => p.response === "accepted" && p.revision === o.revision && !p.needsDetails,
       ),
       ids = new Set(accepted.map((p) => p.userId)),
       reasons = [];
@@ -1293,14 +1300,16 @@ export class Community {
           continue;
         }
         const u = this.user(userId);
-        if (!preferencesSchema.safeParse(u.preferences).success)
-          throw new Error(
-            "This friend must save their evening preferences first.",
-          );
+        const preferences = {
+          name: this.publicPerson(u).name,
+          equipment: [], shareEquipment: false, happyToTeach: false,
+          ...structuredClone(u.preferences || {}),
+        };
         people.push({
           userId,
-          preferences: structuredClone(u.preferences),
-          channel: u.preferences.channel || "email",
+          preferences,
+          needsDetails: !preferencesSchema.safeParse(preferences).success,
+          channel: preferences.channel || "email",
           response: userId === id ? "accepted" : "pending",
           revision: o.revision,
         });
@@ -1371,7 +1380,7 @@ export class Community {
           o,
           p,
           "You’re invited · Star Gazer",
-          `Your place is reserved until ${p.reservedUntil}. Review the plan and respond on the outing page.`,
+          `Your place is reserved until ${p.reservedUntil}. ${p.needsDetails ? 'Your availability or travel details are missing, so no journey was checked for you. Open the outing page to confirm the meeting times and choose self-transport or a lift.' : 'Review the plan and respond on the outing page.'}`,
         );
       for (const p of newly.filter((p) => p.userId !== id))
         this.rideNotices(o, p.userId, { calendarUpdate: true });
@@ -1453,7 +1462,7 @@ export class Community {
     const waiting = new Set(o.pendingTransport || []);
     const affected = previousPeople.filter(
       (p) =>
-        active(p) &&
+        active(p) && !p.needsDetails &&
         o.people.some((n) => n.userId === p.userId && active(n)) &&
         ((waiting.has(p.userId) &&
           !travel.pendingTransport?.includes(p.userId)) ||
@@ -1562,11 +1571,11 @@ export class Community {
       throw new Error(
         "The observing conditions need the organizer’s review before more people can join.",
       );
-    if (o.people.some((p) => p.userId === id && active(p)))
+    if (o.people.some((p) => p.userId === id && active(p) && !p.needsDetails))
       throw new Error(
         "You already have a place. Respond on the outing page.",
       );
-    if (this.capacity(o) >= o.maxPeople)
+    if (this.capacity(o) - Number(this.reservedDetails(o, id)) >= o.maxPeople)
       throw new Error("The group is full. Choose another outing.");
     const input = this.joinInput(id, o, { preferences, details }),
       prefs = input.preferences,
@@ -1582,7 +1591,7 @@ export class Community {
       source: "app",
       answeredAt: iso(),
     };
-    const people = [...structuredClone(o.people.filter(active)), person],
+    const people = [...structuredClone(o.people.filter(p => active(p) && p.userId !== id)), person],
       travel = await this.travelForJoin(o, people);
     if (
       expectedPreview &&
@@ -1612,7 +1621,7 @@ export class Community {
       this.evaluate(o);
       if (
         version !== o.version ||
-        this.capacity(o) >= o.maxPeople ||
+        this.capacity(o) - Number(this.reservedDetails(o, id)) >= o.maxPeople ||
         closed.has(o.status)
       )
         throw new Error(
@@ -1674,7 +1683,7 @@ export class Community {
       o.migrationPaused ||
       o.status === "draft" ||
       Date.parse(o.start) <= Date.now() ||
-      this.capacity(o) >= o.maxPeople
+      this.capacity(o) - Number(this.reservedDetails(o, id)) >= o.maxPeople
     )
       throw new Error("This outing has no open place.");
     if (o.weather?.suitable === false || o.astronomy?.suitable === false)
@@ -1779,6 +1788,8 @@ export class Community {
         throw new Error(
           "The plan changed. Review the latest version first.",
         );
+      if (data.response === 'accepted' && p.needsDetails)
+        throw new Error('Confirm your meeting times and travel choice using “Check my journey & join” first. Your saved profile can stay incomplete.');
       if (
         p.response === data.response &&
         p.revision === o.revision &&

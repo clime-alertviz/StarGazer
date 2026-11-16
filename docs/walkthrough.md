@@ -35,6 +35,13 @@ own way** and confirm that you can meet at the displayed time.
 
 ## Organize your own
 
+You can invite a circle friend even if they have not filled in their availability
+or starting point. The page warns which details are missing, and their journey is
+left unchecked. Their invitation reserves a place; they confirm the meeting times
+and choose self-transport or a lift in the short join form. A Calendar acceptance
+alone does not confirm missing travel details. A known conflict in supplied
+availability or travel limits still needs resolving.
+
 1. Finish the evening setup and choose **Organize my own evening**.
 2. Choose what to observe, **Available from**, **Home by**, observing minutes and
    group size. After midnight, Home by uses the following date.
