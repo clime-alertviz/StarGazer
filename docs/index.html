@@ -33,13 +33,16 @@
   </section>
 
   <section><h2>Run the demo from the repository.</h2>
-    <p>With Node.js 22.13+ and npm installed, run these commands in your checkout:</p>
+    <p>Install Node.js 22.13+ and npm. AI matching and new plans also need a signed-in Codex CLI on the machine running the web server. The commands below install it; the server starts it automatically, so you do not need to keep the Codex desktop app or a chat open. Codex uses your account’s online models.</p>
     <pre><code>npm ci --ignore-scripts
 cp .env.example .env
+npx codex login
+# Set GEOAPIFY_API_KEY in .env before starting the server.
 npm run seed
 npm run web:demo</code></pre>
+    <p>If you already have a <code>.env</code>, keep it rather than copying over it. An OpenAI API key is not required.</p>
     <p>Open <a href="http://127.0.0.1:4318">StarGazer at 127.0.0.1:4318</a>. Browse the open outings, then sign in as <code>mia@stargazer.test</code>. Open <strong>Local outbox</strong>, follow the sign-in link and click <strong>Continue</strong>.</p>
-    <p>For a simple first join, choose <strong>I’ll make my own way</strong>. For live address search, routes and AI planning, put your Geoapify key in the ignored <code>.env</code> file, run <code>npx codex login</code>, then restart the app.</p>
+    <p>For a limited preview, skip Codex login and the Geoapify key: browse the sample outings, sign in through Local outbox and join with <strong>I’ll make my own way</strong>. AI matching and new plans require Codex login; live address search and checked journeys require <code>GEOAPIFY_API_KEY</code>. Restart after adding credentials.</p>
     <p class="meta">The separate sample database contains eight varied outings. For a fresh set of dates, stop the demo, run <code>npm run seed -- --reset</code>, then restart it. Real email and Calendar delivery need a connected provider.</p>
   </section>
 

@@ -23,16 +23,25 @@ Weather comes from Open-Meteo; sky calculations use Astronomy Engine.
 
 ## Try the web demo
 
-Requires **Node.js 22.13+** and npm. From this repository:
+Requires **Node.js 22.13+** and npm. **AI matching and creating new plans also
+require a signed-in Codex CLI on the machine running the web server.** The install
+command below includes the CLI; the web server starts it automatically. You do
+not need to keep the Codex desktop app or a chat open. Codex uses your account's
+online models; the model itself does not run locally.
+
+For the full experience:
 
 ```bash
 npm ci --ignore-scripts
 cp .env.example .env
+npx codex login
+# Set GEOAPIFY_API_KEY in .env before starting the server.
 npm run seed
 npm run web:demo
 ```
 
-If you already have a `.env`, keep it rather than copying over it.
+If you already have a `.env`, keep it rather than copying over it. An OpenAI API
+key is not required.
 
 Open **[http://127.0.0.1:4318](http://127.0.0.1:4318)**. Eight varied outings are
 seeded; the public page shows those that are open and have places available.
@@ -42,10 +51,11 @@ seeded; the public page shows those that are open and have places available.
 3. Open an outing → **Check my journey & join** → review your journey → join.
 4. Or choose **Plan your next adventure** to organize your own evening.
 
-Browsing the examples and joining with self-arranged transport work without
-provider credentials. For address search, checked routes and new AI-generated
-plans, put your `GEOAPIFY_API_KEY` in `.env`, run `npx codex login`, then restart
-the server. Codex uses your own account; an OpenAI API key is not required.
+For a limited preview, you can skip Codex login and the Geoapify key: browse the
+sample outings, sign in through Local outbox, and join with self-arranged
+transport. AI matching and new AI-generated plans require Codex login; live
+address search and checked journeys require `GEOAPIFY_API_KEY`. Restart the
+server after adding credentials.
 
 The demo is the same app with its own SQLite database in `private/community-demo`.
 For your own empty community, use `npm run web` and
