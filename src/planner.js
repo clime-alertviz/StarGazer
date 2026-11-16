@@ -23,7 +23,7 @@ function equipmentFor(group, target) {
   return { suitable: false, arrangements: [] };
 }
 
-export async function planOuting(input, { geo, forecast = fetchForecast, now = Date.now(), demo = false, sky = assessSky } = {}) {
+export async function planOuting(input, { geo, forecast = fetchForecast, now = Date.now(), demo = false, sky = assessSky, allowWeatherWarning = false } = {}) {
   const wallStartedAt = Date.now();
   const { request, participants, sites } = planInput.parse(input);
   const searchStart = Date.parse(request.start), searchEnd = Date.parse(request.end);
@@ -60,7 +60,7 @@ export async function planOuting(input, { geo, forecast = fetchForecast, now = D
       const astronomy = sky(site.location, start, end, request.target);
       if (!astronomy.suitable) { reject('not_dark_or_target_too_low'); continue; }
       const conditions = assessWeather(weather, start, end, request);
-      if (!conditions.suitable) { reject(conditions.reason ?? 'poor_weather'); continue; }
+      if (!conditions.suitable && !(allowWeatherWarning && !conditions.reason && conditions.failures?.length)) { reject(conditions.reason ?? 'poor_weather'); continue; }
       for (const { group, equipment, choices } of groupsWithTransport) {
         const travelOptions = choices.filter(option => group.every(p => journeyFits(p, option.journeys[p.id], site, start, end)));
         if (!travelOptions.length) { reject('travel_or_availability'); continue; }
@@ -73,7 +73,7 @@ export async function planOuting(input, { geo, forecast = fetchForecast, now = D
       }
     }
   }
-  candidates.sort((a, b) => Number(b.site.access === 'confirmed') - Number(a.site.access === 'confirmed') || b.score - a.score || b.group.length - a.group.length || a.start - b.start || a.site.id.localeCompare(b.site.id));
+  candidates.sort((a, b) => Number(b.weather.suitable) - Number(a.weather.suitable) || Number(b.site.access === 'confirmed') - Number(a.site.access === 'confirmed') || b.score - a.score || b.group.length - a.group.length || a.start - b.start || a.site.id.localeCompare(b.site.id));
   if (!candidates.length) return { status: 'no_match', reason: 'No outing satisfies the constraints. Review exclusions before changing a preference.', exclusions };
 
   // Validate whole pickup itineraries, walking legs and the reverse return route.
@@ -94,7 +94,7 @@ export async function planOuting(input, { geo, forecast = fetchForecast, now = D
   if (!selected) return { status: 'no_match', reason: 'Detailed routes do not fit travel limits or availability.', exclusions };
   const s = selected;
   return {
-    status: s.site.access === 'confirmed' ? 'proposal' : 'needs_access_check',
+    status: !s.weather.suitable ? 'needs_weather_review' : s.site.access === 'confirmed' ? 'proposal' : 'needs_access_check',
     planId: randomUUID(), mode: demo ? 'demo' : 'live', createdAt: new Date(now).toISOString(),
     request, observingStart: new Date(s.start).toISOString(), observingEnd: new Date(s.end).toISOString(),
     meetingStart: new Date(s.start - (setupMinutes + s.site.walkMinutes) * minute).toISOString(),
@@ -103,11 +103,12 @@ export async function planOuting(input, { geo, forecast = fetchForecast, now = D
     traffic: { model: request.trafficModel, drivingBufferMinutes: request.drivingBufferMinutes, pickupStopMinutes: request.pickupStopMinutes, liveTraffic: false, departureTimePrediction: false,
       description: request.trafficModel === 'approximated' ? 'Geoapify approximated traffic adjusts road speeds for likely congestion. It is not live traffic or a departure-time forecast.' : 'Free-flow driving estimates assume uncongested roads.' },
     astronomy: s.astronomy, weather: s.weather, score: Number(s.score.toFixed(4)),
-    scoring: 'Mean participant utility: sky weight best_sky=0.85, balanced=0.5, shortest_journey=0.15; remaining weight is travel. Confirmed access ranks first. Score is a heuristic, not a probability.',
+    scoring: 'Mean participant utility: sky weight best_sky=0.85, balanced=0.5, shortest_journey=0.15; remaining weight is travel. Suitable weather ranks first, then confirmed access. Score is a heuristic, not a probability.',
     alternatives: candidates.filter(c => c.site.id !== s.site.id || c.start !== s.start).slice(0, 3).map(c => ({ site: c.site.name, observingStart: new Date(c.start).toISOString(), participants: c.group.map(p => p.id), score: Number(c.score.toFixed(4)), detailedRoutesChecked: false })),
     exclusions,
     warnings: [
       ...(demo ? ['DEMO: fictional profiles, site access, weather and journeys. Astronomy is calculated for the recorded date. Do not send invitations.'] : []),
+      ...(!s.weather.suitable ? ['Forecast exceeds weather preferences. Review the report before inviting; this is only a draft.'] : []),
       ...(s.site.access !== 'confirmed' ? ['Night access needs confirmation before an invitation can be prepared.'] : []),
       ...(s.site.bortle === null ? ['Light pollution is unknown; no dark-sky claim has been made.'] : []),
       'Forecasts are provisional. Recheck conditions before departure.',

@@ -34,7 +34,7 @@ import { prepareJoin, joinDetailsSchema, meetingTimes } from "./join.js";
 import { Traffic } from "./traffic.js";
 import { Identity } from "./identity.js";
 import { Providers, digest } from "./providers.js";
-import { weatherAllowed, weatherMessages, weatherReviewKey, acceptWeather } from './weather-review.js';
+import { weatherAllowed, weatherMessages, weatherReviewKey, acceptWeather, inviteWeatherKey } from './weather-review.js';
 
 const iso = () => new Date().toISOString();
 const closed = new Set(["cancelled", "completed", "not_formed"]);
@@ -486,6 +486,7 @@ export class Community {
       weatherError: o.weatherError,
       solver: o.organizerId === id ? o.solver : undefined,
       reasons: [
+        ...(o.status === "draft" && !weatherAllowed(o) ? ["The forecast is outside your preferences. Review the weather warning before inviting."] : []),
         ...(o.reasons || []),
         ...(o.migrationPaused
           ? [
@@ -574,6 +575,8 @@ export class Community {
       needsDriver: Boolean(o.pendingTransport?.length),
       meeting: meetingTimes(o),
       accessConfirmed: o.site.access === "confirmed",
+      weatherReviewRequired: !weatherAllowed(o),
+      weatherConfirmationKey: o.organizerId === id ? inviteWeatherKey(o) : undefined,
       weatherWarnings: weatherMessages(o.weather, o.timezone),
       weatherAccepted: o.weather?.suitable === false && weatherAllowed(o),
     };
@@ -1275,6 +1278,7 @@ export class Community {
         holdHours: z.number().min(1).max(168).default(24),
         visibility: z.enum(["circle", "open"]).optional(),
         confirmAccess: z.boolean().optional(),
+        weatherConfirmation: z.string().regex(/^[a-f0-9]{64}$/).optional(),
       })
       .strict()
       .parse(raw);
@@ -1286,6 +1290,14 @@ export class Community {
       throw new Error(
         "Confirm night access and the meeting point before inviting.",
       );
+    const needsWeatherReview = !weatherAllowed(o);
+    if (needsWeatherReview) {
+      const key = inviteWeatherKey(o);
+      if (!key)
+        throw new Error("Refresh the weather to get a complete forecast before inviting.");
+      if (data.weatherConfirmation !== key)
+        throw new Error("Review and acknowledge the forecast warning before inviting. Reload the outing if its forecast has changed.");
+    }
     if (Date.parse(o.start) <= Date.now() + 30 * 60000)
       throw new Error(
         "Choose a future outing with time to respond and travel.",
@@ -1358,6 +1370,7 @@ export class Community {
       const previousPeople = structuredClone(o.people);
       o.migrationPaused = false;
       o.unpublished = false;
+      if (needsWeatherReview) o.weatherAcceptance = acceptWeather(o, o.weather, id);
       if (data.confirmAccess) {
         const meeting = meetingTimes(o);
         o.site = {

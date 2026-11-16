@@ -459,3 +459,31 @@ test("a failed draft write can be retried without creating duplicate in-memory o
   await f.hub.clientPlanning.save(f.owner.id, args);
   assert.equal(f.hub.data.outings.length, 1);
 });
+
+test("local MCP client can save a cloudy draft and sees the same invitation decision", async t => {
+  const f = await solverFixture({run:async()=>assert.fail("No background model")});
+  t.after(f.close);
+  f.hub.forecast = async () => {
+    const forecast = await f.forecast();
+    forecast.hours.forEach(h => {h.cloud_cover=72;});
+    return forecast;
+  };
+  const session = await run(f.hub,f.owner.id,"begin_planning",f.input);
+  await run(f.hub,f.owner.id,"find_planning_sites",{planningId:session.planningId});
+  const checked = await run(f.hub,f.owner.id,"check_plan_candidate",{
+    planningId:session.planningId,siteId:"spot-1",start:`${f.day}T20:00:00Z`,
+    participantIds:[f.owner.id],transports:{[f.owner.id]:"walk"},
+  });
+  assert.equal(checked.status,"needs_weather_review");
+  const draft = await run(f.hub,f.owner.id,"save_plan_candidate",{
+    planningId:session.planningId,candidateId:checked.candidateId,
+    explanation:"The walk and timing fit; the cloudy forecast needs your decision before inviting.",
+  });
+  assert.equal(draft.status,"draft");
+  assert.equal(draft.solver.execution,"client");
+  assert.equal(f.hub.data.messages.length,0);
+  const args={outingId:draft.id,participantIds:[],confirmAccess:true};
+  await assert.rejects(run(f.hub,f.owner.id,"invite_outing",args),/acknowledge/);
+  const opened = await run(f.hub,f.owner.id,"invite_outing",{...args,weatherConfirmation:draft.weatherConfirmationKey});
+  assert.equal(opened.weatherAccepted,true);
+});

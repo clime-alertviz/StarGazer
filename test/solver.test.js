@@ -572,3 +572,92 @@ test("background matching coalesces identical requests and exposes failures with
   assert.equal(failed[0].matching.error, "Offline");
   assert.equal(failed[0].agentReason, undefined);
 });
+
+for (const backend of ["codex", "deterministic"]) {
+  test(`${backend} creates a private weather-warning draft and requires explicit acknowledgement before invitations`, async (t) => {
+    let f;
+    const runtime = {
+      run: async ({ callTool }) => {
+        await callTool("discover_sites", {});
+        const windows = await callTool("inspect_conditions", { siteId:"spot-1" });
+        assert.equal(windows.totalSuitable, 0);
+        assert.ok(windows.totalCandidates > 0);
+        assert.equal(windows.windows[0].weather.suitable, false);
+        const noTravelTime = await callTool("evaluate_candidate", candidate(f.owner.id, input.start));
+        assert.equal(noTravelTime.status, "no_match");
+        const draft = await callTool("evaluate_candidate", candidate(f.owner.id, `${f.day}T19:00:00Z`));
+        assert.equal(draft.status, "needs_weather_review");
+        assert.ok(draft.candidateId);
+        await callTool("finish_plan", { candidateId:draft.candidateId, explanation:"The walk fits. Cloud cover is high; review the forecast before inviting." });
+      },
+    };
+    f = await solverFixture(runtime, {backend});
+    t.after(f.close);
+    f.owner.preferences.maxWalkMinutes = 20;
+    let cloud = 72;
+    f.hub.forecast = async () => {
+      const forecast = await f.forecast();
+      forecast.hours.forEach(h => { h.cloud_cover = cloud; });
+      return forecast;
+    };
+    const input = { ...f.input, start:`${f.day}T18:00:00Z`, end:`${f.day}T21:00:00Z` };
+    const result = await f.hub.plan(f.owner.id, input);
+    assert.equal(result.status, "draft");
+    assert.equal(result.minPeople, 2);
+    assert.equal(result.people.length, 1);
+    assert.equal(result.weather.suitable, false);
+    assert.equal(result.weatherReviewRequired, true);
+    assert.match(result.weatherWarnings[0], /72%.*40%/);
+    assert.equal(result.weatherAccepted, false);
+    assert.equal(f.hub.data.messages.length, 0);
+    assert.equal(f.hub.publicOuting(result.id), null);
+    const invite = {outingId:result.id, participantIds:[], confirmAccess:true};
+    await assert.rejects(f.hub.invite(f.owner.id, invite), /acknowledge the forecast warning/);
+    cloud = 80;
+    await f.hub.weather(f.owner.id, {outingId:result.id});
+    await assert.rejects(f.hub.invite(f.owner.id, {...invite, weatherConfirmation:result.weatherConfirmationKey}), /acknowledge the forecast warning/);
+    assert.equal(f.hub.outing(result.id).status, "draft");
+    assert.equal(f.hub.data.messages.length, 0);
+    const current = f.hub.view(result.id, f.owner.id);
+    const opened = await f.hub.invite(f.owner.id, {...invite, weatherConfirmation:current.weatherConfirmationKey});
+    assert.equal(opened.weatherAccepted, true);
+    assert.equal(opened.weatherReviewRequired, false);
+    assert.equal(opened.weather.suitable, false);
+    assert.equal(opened.status, "invited");
+    assert.equal(opened.minPeople, 2);
+  });
+}
+
+test("rule-based draft selection prefers suitable weather before a warning candidate", async (t) => {
+  const f = await solverFixture(undefined, {backend:"deterministic"});
+  t.after(f.close);
+  f.hub.forecast = async point => {
+    const forecast = await f.forecast();
+    forecast.hours.forEach(h => { h.cloud_cover = point.lat < 50.11 ? 72 : 5; });
+    return forecast;
+  };
+  const result = await f.hub.plan(f.owner.id, f.input);
+  assert.equal(result.site.name, "Quiet hill");
+  assert.equal(result.weather.suitable, true);
+  assert.equal(result.weatherReviewRequired, false);
+});
+
+test("warning drafts still require complete forecasts and feasible walking journeys", async (t) => {
+  const f = await solverFixture({run:async()=>assert.fail("Client reasoning does not run the backend model")});
+  t.after(f.close);
+  f.hub.forecast = async () => ({...await f.forecast(), hours:[]});
+  const missing = await f.hub.plan(f.owner.id, {...f.input,solver:"deterministic"});
+  assert.equal(missing.status, "no_match");
+  f.hub.forecast = async () => {
+    const forecast = await f.forecast();
+    forecast.hours.forEach(h => {h.cloud_cover=72;});
+    return forecast;
+  };
+  f.owner.preferences.maxWalkMinutes = 1;
+  const s = await f.hub.clientPlanning.begin(f.owner.id, f.input);
+  await f.hub.clientPlanning.run(f.owner.id,s.planningId,"discover_sites",{});
+  await assert.rejects(f.hub.clientPlanning.run(f.owner.id,s.planningId,"evaluate_candidate",{
+    ...candidate(f.owner.id,`${f.day}T20:00:00Z`),allowIncomplete:true,
+  }),/walking|journey|travel|pickup/);
+  assert.equal(f.hub.data.outings.length,0);
+});

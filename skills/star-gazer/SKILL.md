@@ -107,7 +107,11 @@ Use the client-led tools; do not ask the server's LLM to make your choices:
 5. Use `check_plan_candidate` with a specific group, registered site ID, observing
    start and offered travel methods. Compare plausible candidates yourself. The
    service independently rechecks journeys/weather/sky; your claimed feasibility
-   or external reports cannot bypass it. Revise failures without loosening limits.
+   or external reports cannot bypass it. Revise hard failures without loosening limits.
+   Weather preferences are advisory for a private draft: `needs_weather_review`
+   still returns a candidate ID when the journey and other hard checks pass.
+   Prefer suitable weather; otherwise evaluate and save a reachable cloudy option
+   with a clear warning. Missing forecast data still blocks validation.
 6. Choose a returned candidate ID and `save_plan_candidate` with your explanation.
    This saves a draft visible in the website. It sends nothing.
 
@@ -133,7 +137,8 @@ waiting riders must review and accept the newly arranged pickup and return.
 
 A mapped viewpoint does not prove night access, parking or a clear horizon.
 Ask the organizer to verify the site, public meeting point, dated access window
-and final walk. Use `edit_outing` to record verified access. Never assert access
+and final walk. Pass `confirmAccess: true` to `invite_outing` after that explicit
+confirmation, or use `edit_outing` to record it separately. Never assert access
 or a Bortle estimate without evidence. Unverified access blocks invitations.
 
 Present the observing time and timezone, site, proposed people, equipment,
@@ -147,7 +152,12 @@ this user's connected integrations, or `mode: server` for hosted providers. Read
 This requires the relevant connected integrations; do not assume they exist.
 
 After authorization, call `invite_outing` with the selected circle members,
-response deadline, invitation reservation duration and visibility. This queues
+response deadline, invitation reservation duration and visibility. If `get_outing`
+returns `weatherReviewRequired`, show `weatherWarnings` and ask whether to invite
+despite the forecast. Only after that decision, pass its `weatherConfirmationKey`
+as `weatherConfirmation`. Never acknowledge it automatically; saving a cloudy
+draft is not permission to publish it. A changed report requires another review.
+This queues
 notifications for the selected sender. In Codex mode, deliver and record them
 using the handoff tools; do not claim they were sent just because they were queued. Pending and Maybe responses reserve places until their displayed expiry; declined or expired
 ones release them. An open outing exposes genuinely unreserved places. The
@@ -159,7 +169,8 @@ different. The organizer gets join, decline, review and full-group notices.
 
 ## After inviting
 
-- `respond_outing`: use the current revision; only respond for the signed-in user.
+- `respond_outing`: guests use the current revision. Organizers are attending by
+  default; they can confirm changed arrangements or cancel if they cannot attend.
 - `add_comment`: participants can comment or reply using `replyTo`; organizer
   and direct reply author receive email, excluding the commenter.
 - `invite_to_circle`: invite by email or a shared outing participant's ID.
@@ -174,7 +185,10 @@ different. The organizer gets join, decline, review and full-group notices.
   Use the organizer's outing `availability`, not their current profile defaults.
   If changing their available hours too, explicitly confirm and pass an
   `availability` object with `start` and `end`. Never silently expand another
-  participant's availability.
+  participant's availability. A `weather_review` result saves nothing: show its
+  warnings and repeat the exact request with `weatherConfirmation` set to its
+  `confirmationKey` only after the organizer chooses **Save anyway**. Their own
+  saved edit confirms the organizer's attendance; guests still reconfirm.
 - `cancel_outing`: organizer cancels, including the linked Calendar event.
 
 Initial notifications use one selected channel: email OR Calendar. Calendar

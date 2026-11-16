@@ -90,7 +90,7 @@ export function operations(hub, id, client = "local") {
     },
     check_plan_candidate: {
       description:
-        "Validate YOUR exact proposed group, time, site and offered travel modes. Returns a candidate ID only when checks pass. Revise failures yourself. allowIncomplete supports open organizer-only drafts with explicit missing resources.",
+        "Validate YOUR exact proposed group, time, site and offered travel modes. Returns a candidate ID when hard checks pass. needs_weather_review is a private draft with an advisory forecast warning; prefer suitable weather, but it can be saved for organizer review. Missing weather, astronomy and journey failures still block candidates. allowIncomplete supports open organizer-only drafts with explicit missing resources.",
       schema: z
         .object({
           planningId: sessionId,
@@ -317,7 +317,7 @@ export function operations(hub, id, client = "local") {
     },
     invite_outing: {
       description:
-        "Publish the reviewed outing and send invitations to selected circle members. Set confirmAccess only after the organizer confirms night access, the meeting point and final walk; this saves the confirmation with the invitations. Reserves pending invitation places until expiry; open outings expose remaining places. This sends notifications.",
+        "Publish the reviewed outing and send invitations to selected circle members. Set confirmAccess only after the organizer confirms night access, the meeting point and final walk; this saves the confirmation with the invitations. Reserves pending invitation places until expiry; open outings expose remaining places. When get_outing returns weatherReviewRequired, show weatherWarnings and pass weatherConfirmationKey as weatherConfirmation only after explicit organizer acknowledgement. This sends notifications.",
       schema: z
         .object({
           outingId,
@@ -326,6 +326,7 @@ export function operations(hub, id, client = "local") {
           holdHours: z.number().min(1).max(168).default(24),
           visibility: z.enum(["circle", "open"]).optional(),
           confirmAccess: z.boolean().optional(),
+          weatherConfirmation: z.string().regex(/^[a-f0-9]{64}$/).optional(),
         })
         .strict(),
       run: (data) => hub.invite(id, data),

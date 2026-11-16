@@ -173,6 +173,8 @@ npm run verify:install         # installed MCP package, isolated fixture service
 was produced. [Verification](docs/verification.md) records the tested scope.
 Geoapify traffic is an approximation, not live congestion or a departure-time
 forecast. Weather can change; mapped places still need night-access confirmation.
+Poor weather can produce a private draft with a warning. You decide whether to
+invite anyway; walking limits, complete availability and astronomy still apply.
 
 ## Submission contents
 

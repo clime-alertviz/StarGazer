@@ -34,3 +34,9 @@ export function acceptWeather(outing, weather, userId) {
     acceptedBy: userId, acceptedAt: new Date().toISOString(),
   };
 }
+
+// The published decision must refer to the exact report shown on this revision.
+export function inviteWeatherKey(outing) {
+  if (weatherAllowed(outing) || outing.weather?.reason || !outing.weather?.failures?.length) return undefined;
+  return weatherReviewKey(outing, { action: "invite" }, outing.weather);
+}

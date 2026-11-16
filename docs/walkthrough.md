@@ -49,11 +49,15 @@ availability or travel limits still needs resolving.
    Choose circle members to consider, then click **Create outing**.
 4. The agent compares possible groups, places, conditions and journeys. Review
    **Why this plan**, the reports and your complete travel times on the draft.
+   If the journey works but the forecast is poor, you still get a private draft
+   with the measured conditions and limits. No invitation has been sent.
 5. Under **Review & invite**, choose direct invitations, any remaining open
    places and the response deadline.
 6. Check night access, the meeting point and final walk. Tick the two checkboxes
    immediately above **Invite selected & open outing**, then invite. The checks
-   are saved with the invitations; no separate edit is needed.
+   are saved with the invitations; no separate edit is needed. If there is a
+   weather warning, choose whether to invite anyway using the checkbox there,
+   or edit the time. The warning stays visible to the group.
 7. Guests respond by their chosen channel or on the page. The outing confirms
    once the minimum group and required equipment/transport have accepted. As the
    organizer you are already attending; cancel the outing if you can no longer go.

@@ -72,7 +72,7 @@ export async function solveDeterministically(context) {
     routesFor,
   } = context;
   const sites = context.sites || (await discoverSites(context));
-  let result;
+  let result, weatherDraft;
   const seenVariants = new Set(),
     forecasts = new Map();
   const forecast = (point) => {
@@ -113,10 +113,14 @@ export async function solveDeterministically(context) {
     seenVariants.add(variantKey);
     result = await planOuting(
       { request, participants, sites },
-      { geo: geo, forecast },
+      { geo: geo, forecast, allowWeatherWarning: true },
     );
-    if (result.status !== "no_match") break;
+    if (result.status === "needs_weather_review") {
+      if (!weatherDraft || result.score > weatherDraft.score) weatherDraft = result;
+    } else if (result.status !== "no_match") break;
   }
+  if (weatherDraft && (result.status === "no_match" || result.status === "needs_weather_review"))
+    result = weatherDraft;
   if (result.status === "no_match" && data.visibility === "open") {
     const opportunity = await findOpportunity(
       request,
@@ -124,6 +128,7 @@ export async function solveDeterministically(context) {
       sites,
       forecast,
       availability,
+      { allowWeatherWarning: true },
     );
     if (opportunity) {
       const provisional = {
@@ -147,7 +152,7 @@ export async function solveDeterministically(context) {
           "Leave at least one place for a driver, or arrange your own transport.",
         );
       result = {
-        status: "needs_access_check",
+        status: opportunity.weather.suitable ? "needs_access_check" : "needs_weather_review",
         observingStart: provisional.start,
         observingEnd: provisional.end,
         site: opportunity.site,

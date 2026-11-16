@@ -10,6 +10,7 @@ export async function findOpportunity(
   sites,
   forecast,
   availability,
+  { allowWeatherWarning = false } = {},
 ) {
   const now = Date.now(),
     from = Date.parse(request.start),
@@ -77,11 +78,13 @@ export async function findOpportunity(
         candidate.end,
         request,
       );
-      if (weather.suitable) options.push({ ...candidate, site, weather });
+      if (weather.suitable || (allowWeatherWarning && !weather.reason && weather.failures?.length))
+        options.push({ ...candidate, site, weather });
     }
   }
   options.sort(
     (a, b) =>
+      Number(b.weather.suitable) - Number(a.weather.suitable) ||
       a.weather.maxCloudCover - b.weather.maxCloudCover ||
       a.start - b.start,
   );
