@@ -4,9 +4,9 @@
 
 Plan a stargazing evening, join an open outing, and grow a circle of people who
 love looking up. Use the website or work entirely in Codex. By Michal Novotný,
-Czech Republic. **Version 0.4.0 · [MIT license](LICENSE).**
+Czech Republic. **Submission v0.4.1 · [MIT license](LICENSE).**
 
-[Public repository](https://github.com/clime-alertviz/StarGazer) · [Release v0.4.0](https://github.com/clime-alertviz/StarGazer/tree/v0.4.0)
+[Public repository](https://github.com/clime-alertviz/StarGazer) · [Release v0.4.1](https://github.com/clime-alertviz/StarGazer/tree/v0.4.1)
 
 [![Watch the short walkthrough](docs/showcase-poster.jpg)](docs/showcase.mp4)
 
@@ -184,7 +184,7 @@ invite anyway; walking limits, complete availability and astronomy still apply.
 | Walkthrough | [Video](docs/showcase.mp4), [written tutorial](docs/walkthrough.md), [HTML page](docs/index.html) |
 | Prompts and AI workflow | [Example requests](examples/requests.md), [workflow](docs/ai-workflow.md), [StarGazer skill](skills/star-gazer/SKILL.md) |
 | Tool calls and lessons | [Recorded traces](examples/README.md), [Geoapify feedback](docs/geoapify-feedback.md) |
-| License and release | [MIT](LICENSE), version **0.4.0** in [package.json](package.json), [release/tag steps](docs/release.md) |
+| License and release | [MIT](LICENSE), [submission v0.4.1](https://github.com/clime-alertviz/StarGazer/tree/v0.4.1), [release/tag steps](docs/release.md) |
 
 This repository contains both the video demo and runnable app; no separate
-public app hosting is required. Use the **v0.4.0** tag for the submission snapshot.
+public app hosting is required. Use the **[v0.4.1](https://github.com/clime-alertviz/StarGazer/tree/v0.4.1)** tag at reviewed commit **`4aa8123`** for the submission snapshot.
